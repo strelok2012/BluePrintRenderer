@@ -1,6 +1,6 @@
 var BinaryOperatorNode = Class(AbstractNode, {
-	constructor: function (funcObj, x, y, parentCanvas, hoverCanvas) {
-		BinaryOperatorNode.$super.call(this, x, y, parentCanvas, hoverCanvas);
+	constructor: function (funcObj, x, y, drawer) {
+		BinaryOperatorNode.$super.call(this, x, y, drawer);
 		this.function = funcObj;
 
 		this.inputs = funcObj.inputs;
@@ -19,9 +19,8 @@ var BinaryOperatorNode = Class(AbstractNode, {
 		this.height = this.minCellHeight * this.getCellSize();
 		this.width = this.getCellSize() * this.minCellWidth;
 	},
-	setSVG: function () {
-		this.calculateWidth();
-		var draw = SVG('svgContainer').size(this.width, this.height);
+	setSVG: function (drawer) {
+		var draw = drawer.group();
 
 
 		var linGradient = draw.gradient('linear', function (stop) {
@@ -53,9 +52,9 @@ var BinaryOperatorNode = Class(AbstractNode, {
 
 
 
-		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		mainRect.fill({color: "#000", opacity: 0.5});
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 
@@ -72,5 +71,7 @@ var BinaryOperatorNode = Class(AbstractNode, {
 		});
 
 		this.drawPins(draw, 1, false);
+
+		return draw;
 	}
 });

@@ -131,11 +131,13 @@ var BPParser = Class({
 				delete currentNode["Pins({0})".format(pinCounter)];
 				pinCounter++;
 			}
-
-			for (var j = currentNode.objects.length - 1; j >= 0; j--) {
-				var item = currentNode.objects[j];
-				if (item.Class)
-					currentNode.objects.splice(j, 1);
+			//console.log(currentNode);
+			if (currentNode.objects) {
+				for (var j = currentNode.objects.length - 1; j >= 0; j--) {
+					var item = currentNode.objects[j];
+					if (item.Class)
+						currentNode.objects.splice(j, 1);
+				}
 			}
 			//assert(currentNode.pins.length === currentNode.objects.length,"currentNode.pins.length !== currentNode.objects.length");
 			var tmpPins = [];
@@ -229,7 +231,7 @@ var BPParser = Class({
 			}
 
 		}
-		//console.log(work);
+		console.log(work);
 		return work;
 	}
 });

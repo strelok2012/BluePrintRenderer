@@ -1,7 +1,6 @@
 var AbstractNode = Class({
-	constructor: function (x, y, parentCanvas, hoverCanvas) {
-		this.parentCanvas = parentCanvas;
-		this.hoverCanvas = hoverCanvas;
+	constructor: function (x, y) {
+		//console.log('construtcot', drawer);
 		this.x = x;
 		this.y = y;
 
@@ -15,21 +14,28 @@ var AbstractNode = Class({
 		this.showPinText = true;
 	},
 	getScale: function () {
-		return this.parentCanvas.scale;
+		return  1;
+	},
+	getAngleRadius: function () {
+		return this.angleRadius * this.getScale();
 	},
 	getCellSize: function () {
 		return 17 * this.getScale();
 	},
-	draw: function (ctx) {
-		this.setSVG();
+	draw: function (drawer) {
 		var self = this;
-		var drawPromise = new Promise(function (resolve, reject) {
-			self.parentCanvas.drawer.draw(self.getX(), self.getY()).then(function () {
-				self.isDrawed = true;
-				resolve();
-			});
+		this.hover = this.drawHover(drawer);
+		this.shadow = this.drawShadow(drawer);
+		this.nested = this.setSVG(drawer);
+
+		this.nested.style('cursor', 'pointer');
+		this.nested.click(function (el) {
+			if (self.hover.visible())
+				self.hover.hide();
+			else
+				self.hover.show();
 		});
-		return drawPromise;
+
 	},
 	getFontSize: function () {
 		return this.fontSize * this.getScale();
@@ -47,7 +53,6 @@ var AbstractNode = Class({
 		var tmpDraw = SVG('tmpSvgContainer').size(0, 0);
 		this.width = this.getCellSize() * this.minCellWidth;
 		this.height = this.cellHeight * this.getCellSize();
-		console.log('calculate width for scale', this.getScale());
 		if (this.function && this.showHeader) {
 			var headerTextCheck = tmpDraw.text(this.function.name);
 			headerTextCheck.font({
@@ -108,7 +113,7 @@ var AbstractNode = Class({
 					, color: "#ffffff"
 				});
 
-				var size = this.getTextElementWidth(tInputText)
+				var size = this.getTextElementWidth(tInputText);
 				if (size > maxInSize)
 					maxInSize = size;
 			}
@@ -164,17 +169,16 @@ var AbstractNode = Class({
 		else
 			return 0;
 	},
-	drawShadow: function () {
-		var draw = SVG('svgContainer').size(this.width * 1.5, this.height * 1.5);
-		var shadow = draw.rect(this.width, this.height).radius(this.angleRadius);
+	drawShadow: function (drawer) {
+		var group = drawer.group();
+		var shadow = group.rect(this.width, this.height).radius(this.getAngleRadius());
 		shadow.fill({color: '#f06', opacity: 0.0});
-		shadow.stroke({color: '#000', opacity: 0.8, width: 2});
+		shadow.stroke({color: '#000', opacity: 0.5, width: 4});
 		shadow.filter(function (add) {
-			add.gaussianBlur(3);
+			add.gaussianBlur(2);
 		});
 		shadow.back();
-		this.parentCanvas.drawer.draw(this.getX(), this.getY());
-		this.isShadowDrawed = true;
+		return group;
 	},
 	constructCircle: function (draw, input, x, y) {
 		input.parent = this;
@@ -192,7 +196,12 @@ var AbstractNode = Class({
 				circle.fill({color: color});
 			circle.translate(x, y);
 
-			var polyline = draw.polyline([[x + this.getCircleRadius() * 1.5, y + this.getCircleRadius() / 2], [x + this.getCircleRadius() * 1.2, y + this.getCircleRadius() / 2 - this.getCircleRadius() / 4], [x + this.getCircleRadius() * 1.2, y + this.getCircleRadius() / 2 + this.getCircleRadius() / 4], [x + this.getCircleRadius() * 1.5, y + this.getCircleRadius() / 2]]).fill(color).stroke({width: 1, color: color});
+			var polyline = draw.polygon([
+				[x + this.getCircleRadius() * 1.5, y + this.getCircleRadius() / 2],
+				[x + this.getCircleRadius() * 1.2, y + this.getCircleRadius() / 2 - this.getCircleRadius() / 4],
+				[x + this.getCircleRadius() * 1.2, y + this.getCircleRadius() / 2 + this.getCircleRadius() / 4],
+				[x + this.getCircleRadius() * 1.5, y + this.getCircleRadius() / 2]
+			]).fill(color).stroke({width: 1, color: color});
 		}
 		else {
 			var dIn = draw.rect(this.getCircleRadius(), this.getCircleRadius()).radius(1).stroke({color: VAR_COLORS[input.type.name], width: 2});
@@ -201,9 +210,6 @@ var AbstractNode = Class({
 			dIn.translate(x, y);
 		}
 
-		//var circleT = draw.circle(this.getCircleRadius());
-		//circleT.fill({color: "#eee"});
-		//circleT.translate(x, y);
 	},
 	constructExecNode: function (draw, input, x, y) {
 		var execNodeRadius = 3;
@@ -233,13 +239,14 @@ var AbstractNode = Class({
 		}
 
 	},
-	drawHover: function () {
-		var draw = SVG('svgContainer').size(this.width, this.height);
-		var hoverRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+	drawHover: function (drawer) {
+		var group = drawer.group();
+		var hoverRect = group.rect(this.width, this.height).radius(this.getAngleRadius());
 		hoverRect.fill({color: '#000000', opacity: 0});
-		hoverRect.stroke({color: '#f1b000', opacity: 1, width: 4});
-		var origin = this.parentCanvas.getOrigin();
-		this.hoverCanvas.drawer.draw(this.getX() - origin.x, this.getY() - origin.y, this.getX(), this.getY());
+		hoverRect.stroke({color: '#f1b000', opacity: 1, width: 3});
+		hoverRect.translate(0, 0);
+		hoverRect.back();
+		return group;
 	},
 	drawPins: function (draw, newCellOffset, newDrawText) {
 		var drawText = true;
@@ -274,6 +281,8 @@ var AbstractNode = Class({
 		cellOffset = newCellOffset || 2.5;
 		for (var i = 0; i < this.outputs.length; i++) {
 			var tOut = this.outputs[i];
+			if (tOut.name === "Output Delegate")
+				continue
 			var circleCenterX = this.width - this.getCellSize();
 			var circleCenterY = cellOffset * this.getCellSize();
 			if (tOut.type === VAR_TYPES.exec) {

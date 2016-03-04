@@ -1,6 +1,6 @@
 var FunctionNode = Class(AbstractNode, {
-	constructor: function (funcObj, x, y, parentCanvas, hoverCanvas) {
-		FunctionNode.$super.call(this, x, y, parentCanvas, hoverCanvas);
+	constructor: function (funcObj, x, y, drawer) {
+		FunctionNode.$super.call(this, x, y, drawer);
 		this.function = funcObj;
 
 		this.inputs = funcObj.inputs;
@@ -14,8 +14,8 @@ var FunctionNode = Class(AbstractNode, {
 		this.showPinText = true;
 		this.headerCellHeight = 1.5;
 		this.cellOffset = 0.5;
-
-		if (this.function.name.split(" ")[0].indexOf("_") !== -1 && this.function.name.indexOf("Get") === -1 && this.function.name.indexOf("Set") === -1 && this.function.name.indexOf("Add") === -1) {
+		console.log(this.function.name);
+		if (this.function.name.indexOf("_") !== -1 && this.function.name.indexOf("Get") === -1 && this.function.name.indexOf("Set") === -1 && this.function.name.indexOf("Add") === -1 && this.function.name.indexOf("K2") === -1) {
 			this.angleRadius = 0;
 			this.headerCellHeight = 0;
 			this.minCellWidth = 5;
@@ -27,8 +27,7 @@ var FunctionNode = Class(AbstractNode, {
 		this.width = this.getCellSize() * this.minCellWidth;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
 	},
-	setSVG: function () {
-		this.calculateWidth();
+	setSVG: function (drawer) {
 		var headerColor = null;
 		if (!this.function.isPure) {
 			headerColor = VAR_COLORS["execFunction"];
@@ -36,7 +35,10 @@ var FunctionNode = Class(AbstractNode, {
 		else {
 			headerColor = VAR_COLORS["pureFunction"];
 		}
-		var draw = SVG('svgContainer').size(this.width, this.height);
+		//var tmp = this.drawer;
+
+		var draw = drawer.group();
+		//var draw = tmp.nested();
 
 
 		var headerGradient = draw.gradient('linear', function (stop) {
@@ -67,7 +69,7 @@ var FunctionNode = Class(AbstractNode, {
 				stop.at({offset: 1, color: headerColor, opacity: 0});
 			});
 			headerGradient.from(0, 0).to(1, 0);
-			var header = draw.rect(this.width, this.height).radius(this.angleRadius).fill(headerGradient);
+			var header = draw.rect(this.width, this.height).radius(this.getAngleRadius()).fill(headerGradient);
 			var rect = draw.rect(this.width, this.height).move(0, -this.height + this.headerCellHeight * this.getCellSize())
 
 			header.clipWith(rect)
@@ -81,6 +83,7 @@ var FunctionNode = Class(AbstractNode, {
 				, color: "#ffffff"
 			});
 			headerText.style('font-weight', 'bold');
+			headerText.style('pointer-events', 'none');
 			headerText.translate(this.getCellSize() * 2, 0);
 			headerText.fill({color: "#fff"});
 
@@ -106,7 +109,7 @@ var FunctionNode = Class(AbstractNode, {
 				text = "+"
 			}
 			else if (text.indexOf("Multiply") !== -1) {
-				text = "*"
+				text = "x"
 			}
 			else if (text.indexOf("Percent") !== -1) {
 				text = "%"
@@ -116,6 +119,9 @@ var FunctionNode = Class(AbstractNode, {
 			}
 			else if (text.indexOf("Greater") !== -1) {
 				text = ">"
+			}
+			else if (text.indexOf("Equal") !== -1 && text.indexOf("Not") !== -1) {
+				text = "!="
 			}
 			var textSize = 35 * this.getScale();
 			var nodeText = draw.text(text.toUpperCase());
@@ -131,7 +137,7 @@ var FunctionNode = Class(AbstractNode, {
 			this.drawPins(draw, 1, false);
 		}
 
-
+		return draw;
 
 	}
 });

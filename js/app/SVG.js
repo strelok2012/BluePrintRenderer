@@ -2,46 +2,28 @@ var SVGDrawer = Class({
 	constructor: function (canvas) {
 		this.canvas = canvas;
 	},
-	draw: function ( x, y, xx, yy) {
+	draw: function (x, y, addToElements) {
 		var self = this;
 		var drawPromise = new Promise(function (resolve, reject) {
-			var svgString = document.getElementById('svgContainer').innerHTML;
-			var img = new Image();
-			var src = 'data:image/svg+xml;base64,' + window.btoa(svgString);
-			var promise = new Promise(function (resolve, reject) {
-				img.onload = function () {
-					resolve();
-				};
-				img.onerror = function (e) {
-					reject();
-				};
-			});
+			/*var img = new Image();
+			img.src = 'data:image/svg+xml;base64,' + window.btoa(document.getElementById('svgContainer').innerHTML);
+			var el = {img: img, x: x, y: y};
+			if (addToElements !== false)
+				self.canvas.elements.push(el);*/
 
-			promise.then(function () {
-				self.callBack(img, x, y, xx, yy);
-				resolve();
-			}, function () {
-				self.callBack(img, x, y, xx, yy);
-				reject();
-			});
-			img.src = src;
-			document.getElementById('svgContainer').innerHTML = "";
+			//console.log('zanuliaem');
+			//document.getElementById('svgContainer').innerHTML = "";
+			//resolve(el);
+			resolve();
+
 		});
-
 		return drawPromise;
-
-	},
-	callBack: function (img, x, y, xx, yy) {
-
-		if (xx && yy || (xx === 0 && yy === 0)) {
-			this.canvas.elements.push({img: img, x: xx, y: yy});
-		}
-		else {
-			this.canvas.elements.push({img: img, x: x, y: y});
-		}
-
 	},
 	drawImage: function (img, x, y) {
 		this.canvas.getContext().drawImage(img, x, y);
+	},
+	drawElement: function (el) {
+		var origin = this.canvas.getOrigin();
+		this.canvas.getContext().drawImage(el.img, el.x + origin.x, el.y + origin.y);
 	}
 });

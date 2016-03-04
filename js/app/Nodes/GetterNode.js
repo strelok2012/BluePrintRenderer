@@ -1,21 +1,19 @@
-var GetterNode = Class(AbstractNode, {constructor: function (getterNode, x, y, parentCanvas, hoverCanvas) {
-		GetterNode.$super.call(this, x, y, parentCanvas, hoverCanvas);
+var GetterNode = Class(AbstractNode, {constructor: function (getterNode, x, y, drawer) {
+		GetterNode.$super.call(this, x, y, drawer);
 		this.outputs = getterNode.outputs;
 		this.minCellWidth = 8;
 		this.cellHeight = 2;
 		this.width = this.getCellSize() * this.minCellWidth;
 	},
-	setSVG: function () {
+	setSVG: function (drawer) {
 		var mainColor = VAR_COLORS[this.outputs[0].type.name];
-		this.calculateWidth();
-
-		var draw = SVG('svgContainer').size(this.width, this.height);
+		var draw = drawer.group();
 		var radGradient = draw.gradient('radial', function (stop) {
 			stop.at({offset: 0, color: mainColor, opacity: 0.74226803});
-			stop.at({offset: 1, color: mainColor, opacity: 0});
+			stop.at({offset: 1, color: mainColor, opacity: 0.01});
 		});
-		radGradient.attr('gradientTransform', 'matrix(1,0,0,0.7,0,' + (-this.height / 2) + ')');
-		radGradient.attr('gradientUnits', 'userSpaceOnUse');
+		radGradient.attr('gradientTransform', 'matrix(1,0,0,1,0,-0.5)');
+		//radGradient.attr('gradientUnits', 'userSpaceOnUse');
 
 		var linGradient = draw.gradient('linear', function (stop) {
 			stop.at({offset: 0, color: '#a0a0a0', opacity: 1});
@@ -25,9 +23,9 @@ var GetterNode = Class(AbstractNode, {constructor: function (getterNode, x, y, p
 		});
 		linGradient.from(0, 1).to(0, 0);
 
-		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		mainRect.fill(radGradient);
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 
@@ -44,5 +42,7 @@ var GetterNode = Class(AbstractNode, {constructor: function (getterNode, x, y, p
 			, anchor: 'end'
 			, color: "#ffffff"
 		});
+
+		return draw;
 	}
 });

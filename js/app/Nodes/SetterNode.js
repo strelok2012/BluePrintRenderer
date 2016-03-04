@@ -1,6 +1,6 @@
 var SetterNode = Class(AbstractNode, {
-	constructor: function (setterNode, x, y, parentCanvas, hoverCanvas) {
-		GetterNode.$super.call(this, x, y, parentCanvas, hoverCanvas);
+	constructor: function (setterNode, x, y, drawer) {
+		GetterNode.$super.call(this, x, y, drawer);
 		this.inputs = setterNode.inputs;
 		this.outputs = setterNode.outputs;
 		this.minCellWidth = 10;
@@ -8,9 +8,8 @@ var SetterNode = Class(AbstractNode, {
 
 		this.width = this.getCellSize() * this.minCellWidth;
 	},
-	setSVG: function () {
-		this.calculateWidth();
-		var draw = SVG('svgContainer').size(this.width, this.height);
+	setSVG: function (drawer) {
+		var draw =drawer.group();
 
 		var mainColor = null;
 		this.inputs.forEach(function (item) {
@@ -38,9 +37,9 @@ var SetterNode = Class(AbstractNode, {
 
 
 
-		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		mainRect.fill(radGradient);
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 		this.drawPins(draw);
@@ -55,5 +54,7 @@ var SetterNode = Class(AbstractNode, {
 			, anchor: 'middle'
 			, color: "#ffffff"
 		});
+
+		return draw;
 	}
 });

@@ -10,14 +10,22 @@ var HoverCanvas = Class(AbstractCanvas, {
 	redraw: function () {
 
 	},
-	drawHover: function () {
+	draw: function () {
+
 		this.getContext().clearRect(0, 0, this.width, this.height);
+		var promises = [];
 		for (var i = 0; i < this.nodes.length; i++) {
 			var node = this.nodes[i];
 			if (node.isSelected) {
-				node.drawHover();
+				promises.push(node.drawHover());
 			}
 
 		}
+		var self = this;
+
+		Promise.all(promises).then(function () {
+			self.drawElements();
+		});
+
 	}
 });

@@ -1,6 +1,6 @@
 var ConverterNode = Class(AbstractNode, {
-	constructor: function (funcObj, x, y, parentCanvas, hoverCanvas) {
-		ConverterNode.$super.call(this, x, y, parentCanvas, hoverCanvas);
+	constructor: function (funcObj, x, y, drawer) {
+		ConverterNode.$super.call(this, x, y, drawer);
 		this.function = funcObj;
 
 		this.inputs = funcObj.inputs;
@@ -19,10 +19,8 @@ var ConverterNode = Class(AbstractNode, {
 		this.height = this.minCellHeight * this.getCellSize();
 		this.width = this.getCellSize() * this.minCellWidth;
 	},
-	setSVG: function () {
-		this.calculateWidth();
-		console.log('conv', this.height);
-		var draw = SVG('svgContainer').size(this.width, this.height);
+	setSVG: function (drawer) {
+var draw = drawer.group();
 
 
 		var linGradient = draw.gradient('linear', function (stop) {
@@ -35,9 +33,9 @@ var ConverterNode = Class(AbstractNode, {
 
 
 
-		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		mainRect.fill({color: "#000", opacity: 0.5});
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 
@@ -48,5 +46,7 @@ var ConverterNode = Class(AbstractNode, {
 		var ellipse = draw.rect(ellipseWidth, ellipseHeight).radius(6);
 		ellipse.translate(this.width / 2 - ellipseWidth / 2, this.height / 2 - ellipseHeight / 2);
 		ellipse.fill({color: "#fff", opacity: 0.3});
+		
+			return draw;
 	}
 });

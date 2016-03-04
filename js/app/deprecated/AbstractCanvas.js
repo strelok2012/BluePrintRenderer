@@ -2,13 +2,13 @@ var AbstractCanvas = Class({
 	constructor: function (id, width, height) {
 		this.id = id;
 		this.origin = {x: 0, y: 0};
-		this.canvasObject = document.getElementById(id);
+		//this.canvasObject = document.getElementById(id);
 		this.width = width || window.innerWidth;
 		this.height = height || window.innerHeight;
 		this.elements = [];
-		this.canvasObject.width = this.width;
-		this.canvasObject.height = this.height;
-		this.drawer = new SVGDrawer(this);
+	//	this.canvasObject.width = this.width;
+	//	this.canvasObject.height = this.height;
+		//this.drawer = new SVGDrawer(this);
 		this.scale = 1;
 	},
 	getContext: function () {
@@ -18,7 +18,7 @@ var AbstractCanvas = Class({
 		this.origin = point;
 	},
 	getOrigin: function () {
-		return this.origin;
+		return new Vector(this.origin.x, this.origin.y);
 	},
 	resize: function () {
 		this.setSize(window.innerWidth, window.innerHeight);
@@ -35,5 +35,12 @@ var AbstractCanvas = Class({
 
 		this.canvasObject.width = width;
 		this.canvasObject.height = height;
+	},
+	drawElements: function () {
+		for (var i = 0; i < this.elements.length; i++) {
+			var el = this.elements[i];
+			if (!el.tag)
+				this.drawer.drawElement(el);
+		}
 	}
 });

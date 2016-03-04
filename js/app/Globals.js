@@ -1,4 +1,3 @@
-
 var CanvasStack = Class({
 	stack: [],
 	constructor: function () {
@@ -10,6 +9,37 @@ var CanvasStack = Class({
 	},
 	addCanvas: function (canvas) {
 		this.stack.push(canvas);
+	},
+	drawAll: function () {
+
+	},
+	setOrigin: function (origin) {
+		this.stack.forEach(function (item) {
+			item.origin = origin;
+		});
+	},
+	setScale: function (scale) {
+		this.stack.forEach(function (item) {
+			item.scale = scale;
+		});
+	},
+	clear: function () {
+		this.stack.forEach(function (item) {
+			item.clear();
+		});
+	},
+	draw: function () {
+		this.stack.forEach(function (canvas) {
+			canvas.elements.forEach(function (element) {
+				canvas.drawer.drawElement(element);
+			});
+
+			canvas.nodes.forEach(function (node) {
+				if (node.isSelected) {
+					canvas.drawer.drawElement(node.hoverElement);
+				}
+			})
+		});
 	}
 
 });

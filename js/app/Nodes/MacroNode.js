@@ -1,6 +1,6 @@
 var MacroNode = Class(AbstractNode, {
-	constructor: function (funcObj, x, y, parentCanvas, hoverCanvas) {
-		MacroNode.$super.call(this, x, y, parentCanvas, hoverCanvas);
+	constructor: function (funcObj, x, y, drawer) {
+		MacroNode.$super.call(this, x, y, drawer);
 		this.function = funcObj;
 		this.inputs = funcObj.inputs;
 		this.outputs = funcObj.outputs;
@@ -17,11 +17,10 @@ var MacroNode = Class(AbstractNode, {
 		this.width = this.getCellSize() * this.minCellWidth;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
 	},
-	setSVG: function () {
-		this.calculateWidth();
+	setSVG: function (drawer) {
 		var headerColor = VAR_COLORS["macro"];
 
-		var draw = SVG('svgContainer').size(this.width, this.height);
+var draw = drawer.group();
 
 
 		var headerGradient = draw.gradient('linear', function (stop) {
@@ -39,9 +38,9 @@ var MacroNode = Class(AbstractNode, {
 
 
 
-		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
 		mainRect.fill({color: "#000", opacity: 0.5});
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 
@@ -68,7 +67,7 @@ var MacroNode = Class(AbstractNode, {
 
 		this.drawPins(draw);
 
-
+	return draw;
 
 	}
 });
