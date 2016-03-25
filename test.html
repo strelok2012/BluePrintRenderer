@@ -1,24 +1,42 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 		<style>
 			* { margin:0; padding:0; } /* to remove the top and left whitespace */
 
-			html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+			html, body { width:100%; height:100%;font-family: 'Roboto', sans-serif; } /* just to be sure these are full screen*/
 
 			canvas { display:block; position: absolute; left: 0; top:0;} /* To remove the scrollbars */
 			#gridCanvas { z-index: 1; background: #262626;};
 			#mainCanvas { z-index: 2;};
 			#container {overflow: auto};
 
+			#svgContainer {
+				-webkit-user-select:none;
+				-khtml-user-select:none;
+				-moz-user-select:none;
+				-ms-user-select:none;
+				-o-user-select:none;
+				user-select:none;
+			}
+
+
+
+			#contenteditable {
+				display: none;
+			}
+
 		</style>
 		<script src="/js/svg.js"></script>
+		<script src="/js/svg.absorb.js"></script>
 		<script src="/js/svg.filter.js"></script>
 		<script src="/js/jsface.js"></script>
 		<script src="/js/vector.js"></script>
 		<script src="/js/app/SVG.js"></script>
 		<script src="/js/app/Drawers/LinksDrawer.js"></script>
 		<script src="/js/app/Drawers/NodesDrawer.js"></script>
+		<script src="/js/app/Drawers/InterfaceDrawer.js"></script>
 
 
 		<script src="/js/app/Globals.js"></script>
@@ -35,37 +53,126 @@
 		<script src="/js/app/Nodes/ConverterNode.js"></script>
 		<script src="/js/app/Nodes/BinaryOperatorNode.js"></script>
 		<script src="/js/app/Nodes/MacroNode.js"></script>
+		<script src="/js/app/Nodes/RerouteNode.js"></script>
+		<script src="/js/app/Nodes/ArrayFunctionNode.js"></script>
 	</head>
 	<body style="overflow: hidden">
 		<script>
 
 			window.addEventListener("load", onLoad, false);
 			window.addEventListener('resize', onResize, true);
-			window.addEventListener('paste', onPaste, true);
+
 			var objects = [];
 			var nodes = [];
-			var isButtonDown = false;
+			var dragNode = null;
+			var interfaceDrawer = null;
+			var rightButtonDown = false;
 			var clickPoint = null;
 			var uberGroup = null;
+			var nodeMouseDownPoint;
+			var grid = null;
 			var linksSvg = null;
 			var origin = new Vector(0, 0);
 			var currentScale = 1;
+			var scaleStep = 0;
+			var gridStep = 16;
+			var selectedNodes = [];
+			var gridCoeff = 3;
+			var drawerWidth, drawHeight;
+			var mainDrawer;
+			var linksDrawer;
+			var pointOnNode = null;
+			var dragStart = false;
+			var nodeClicked = false;
+			var movingNodes = [];
+			var nodesDrawer;
+			var currentCursorPos;
+			var linksLayer, nodesLayer;
 
 			function onResize() {
 				//globalStack.resizeAll();
 			}
 
-			function onPaste(e) {
-				var content;
-
-				e.preventDefault();
-
-				console.log(e);
-			}
 
 			function getRandomInt(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
 			}
+
+
+
+			document.addEventListener('paste', function (e) {
+
+				var pastedText = undefined;
+				if (window.clipboardData && window.clipboardData.getData) { // IE
+					pastedText = window.clipboardData.getData('Text');
+				} else if (e.clipboardData && e.clipboardData.getData) {
+					pastedText = e.clipboardData.getData('text/plain');
+				}
+
+				var parser = new BPParser(pastedText);
+				var newObjects = parser.parseText();
+				if (newObjects) {
+					var newNodes = BPToNodes(newObjects, currentCursorPos);
+					nodes = nodes.concat(newNodes);
+					nodesLayer.add(drawNodes(newNodes));
+					var links = linksDrawer.renderNodes(newNodes)
+					linksLayer.add(links);
+				}
+				else {
+					console.log('Parse error');
+				}
+				return false; // Prevent the default handler from running.
+			});
+
+
+			document.addEventListener('copy', function (e) {
+
+				return false;
+			});
+
+			document.addEventListener('dragstart', function (e) {
+				e.preventDefault();
+			});
+
+			document.onkeydown = function (evt) {
+				evt = evt || window.event;
+				console.log(evt.keyCode);
+				if (evt.ctrlKey && evt.keyCode === 65) {
+					selectAllNodes();
+					evt.preventDefault();
+				}
+				else if (evt.ctrlKey && evt.keyCode === 67) {
+					document.getElementById('copyContainer').innerHTML = '';
+					selectedNodes.forEach(function (item) {
+						document.getElementById('copyContainer').innerHTML += item.x + ",";
+					});
+					var doc = document
+							, text = doc.getElementById('copyContainer')
+							, range, selection
+							;
+					if (doc.body.createTextRange) {
+						range = document.body.createTextRange();
+						range.moveToElementText(text);
+						range.select();
+					} else if (window.getSelection) {
+						selection = window.getSelection();
+						range = document.createRange();
+						range.selectNodeContents(text);
+						selection.removeAllRanges();
+						selection.addRange(range);
+					}
+					var successful = document.execCommand('copy');
+					var msg = successful ? 'successful' : 'unsuccessful';
+					console.log('Copying text command was ' + msg);
+					document.getElementById('copyContainer').innerHTML = '';
+				}
+
+
+
+
+			};
+
+
 			function onLoad()
 			{
 				var client = new XMLHttpRequest();
@@ -79,22 +186,35 @@
 				}
 				client.send();
 
-				console.log(document.getElementById('svgContainer'));
 
-				var el = document.getElementById('svgContainer')
+				var el = document.getElementById('svgContainer');
 				el.addEventListener('wheel', function (e) {
 					var sign = e.deltaY > 0 && -1 || 1;
+					var newScaleStep = scaleStep + sign;
+					if (newScaleStep >= -12 && newScaleStep <= 7) {
+						var newScale = currentScale + sign * 0.08;
 
-					var newScale = currentScale + sign * 0.3;
-					var point = getCoords(e);
-					uberGroup.animate(100, '>').scale(newScale).during(function (pos) {
-						//	uberGroup.move(-sign*point.x*pos+origin.x,-sign*point.y*pos+origin.y);console.log(pos);
-					}).after(function () {
+						var point = getCoords(e).subtract(origin).divide(currentScale);
+
+						var deltaScale = newScale - currentScale;
+
+						var offsetX = -((point.x) * deltaScale);
+						var offsetY = -((point.y) * deltaScale);
+
+						uberGroup.scale(newScale);
+						uberGroup.move(origin.x, origin.y);
+						uberGroup.dmove(offsetX, offsetY);
+
 						origin.x = uberGroup.x();
 						origin.y = uberGroup.y();
-						currentScale = newScale;
-					});
 
+						scaleStep = newScaleStep;
+
+						interfaceDrawer.setScaleLabelText(scaleStep);
+						currentScale = newScale;
+						gridPattern.scale(currentScale);
+						updatePattern(origin.x, origin.y);
+					}
 				});
 
 				el.addEventListener('contextmenu', function (ev) {
@@ -102,86 +222,419 @@
 					return false;
 				}, false);
 
-				makeUnselectable(el);
+
+
+
+
+
+
+
+
+
+				//makeUnselectable(el);
+			}
+
+			function isNodeSelected(el) {
+				return selectedNodes.indexOf(el) !== -1;
+			}
+
+			function selectAllNodes() {
+				selectedNodes.splice(0, selectedNodes.length);
+				nodes.forEach(function (node) {
+					node.hover.show();
+					selectedNodes.push(node);
+				});
+				//console.log('len', selectedNodes.length);
 			}
 
 
 
+			function selectOneNode(el) {
+				selectedNodes.forEach(function (node) {
+					node.hover.hide();
+				})
+				selectedNodes.splice(0, selectedNodes.length);
+				selectedNodes[0] = el;
+				selectedNodes.forEach(function (node) {
+					if (node.hover.visible()) {
+						node.hover.hide();
+					}
+					else {
+						node.hover.show();
+					}
+				})
+			}
+
+			function selectNodeGroup(group) {
+				selectedNodes.forEach(function (node) {
+					node.hover.hide();
+				});
+				selectedNodes.splice(0, selectedNodes.length);
+				selectedNodes = group;
+				selectedNodes.forEach(function (node) {
+					node.hover.show();
+				})
+			}
+
+			function addNodeGroupToSelect(group) {
+				group.forEach(function (node) {
+					if (selectedNodes.indexOf(node) === -1) {
+						selectedNodes.push(node);
+						node.hover.show();
+					}
+				});
+			}
+
+
+			function selectNode(el, event) {
+				selectedNodes.forEach(function (node) {
+					node.hover.hide();
+				})
+
+				if (selectedNodes.indexOf(el) === -1) {
+					if (event.shiftKey) {
+						selectedNodes.push(el);
+					}
+					else if (event.ctrlKey) {
+						selectedNodes.push(el);
+					}
+					else {
+						selectedNodes.splice(0, selectedNodes.length);
+						selectedNodes[0] = el;
+					}
+				}
+				else if (event.ctrlKey) {
+					selectedNodes.splice(selectedNodes.indexOf(el), 1);
+				}
+				else {
+					selectedNodes.splice(selectedNodes.indexOf(el), 1);
+				}
+
+
+
+				selectedNodes.forEach(function (node) {
+					if (node.hover.visible()) {
+						node.hover.hide();
+					}
+					else {
+						node.hover.show();
+					}
+				})
+			}
+
+			function unselectAllNodes() {
+				selectedNodes.forEach(function (node) {
+					node.hover.hide();
+				});
+				selectedNodes.splice(0, selectedNodes.length);
+
+			}
+
+			function bindEventsToNodes() {
+
+			}
+
+			function drawNodes(nodes) {
+				var nodesDraw = nodesDrawer.renderNodes(nodes);
+
+				nodes.forEach(function (el) {
+					makeUnselectable(el.allNode);
+					if (el instanceof CommentNode) {
+						//console.log(el);
+						el.selectable.mousedown(function (event) {
+							if (event.button === 0) {
+								//console.log('SELECTABLE');
+
+								dragNode = el;
+								var delta = getCoords(event);
+								nodeMouseDownPoint = getCoords(event);
+								var sub = delta.subtract(origin);
+								pointOnNode = new Vector(sub.x - dragNode.x * currentScale, sub.y - dragNode.y * currentScale);
+								//console.log(pointOnNode);
+
+
+							}
+							if (event.button === 0) {
+								event.stopPropagation();
+							}
+						});
+					}
+					else {
+						el.allNode.mousedown(function (event) {
+							if (event.button === 0) {
+
+								dragNode = el;
+								var delta = getCoords(event);
+								nodeMouseDownPoint = getCoords(event);
+								var sub = delta.subtract(origin);
+								pointOnNode = new Vector(sub.x - dragNode.x * currentScale, sub.y - dragNode.y * currentScale);
+								//console.log(pointOnNode);
+
+
+							}
+							if (event.button === 0) {
+								event.stopPropagation();
+							}
+						});
+					}
+
+
+					if (el instanceof CommentNode) {
+						el.selectable.mouseup(function (event) {
+							var mouseUpPoint = getCoords(event)
+							if (event.button === 0) {
+								movingNodes = [];
+								if (nodeMouseDownPoint.equals(mouseUpPoint))
+								{
+									if (!isNodeSelected(el) || event.ctrlKey) {
+										selectNode(el, event);
+									}
+									else if (selectedNodes.length > 1) {
+										selectOneNode(el);
+									}
+								}
+
+
+								dragNode = null;
+							}
+
+						});
+					}
+					else {
+						el.allNode.mouseup(function (event) {
+							var mouseUpPoint = getCoords(event)
+							if (event.button === 0) {
+								movingNodes = [];
+								if (nodeMouseDownPoint.equals(mouseUpPoint))
+								{
+									if (!isNodeSelected(el) || event.ctrlKey) {
+										selectNode(el, event);
+									}
+									else if (selectedNodes.length > 1) {
+										selectOneNode(el);
+									}
+								}
+
+
+								dragNode = null;
+							}
+
+						});
+					}
+
+
+
+					el.pins.forEach(function (pin) {
+						pin.draw.style('cursor', 'default');
+						pin.draw.mouseover(function (e) {
+							if (!dragNode)
+								pin.hover.show();
+						});
+						pin.draw.mouseout(function (e) {
+							pin.hover.hide();
+						});
+					})
+
+				});
+
+				return nodesDraw;
+
+			}
 			function draw() {
-				var nodes = BPToNodes(objects);
+				nodes = nodes.concat(BPToNodes(objects));
+				//console.log('nodes', nodes);
+				drawerWidth = window.innerWidth;
+				drawerHeight = window.innerHeight;
 
-				var drawerWidth = window.innerWidth;
-				var drawerHeight = window.innerHeight;
+				mainDrawer = SVG('svgContainer').size(drawerWidth, drawerHeight);
+				linksDrawer = new LinksDrawer(mainDrawer);
 
-				var mainDrawer = SVG('svgContainer').size(drawerWidth, drawerHeight);
-				var linksDrawer = new LinksDrawer(nodes, mainDrawer);
-				var nodesDrawer = new NodesDrawer(nodes, mainDrawer);
-				//console.log('maxes', maxX, maxY)
-				//must know width & height!
-				//	maxX += 200;
-				//maxY += 200;
 
-				//var drawerWidth = (maxX > window.innerWidth) && maxX || window.innerWidth;
-				//var drawerHeight = (maxY > window.innerHeight) && maxY || window.innerHeight;
+				nodesDrawer = new NodesDrawer(mainDrawer);
+				var nodesDraw = drawNodes(nodes);
 
-				var grid = mainDrawer.group();
-				var gridRect = grid.rect(drawerWidth, drawerHeight).fill({color: '#262626'});
-				var gridStep = 17;
+				var links = linksDrawer.renderNodes(nodes);
 
-				for (var p = gridStep; p < drawerWidth; p += gridStep) {
-					grid.line(p, 0, p, drawerHeight).stroke({width: 1, color: '#343434'})
-				}
+				interfaceDrawer = new InterfaceDrawer(nodes, mainDrawer);
 
-				for (var p = gridStep; p < drawerHeight; p += gridStep) {
-					grid.line(0, p, drawerWidth, p).stroke({width: 1, color: '#343434'})
-				}
 
-				for (var p = (gridStep * 8); p < drawerWidth; p += gridStep * 8) {
-					grid.line(p, 0, p, drawerHeight).stroke({width: 1, color: '#161616'})
 
-				}
 
-				for (var p = (gridStep * 8); p < drawerHeight; p += gridStep * 8) {
-					grid.line(0, p, drawerWidth, p).stroke({width: 1, color: '#161616'})
-				}
-				
-				var nodes = nodesDrawer.render();
-				var links = linksDrawer.render();
+
 				links.back();
-				grid.back();
+
+
+
+
+				//	interface.front();
+
+
 				uberGroup = mainDrawer.group();
-				
-				uberGroup.add(links);
-				uberGroup.add(nodes);
+				linksLayer = uberGroup.group();
+				nodesLayer = uberGroup.group();
 
 
 
 
+				drawGrid(gridCoeff);
+				linksLayer.back();
+				linksLayer.add(links);
+				nodesLayer.add(nodesDraw);
 
+				uberGroup.add(linksLayer);
+				uberGroup.add(nodesLayer);
+
+
+				var interface = interfaceDrawer.render();
+
+				//grid.back();
 
 
 				mainDrawer.mousemove(function (e) {
-					if (isButtonDown) {
+
+					currentCursorPos = getCoords(e).subtract(origin).divide(currentScale);
+
+					if (rightButtonDown) {
 						var delta = getCoords(e).subtract(clickPoint);
+						updatePattern(origin.x + delta.x, origin.y + delta.y);
 						uberGroup.move(origin.x + delta.x, origin.y + delta.y);
+					}
+
+
+
+					if (dragNode !== null && (e.button === 0)) {
+						var delta = getCoords(e);
+						if (!isNodeSelected(dragNode)) {
+							selectNode(dragNode, e);
+						}
+
+						var newPos = new Vector(delta.x - pointOnNode.x - origin.x, delta.y - pointOnNode.y - origin.y).divide(currentScale);
+						newPos = getNearestCell(newPos.x, newPos.y)
+						var deltaPos = new Vector(newPos.x - dragNode.allNode.x(), newPos.y - dragNode.allNode.y());
+						dragNode.allNode.move(newPos.x, newPos.y);
+
+
+
+						if (!dragStart) {
+							if (dragNode instanceof CommentNode) {
+								//console.log('is instance');
+								nodes.forEach(function (nodeItem) {
+									if (inNode(dragNode, nodeItem) && nodeItem !== dragNode && selectedNodes.indexOf(nodeItem) === -1) {
+										movingNodes.push(nodeItem);
+									}
+								});
+							}
+
+
+							selectedNodes.forEach(function (node) {
+								if (node instanceof CommentNode && node !== dragNode) {
+									nodes.forEach(function (nodeItem) {
+										if (inNode(node, nodeItem) && nodeItem !== node && selectedNodes.indexOf(nodeItem) === -1) {
+											movingNodes.push(nodeItem);
+										}
+									});
+								}
+							});
+							dragStart = true;
+						}
+
+
+						selectedNodes.forEach(function (node) {
+							if (node !== dragNode) {
+								node.allNode.dmove(deltaPos.x, deltaPos.y);
+								node.x = node.allNode.x();
+								node.y = node.allNode.y();
+							}
+						});
+
+						movingNodes.forEach(function (node) {
+							if (node !== dragNode) {
+								node.allNode.dmove(deltaPos.x, deltaPos.y);
+								node.x = node.allNode.x();
+								node.y = node.allNode.y();
+							}
+						});
+
+						dragNode.x = dragNode.allNode.x();
+						dragNode.y = dragNode.allNode.y();
+
+						linksLayer.each(function (i, children) {
+							this.remove();
+						})
+						links = linksDrawer.renderNodes(nodes);
+						links.back();
+
+						linksLayer.add(links);
+						//	console.log('delta', delta);
+					}
+
+					if (!dragNode && clickPoint && !rightButtonDown) {
+						var endPoint = getCoords(e);
+						interfaceDrawer.drawSelectRect(clickPoint, getCoords(e));
+						var rect = {};
+						rect.x = (clickPoint.x < endPoint.x) && clickPoint.x || endPoint.x;
+						rect.y = (clickPoint.y < endPoint.y) && clickPoint.y || endPoint.y;
+
+						rect.width = Math.abs(endPoint.x - clickPoint.x);
+						rect.height = Math.abs(endPoint.y - clickPoint.y);
+
+
+						rect.x -= origin.x;
+						rect.y -= origin.y;
+
+						var group = [];
+						nodes.forEach(function (nodeItem) {
+							if (nodeItem instanceof CommentNode) {
+								if (intersectNodeSelectable(rect, nodeItem, currentScale, interfaceDrawer, origin)) {
+									group.push(nodeItem);
+								}
+							}
+							else {
+								if (intersectNode(rect, nodeItem, currentScale, interfaceDrawer, origin)) {
+									group.push(nodeItem);
+								}
+							}
+						})
+						//console.log(group);
+						if (!e.shiftKey)
+							selectNodeGroup(group);
+						else {
+							//console.log('add group');
+							addNodeGroupToSelect(group);
+						}
+
 					}
 
 				});
 
 				mainDrawer.mousedown(function (e) {
-					if (e.button === 2)
-						isButtonDown = true;
+					//console.log(e.button);
+					if (e.button === 2) {
+						interfaceDrawer.removeSelectRect();
+						rightButtonDown = true;
+					}
+					else if (e.button === 0 && !e.shiftKey) {
+						unselectAllNodes();
+					}
 					clickPoint = getCoords(e);
-					console.log('uber', uberGroup.x(), uberGroup.y())
 				});
 
 				mainDrawer.mouseup(function (e) {
-					isButtonDown = false;
-					console.log('newOrigin', uberGroup.x(), uberGroup.y())
+					rightButtonDown = false;
 					origin.x = uberGroup.x();
 					origin.y = uberGroup.y();
+					dragStart = false;
+					clickPoint = null;
+					interfaceDrawer.removeSelectRect();
 				});
 
+
+
+
+			}
+
+			function getNearestCell(x, y) {
+				return new Vector(Math.floor(x / gridStep) * gridStep, Math.floor(y / gridStep) * gridStep);
 			}
 
 			function parse(text) {
@@ -189,6 +642,8 @@
 				objects = parser.parseText();
 				draw();
 			}
+
+			var gridPattern;
 
 			function getCoords(e) {
 				var can = document.getElementById('svgContainer');
@@ -208,20 +663,55 @@
 				return new Vector(x, y);
 			}
 
+			function drawGrid(coeff) {
+				grid = mainDrawer.group();
+				var innerCoeff = Math.floor(coeff / 2);
+				gridPattern = mainDrawer.pattern(gridStep * 8, gridStep * 8, function (add) {
+					add.rect(136, 136).fill('#262626');
+					for (var i = 1; i < 8; i++) {
+						add.line(i * gridStep, 0, i * gridStep, gridStep * 8).stroke({width: 1, color: '#343434'});
+						add.line(0, i * gridStep, gridStep * 8, i * gridStep).stroke({width: 1, color: '#343434'});
+					}
+
+					add.line(0, 0, 0, gridStep * 8).stroke({width: 1, color: '#161616'});
+					add.line(0, 0, gridStep * 8, 0).stroke({width: 1, color: '#161616'});
+				})
+				grid.rect(drawerWidth, drawerHeight).fill(gridPattern);
+				grid.back();
+				grid.style('pointer-events', 'none')
+
+
+			}
+
+			function updatePattern(x, y) {
+				gridPattern.x(x / currentScale);
+				gridPattern.y(y / currentScale);
+			}
+
+			function updatePatternScale(newScale) {
+				gridPattern.scale(newScale);
+			}
+
 			function makeUnselectable(node) {
-				/*if (node.nodeType == 1) {
-				 //node.style('pointer-events', 'none');
-				 }
-				 var child = node.firstChild;
-				 while (child) {
-				 makeUnselectable(child);
-				 child = child.nextSibling;
-				 }*/
+				if (node.node)
+					node = node.node;
+				if (node.nodeType === 1) {
+					if (node.tagName === "text" || node.tagName === "tspan")
+						node.setAttribute("style", node.getAttribute("style") + "; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;");
+				}
+				var child = node.firstChild;
+				while (child) {
+
+					makeUnselectable(child);
+					child = child.nextSibling;
+				}
 			}
 
 		</script>
+		<div id="contenteditable" contenteditable></div>
 		<div id="svgContainer"></div>
 		<div id="tmpSvgContainer"></div>
+		<div id="copyContainer"></div>
 	</body>
 
 

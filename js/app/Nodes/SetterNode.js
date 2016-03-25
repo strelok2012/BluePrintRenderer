@@ -1,15 +1,20 @@
 var SetterNode = Class(AbstractNode, {
 	constructor: function (setterNode, x, y, drawer) {
-		GetterNode.$super.call(this, x, y, drawer);
+		SetterNode.$super.call(this, x, y, drawer);
 		this.inputs = setterNode.inputs;
 		this.outputs = setterNode.outputs;
 		this.minCellWidth = 10;
 		this.cellHeight = 5;
+		this.showPinText = true;
+		this.cellOffset = 0.5;
 
-		this.width = this.getCellSize() * this.minCellWidth;
+		this.width = this.cellSize * this.minCellWidth;
+		this.headerCellHeight= 1.5;
+		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(setterNode.outputs.length, setterNode.inputs.length) + Math.max(setterNode.outputs.length, setterNode.inputs.length) * this.cellOffset;
+		console.log(this.cellHeight);
 	},
 	setSVG: function (drawer) {
-		var draw =drawer.group();
+		var draw = drawer.group();
 
 		var mainColor = null;
 		this.inputs.forEach(function (item) {
@@ -24,22 +29,13 @@ var SetterNode = Class(AbstractNode, {
 			stop.at({offset: 0, color: mainColor, opacity: 0.74226803});
 			stop.at({offset: 1, color: mainColor, opacity: 0});
 		});
-		radGradient.attr('gradientTransform', 'matrix(1,0,0,0.7,0,' + (-this.height / 2) + ')');
-		radGradient.attr('gradientUnits', 'userSpaceOnUse');
-
-		var linGradient = draw.gradient('linear', function (stop) {
-			stop.at({offset: 0, color: '#a0a0a0', opacity: 1});
-			stop.at({offset: 0.03, color: '#5f5f5f', opacity: 0.3});
-			stop.at({offset: 0.8, color: '#636363', opacity: 0.3});
-			stop.at({offset: 1, color: '#ffffff', opacity: 1});
-		});
-		linGradient.from(0, 1).to(0, 0);
+		radGradient.attr('gradientTransform', 'matrix(1,0,0,0.7,0,-0.3)');
+		//radGradient.attr('gradientUnits', 'userSpaceOnUse');
 
 
-
-		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
-		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
+		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		opacityRect.fill(this.nodesDrawer.opacityLinearGradient);
+		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
 		mainRect.fill(radGradient);
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 		this.drawPins(draw);
@@ -50,7 +46,7 @@ var SetterNode = Class(AbstractNode, {
 		setText.style('font-weight', 'bold')
 		setText.font({
 			family: 'Roboto'
-			, size: this.getFontSize()
+			, size: this.fontSize
 			, anchor: 'middle'
 			, color: "#ffffff"
 		});

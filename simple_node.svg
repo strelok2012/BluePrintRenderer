@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   viewBox="0 0 173.84412 49.385166"
+   height="49.385166"
+   width="173.84412"
+   version="1.1"
+   id="svg2">
+  <defs
+     id="defs6">
+    <linearGradient
+       id="linearGradient4330">
+      <stop
+         style="stop-color:#a0a0a0;stop-opacity:1"
+         offset="0"
+         id="stop4332" />
+      <stop
+         id="stop4398"
+         offset="0.02167272"
+         style="stop-color:#5f5f5f;stop-opacity:0.83137256" />
+      <stop
+         id="stop4338"
+         offset="0.67559034"
+         style="stop-color:#636363;stop-opacity:0.36470589" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop4334" />
+    </linearGradient>
+    <linearGradient
+       id="NodeGradient">
+      <stop
+         id="stop4153"
+         offset="0"
+         style="stop-color:#871d1d;stop-opacity:0.74226803" />
+      <stop
+         id="stop4155"
+         offset="1"
+         style="stop-color:#871d1d;stop-opacity:0" />
+    </linearGradient>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.87001704,0,0,0.29565444,-705.42711,-265.21721)"
+       r="83.423805"
+       fy="909.45294"
+       fx="909.73175"
+       cy="909.45294"
+       cx="909.73175"
+       id="radialGradient4531"
+       xlink:href="#NodeGradient" />
+    <linearGradient
+       gradientTransform="translate(7.0506356,-69.280115)"
+       gradientUnits="userSpaceOnUse"
+       y2="3.2330489"
+       x2="92.621086"
+       y1="45.501835"
+       x1="92.621086"
+       id="linearGradient4316"
+       xlink:href="#linearGradient4330" />
+    <filter
+       height="1.1789626"
+       y="-0.089481322"
+       width="1.0450653"
+       x="-0.022532653"
+       id="filter4350"
+       style="color-interpolation-filters:sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur4352"
+         stdDeviation="1.5617721" />
+    </filter>
+  </defs>
+  <g
+     id="g4437">
+    <g
+       id="g4354"
+       transform="translate(-7.0506309,69.280115)">
+      <path
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;filter:url(#filter4350);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="m 29.308749,-65.531863 129.327881,0 c 10.25447,0 18.50987,8.2554 18.50987,18.509865 l 0,4.868934 c 0,10.254465 -8.2554,18.509865 -18.50987,18.509865 l -129.327881,0 c -10.254465,0 -18.509865,-8.2554 -18.509865,-18.509865 l 0,-4.868934 c 0,-10.254465 8.2554,-18.509865 18.509865,-18.509865 z"
+         id="path4340" />
+      <path
+         id="rect4312"
+         d="m 29.308749,-65.531863 129.327881,0 c 10.25447,0 18.50987,8.2554 18.50987,18.509865 l 0,4.868934 c 0,10.254465 -8.2554,18.509865 -18.50987,18.509865 l -129.327881,0 c -10.254465,0 -18.509865,-8.2554 -18.509865,-18.509865 l 0,-4.868934 c 0,-10.254465 8.2554,-18.509865 18.509865,-18.509865 z"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4316);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+    </g>
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4531);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 22.258114,3.748252 129.327886,0 c 10.25446,0 18.50986,8.2554 18.50986,18.509865 l 0,4.868934 c 0,10.254466 -8.2554,18.509867 -18.50986,18.509867 l -129.327886,0 c -10.254466,0 -18.5098649,-8.255401 -18.5098649,-18.509867 l 0,-4.868934 c 0,-10.254465 8.2553989,-18.509865 18.5098649,-18.509865 z"
+       id="mainRect" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#232121;fill-opacity:1;fill-rule:nonzero;stroke:#800f0f;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="Circle"
+       cx="139.87965"
+       cy="24.692591"
+       r="6.7196531" />
+    <path
+       style="fill:#7d1817;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 148.2128,21.56964 3.18045,3.1996 -3.21877,3.0463 z"
+       id="CircleArrow" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;line-height:125%;font-family:Roboto;-inkscape-font-specification:Roboto;text-align:end;letter-spacing:0px;word-spacing:0px;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="123.33303"
+       y="28.882044"
+       id="nodeText"><tspan
+         id="tspan4541"
+         x="123.33303"
+         y="28.882044"
+         style="font-size:15px;text-align:end;text-anchor:end">Input Available</tspan></text>
+  </g>
+</svg>

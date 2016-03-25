@@ -5,21 +5,30 @@ var CommentNode = Class(AbstractNode, {
 		this.header = funcObj.name;
 		this.angleRadius = 0;
 		this.headerCellHeight = 2.5;
+		this.selectable = null;
 	},
 	calculateWidth: function () {
-		this.width = this.funcObj.width * this.getScale();
-		this.height = this.funcObj.height * this.getScale();
+		this.width = parseInt(this.funcObj.width);
+		this.height = parseInt(this.funcObj.height);
 	},
 	setSVG: function (drawer) {
 		var draw = drawer.group();
 
+		var headerColor = null;
+		var opacity = 1;
+		if (this.funcObj.commentColor) {
+			var cColor = this.funcObj.commentColor;
+			var r = parseInt(parseFloat(cColor.R) * 255);
+			headerColor = rgbToHex(parseFloat(cColor.R) * 255, parseFloat(cColor.G)*255, parseFloat(cColor.B)*255);
+			opacity = parseFloat(cColor.A);
+		}
+		else {
+			headerColor = '#acacac';
+			opacity = 1;
+		}
 
-		var header = draw.rect(this.width, this.height).radius(this.angleRadius).fill({color: "#acacac", opacity: 1});
-		var rect = draw.rect(this.width, this.height).move(0, -this.height + this.headerCellHeight * this.getCellSize());
-
-
-
-
+		var header = draw.rect(this.width, this.height).radius(this.angleRadius).fill({color: headerColor, opacity: opacity});
+		var rect = draw.rect(this.width, this.height).move(0, -this.height + this.headerCellHeight * this.cellSize);
 
 		header.clipWith(rect);
 
@@ -29,20 +38,30 @@ var CommentNode = Class(AbstractNode, {
 
 		headerText.font({
 			family: 'Roboto'
-			, size: 1.3 * this.getCellSize()
+			, size: 1.3 * this.cellSize
 			, anchor: 'start'
 			, color: "#ffffff"
 		});
 		headerText.style('font-weight', 'bold');
+		headerText.style('pointer-events', 'none');
 		headerText.style('text-shadow', '2px 2px 0px rgba(0, 0, 0, 1)');
-		headerText.translate(this.getCellSize(), 0);
+		headerText.translate(this.cellSize, 0);
 		headerText.fill({color: "#fff"});
 
 
 
+
+
 		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
-		mainRect.fill({color: "#fff", opacity: 0.2});
+		mainRect.fill({color: headerColor, opacity: 0.2});
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
+
+
+		var selectableRect = draw.rect(this.width, this.headerCellHeight * this.cellSize).fill({color: "#fff", opacity: 0});
+		;
+		this.selectable = selectableRect;
+		this.selectableHeight = this.headerCellHeight * this.cellSize;
+
 
 		return draw;
 

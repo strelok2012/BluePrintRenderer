@@ -14,13 +14,24 @@ var MacroNode = Class(AbstractNode, {
 		this.showHeader = true;
 		this.showPinText = true;
 
-		this.width = this.getCellSize() * this.minCellWidth;
+
+		if (this.function.name === "Branch") {
+			this.icon = ICONS["branch"];
+		}
+		else if (this.function.name.indexOf("For Each") !== -1) {
+			this.icon = ICONS["for_each"];
+		}
+		else if (this.function.name.indexOf("Flip") !== -1) {
+			this.icon = ICONS["flip_flop"];
+		}
+
+		this.width = this.cellSize * this.minCellWidth;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
 	},
 	setSVG: function (drawer) {
 		var headerColor = VAR_COLORS["macro"];
 
-var draw = drawer.group();
+		var draw = drawer.group();
 
 
 		var headerGradient = draw.gradient('linear', function (stop) {
@@ -28,19 +39,11 @@ var draw = drawer.group();
 			stop.at({offset: 1, color: headerColor, opacity: 0});
 		});
 
-		var linGradient = draw.gradient('linear', function (stop) {
-			stop.at({offset: 0, color: '#a0a0a0', opacity: 1});
-			stop.at({offset: 0.03, color: '#5f5f5f', opacity: 0.3});
-			stop.at({offset: 0.8, color: '#636363', opacity: 0.3});
-			stop.at({offset: 1, color: '#ffffff', opacity: 1});
-		});
-		linGradient.from(0, 1).to(0, 0);
 
 
-
-		var opacityRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
-		opacityRect.fill(linGradient);
-		var mainRect = draw.rect(this.width, this.height).radius(this.getAngleRadius());
+		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
+		opacityRect.fill(this.nodesDrawer.opacityLinearGradient);
+		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
 		mainRect.fill({color: "#000", opacity: 0.5});
 		mainRect.stroke({color: '#000000', opacity: 1, width: 1});
 
@@ -50,24 +53,29 @@ var draw = drawer.group();
 		});
 		headerGradient.from(0, 0).to(1, 0);
 		var header = draw.rect(this.width, this.height).radius(this.angleRadius).fill(headerGradient);
-		var rect = draw.rect(this.width, this.height).move(0, -this.height + this.headerCellHeight * this.getCellSize())
+		var rect = draw.rect(this.width, this.height).move(0, -this.height + this.headerCellHeight * this.cellSize)
 
 		header.clipWith(rect);
 		var headerText = draw.text(this.function.name);
 
 		headerText.font({
 			family: 'Roboto'
-			, size: this.getFontSize()
+			, size: this.fontSize
 			, anchor: 'start'
 			, color: "#ffffff"
 		});
 		headerText.style('font-weight', 'bold');
-		headerText.translate(this.getCellSize() * 2, 0);
+		headerText.translate(this.cellSize * 2, 0);
 		headerText.fill({color: "#fff"});
-
+		//console.log('macro');
 		this.drawPins(draw);
 
-	return draw;
+		if (this.icon) {
+			var icon = draw.image('/icons/{0}'.format(this.icon), 16, 16);
+			icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
+		}
+
+		return draw;
 
 	}
 });

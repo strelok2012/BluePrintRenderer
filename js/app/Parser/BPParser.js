@@ -81,15 +81,37 @@ var BPParser = Class({
 
 		return lineCounter;
 	},
+	verify: function (txt) {
+		var bCount = 0, eCount = 0;
+		txt.forEach(function (str) {
+			if (str.indexOf("Begin Object") !== -1) {
+				bCount++;
+			}
+			else if (str.indexOf("End Object") !== -1) {
+				eCount++;
+			}
+		});
+
+		if (eCount === bCount)
+			return true;
+
+
+		return false;
+
+	},
 	parseText: function () {
 		var txt = this.txt;
 		var retObj = {};
 		var objects = [];
 		var res = 0;
+		if (!this.verify(this.txt))
+			return null;
 		while (res < this.txt.length) {
 			res = this.parseObject(res, objects);
 			res++;
 		}
+
+		console.log(res, this.txt.length)
 		var original = objects;
 		var work = JSON.parse(JSON.stringify(objects));
 		for (var i = 0; i < work.length; i++) {
@@ -111,18 +133,45 @@ var BPParser = Class({
 
 			}
 			else if (currentNode.MacroGraphReference) {
-				currentNode["nodeName"] = currentNode.MacroGraphReference.MacroGraph.replace(/["']/g, "").split(":")[1].fromCamelCase();
-				console.log(currentNode["nodeName"]);
+			//	console.log(currentNode.MacroGraphReference.MacroGraph);
+				var tmp = currentNode.MacroGraphReference.MacroGraph.replace(/["']/g, "");
+				if (tmp.split(":").length > 1) {
+					currentNode["nodeName"] = tmp.split(":")[1].fromCamelCase();
+				}
+				else {
+					currentNode["nodeName"] = tmp.fromCamelCase();
+				}
 				delete currentNode.MacroGraphReference;
 			}
 			else if (currentNode.EventReference) {
-				currentNode["nodeName"] = currentNode.EventReference.MemberName.replace(/["']/g, "").replace("Receive", "");
-				currentNode["nodeName"] = "Event " + currentNode["nodeName"];
+				if (!currentNode.InputAxisName) {
+					if (!currentNode.DelegatePropertyName) {
+						currentNode["nodeName"] = currentNode.EventReference.MemberName.replace(/["']/g, "").replace("Receive", "");
+						currentNode["nodeName"] = "Event " + currentNode["nodeName"];
+					}
+					else {
+						currentNode["nodeName"] = currentNode.DelegatePropertyName.replace(/["']/g, "");
+						if (currentNode.ComponentPropertyName)
+							currentNode["nodeName"] += " (" + currentNode.ComponentPropertyName.replace(/["']/g, "") + ")";
+					}
+				}
+				else {
+					currentNode["nodeName"] = currentNode.InputAxisName.replace(/["']/g, "");
+					currentNode["nodeName"] = "InputAxis " + currentNode["nodeName"];
+				}
 				delete currentNode.EventReference;
 			}
 			if (!currentNode["nodeName"] && currentNode.CustomFunctionName) {
 				currentNode["nodeName"] = currentNode.CustomFunctionName;
 				currentNode.isCustom = true;
+			}
+
+			if (currentNode["InputActionName"]) {
+				if (currentNode["nodeName"])
+					currentNode["nodeName"] += currentNode["InputActionName"];
+				else if (currentNode["Class"]) {
+					currentNode["Class"] += currentNode["InputActionName"].replace(/["']/g, "").fromCamelCase();
+				}
 			}
 			var pinCounter = 0;
 			currentNode.pins = [];
@@ -131,7 +180,6 @@ var BPParser = Class({
 				delete currentNode["Pins({0})".format(pinCounter)];
 				pinCounter++;
 			}
-			//console.log(currentNode);
 			if (currentNode.objects) {
 				for (var j = currentNode.objects.length - 1; j >= 0; j--) {
 					var item = currentNode.objects[j];
@@ -152,6 +200,9 @@ var BPParser = Class({
 						newPin = currentNode.objects[k];
 						newPin.pinId = parseInt(currentNode.objects[k].Name.split("_")[1].replace(/["']/g, ""));
 						newPin.pinType = currentNode.objects[k].PinType.PinCategory;
+						if (currentNode.objects[k].PinType.bIsArray) {
+							newPin.isArray = true;
+						}
 						if (currentNode.objects[k].PinType.PinSubCategoryObject) {
 							newPin.subType = currentNode.objects[k].PinType.PinSubCategoryObject;
 							if (newPin.subType.indexOf("ScriptStruct") !== -1) {
@@ -231,7 +282,7 @@ var BPParser = Class({
 			}
 
 		}
-		console.log(work);
+	//	console.log(work);
 		return work;
 	}
 });
