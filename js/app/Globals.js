@@ -29,7 +29,12 @@ var ICONS = {
 	event: "icon_Blueprint_Event_16x.png",
 	for_each: "icon_Blueprint_ForEach_16x.png",
 	make_array: "icon_Blueprint_MakeArray_16x.png",
-	flip_flop : "icon_Blueprint_FlipFlop_16x.png"
+	flip_flop: "icon_Blueprint_FlipFlop_16x.png",
+	dynamic_cast: "icon_Blueprint_Cast_16x.png",
+	timeline: "icon_Blueprint_Timeline_16x.png",
+	node: "icon_Blueprint_Node_16x.png",
+	message : "MessageIcon.png",
+	latent: "LatentIcon.png"
 }
 
 var VAR_COLORS = {
@@ -56,7 +61,9 @@ var VAR_COLORS = {
 	exec: "#fff",
 	interface: "#c9d58f",
 	macro: "#b7b4aa",
-	wildcard: "#7f7979"
+	wildcard: "#7f7979",
+	dynamicCast: "#258489",
+	timeline: "#9d7e24"
 };
 
 
@@ -171,11 +178,10 @@ function deepCopy(obj) {
 
 
 function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+	var hex = c.toString(16);
+	return hex.length == 1 ? "0" + hex : hex;
 }
 
 function rgbToHex(r, g, b) {
-	console.log(r,g,b);
-    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+	return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
 }

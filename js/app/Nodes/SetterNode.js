@@ -11,7 +11,6 @@ var SetterNode = Class(AbstractNode, {
 		this.width = this.cellSize * this.minCellWidth;
 		this.headerCellHeight= 1.5;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(setterNode.outputs.length, setterNode.inputs.length) + Math.max(setterNode.outputs.length, setterNode.inputs.length) * this.cellOffset;
-		console.log(this.cellHeight);
 	},
 	setSVG: function (drawer) {
 		var draw = drawer.group();

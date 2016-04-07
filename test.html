@@ -19,13 +19,18 @@
 				-ms-user-select:none;
 				-o-user-select:none;
 				user-select:none;
+
 			}
+			/*svg {
+				shape-rendering:optimizeSpeed;
+			}*/
 
 
 
 			#contenteditable {
 				display: none;
 			}
+
 
 		</style>
 		<script src="/js/svg.js"></script>
@@ -55,6 +60,9 @@
 		<script src="/js/app/Nodes/MacroNode.js"></script>
 		<script src="/js/app/Nodes/RerouteNode.js"></script>
 		<script src="/js/app/Nodes/ArrayFunctionNode.js"></script>
+		<script src="/js/app/Nodes/CastNode.js"></script>
+		<script src="/js/app/Nodes/TimelineNode.js"></script>
+		<script src="/js/app/Nodes/CallDelegateNode.js"></script>
 	</head>
 	<body style="overflow: hidden">
 		<script>
@@ -176,7 +184,7 @@
 			function onLoad()
 			{
 				var client = new XMLHttpRequest();
-				client.open('GET', '/file.txt');
+				client.open('GET', '/file_big.txt');
 				client.onreadystatechange = function () {
 					if (client.readyState === 4 && client.status === 200)
 					{
@@ -446,7 +454,7 @@
 				drawerWidth = window.innerWidth;
 				drawerHeight = window.innerHeight;
 
-				mainDrawer = SVG('svgContainer').size(drawerWidth, drawerHeight);
+				mainDrawer = SVG('svgContainer').size(drawerWidth, drawerHeight).spof();
 				linksDrawer = new LinksDrawer(mainDrawer);
 
 
@@ -503,6 +511,7 @@
 
 
 					if (dragNode !== null && (e.button === 0)) {
+
 						var delta = getCoords(e);
 						if (!isNodeSelected(dragNode)) {
 							selectNode(dragNode, e);
@@ -520,6 +529,7 @@
 								//console.log('is instance');
 								nodes.forEach(function (nodeItem) {
 									if (inNode(dragNode, nodeItem) && nodeItem !== dragNode && selectedNodes.indexOf(nodeItem) === -1) {
+										console.log('push to moving in foreach', nodeItem);
 										movingNodes.push(nodeItem);
 									}
 								});
@@ -539,6 +549,7 @@
 						}
 
 
+
 						selectedNodes.forEach(function (node) {
 							if (node !== dragNode) {
 								node.allNode.dmove(deltaPos.x, deltaPos.y);
@@ -546,6 +557,8 @@
 								node.y = node.allNode.y();
 							}
 						});
+
+
 
 						movingNodes.forEach(function (node) {
 							if (node !== dragNode) {
@@ -555,14 +568,18 @@
 							}
 						});
 
+
 						dragNode.x = dragNode.allNode.x();
 						dragNode.y = dragNode.allNode.y();
 
-						linksLayer.each(function (i, children) {
-							this.remove();
-						})
-						links = linksDrawer.renderNodes(nodes);
-						links.back();
+						var affectedNodes = selectedNodes.concat(movingNodes);
+						linksDrawer.redrawNodes(affectedNodes);
+
+						/*linksLayer.each(function (i, children) {
+						 this.remove();
+						 });
+						 links = linksDrawer.renderNodes(nodes);
+						 links.back();*/
 
 						linksLayer.add(links);
 						//	console.log('delta', delta);
@@ -706,6 +723,7 @@
 					child = child.nextSibling;
 				}
 			}
+
 
 		</script>
 		<div id="contenteditable" contenteditable></div>

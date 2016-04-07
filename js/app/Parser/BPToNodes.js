@@ -55,7 +55,7 @@ function BPToNodes(objects, origin) {
 				width: curObj.nodeWidth,
 				height: curObj.nodeHeight
 			};
-			if(curObj.commentColor)
+			if (curObj.commentColor)
 				newNode.commentColor = curObj.commentColor;
 			nN = new CommentNode(newNode, x, y);
 			newNodes.push(nN);
@@ -167,6 +167,44 @@ function BPToNodes(objects, origin) {
 			}
 
 		}
+		else if (curObj.class.indexOf("K2Node_DynamicCast") !== -1) {
+			var tmpArr = curObj.targetType.split(".");
+			var name = "Cast to " + tmpArr[tmpArr.length - 1].replace("_C", "").replace(/["']/g, "");
+			newNode = {
+				name: name,
+				inputs: inputs,
+				outputs: outputs
+			};
+
+
+			nN = new CastNode(newNode, x, y);
+		}
+		else if (curObj.class.indexOf("K2Node_Timeline") !== -1) {
+			console.log(curObj);
+			newNode = {
+				name: curObj.timelineName,
+				inputs: inputs,
+				outputs: outputs
+			};
+
+
+			nN = new TimelineNode(newNode, x, y);
+		}
+		else if (curObj.class.indexOf("K2Node_CallDelegate") !== -1) {
+			console.log(curObj);
+			newNode = {
+				name: curObj.nodeName,
+				inputs: inputs,
+				outputs: outputs
+			};
+
+
+			nN = new CallDelegateNode(newNode, x, y);
+		}
+
+
+
+
 		else if (curObj.class.indexOf("K2Node_CallArrayFunction") !== -1) {
 			newNode = {
 				isPure: curObj.bIsPureFunc && curObj.bIsPureFunc === "True",
@@ -253,7 +291,6 @@ function BPToNodes(objects, origin) {
 		var from = null;
 		var to = null;
 		var nodeFrom = null;
-		//console.log('current link', curLink);
 		//console.log('current link', curLink);
 		for (var j = 0; j < newNodes.length; j++) {
 			if (newNodes[j].outputs) {

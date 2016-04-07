@@ -10,7 +10,7 @@ var FunctionNode = Class(AbstractNode, {
 
 
 
-		this.angleRadius = 10;
+		this.angleRadius = 8;
 		this.showHeader = true;
 		this.showPinText = true;
 		this.headerCellHeight = 1.5;
@@ -39,6 +39,10 @@ var FunctionNode = Class(AbstractNode, {
 	},
 	setSVG: function (drawer) {
 		var headerColor = null;
+
+
+
+
 		if (!this.function.isPure) {
 			headerColor = VAR_COLORS["execFunction"];
 		}
@@ -47,6 +51,8 @@ var FunctionNode = Class(AbstractNode, {
 		}
 
 		var draw = drawer.group();
+
+
 
 		var headerGradient = draw.gradient('linear', function (stop) {
 			stop.at({offset: 0, color: headerColor, opacity: 0.74226803});
@@ -97,6 +103,12 @@ var FunctionNode = Class(AbstractNode, {
 				var icon = draw.image('/icons/{0}'.format(this.icon), 16, 16).fill({color: "#fff"});
 				icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
 			}
+
+			if (this.function.name.indexOf("Delay") !== -1) {
+				var latentIcon = draw.image('/icons/{0}'.format(ICONS["latent"]), 32, 32).fill({color: "#fff"});
+				latentIcon.center(this.width, 0);
+			}
+			
 			this.drawPins(draw);
 
 		}
@@ -136,6 +148,10 @@ var FunctionNode = Class(AbstractNode, {
 			});
 			this.drawPins(draw, 1, false);
 		}
+
+
+
+
 
 		return draw;
 

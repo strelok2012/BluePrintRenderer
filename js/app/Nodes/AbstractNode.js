@@ -49,6 +49,7 @@ var AbstractNode = Class({
 		this.width = this.cellSize * this.minCellWidth;
 		this.height = this.cellHeight * this.cellSize;
 		if (this.function && this.showHeader) {
+			console.log(this.function);
 			var headerTextCheck = tmpDraw.text(this.function.name);
 			//console.log(this.function);
 			headerTextCheck.font({
@@ -94,7 +95,7 @@ var AbstractNode = Class({
 		}
 
 		//var l = Math.min(this.inputs.length, this.outputs.length) || 1;
-		
+
 		//	console.log('SETTER', l);
 		var maxOutSize = 0;
 		var maxInSize = 0;
@@ -507,6 +508,7 @@ var AbstractNode = Class({
 
 				}
 			}
+
 			pinObj.draw = pinDraw;
 			var hoverRect = pinDraw.rect(pinFullLength, pinFullHeight);
 			var hoverGradient = draw.gradient('linear', function (stop) {

@@ -133,7 +133,7 @@ var BPParser = Class({
 
 			}
 			else if (currentNode.MacroGraphReference) {
-			//	console.log(currentNode.MacroGraphReference.MacroGraph);
+				//	console.log(currentNode.MacroGraphReference.MacroGraph);
 				var tmp = currentNode.MacroGraphReference.MacroGraph.replace(/["']/g, "");
 				if (tmp.split(":").length > 1) {
 					currentNode["nodeName"] = tmp.split(":")[1].fromCamelCase();
@@ -161,6 +161,13 @@ var BPParser = Class({
 				}
 				delete currentNode.EventReference;
 			}
+			else if (currentNode.DelegateReference) {
+				
+				currentNode["nodeName"] = "Call "+currentNode.DelegateReference.MemberName.replace(/["']/g, "");
+				console.log(currentNode["nodeName"]);
+				//delete currentNode.DelegateReference;
+			}
+
 			if (!currentNode["nodeName"] && currentNode.CustomFunctionName) {
 				currentNode["nodeName"] = currentNode.CustomFunctionName;
 				currentNode.isCustom = true;
@@ -282,7 +289,7 @@ var BPParser = Class({
 			}
 
 		}
-	//	console.log(work);
+		//	console.log(work);
 		return work;
 	}
 });
