@@ -5,16 +5,45 @@ var InterfaceDrawer = Class({
 		this.scaleLabel = null;
 		this.menuRect = null;
 		this.selectRect = null;
+		this.saveCallback = null;
+	},
+	setSaveCallback: function (cb) {
+		this.saveIcon.click(function (e) {
+			cb(e);
+		});
 	},
 	render: function () {
 		var draw = this.drawer.group();
 		this.scaleLabel = this.drawScaleLabel();
 		this.scaleLabel.style('pointer-events', 'none')
 		this.menuRect = this.drawMenuRect();
-		this.menuRect.style('pointer-events', 'none')
+		this.menuRect.style('pointer-events', 'none');
+		var self = this;
+		this.saveIcon = this.drawSaveIcon();
+		this.saveIcon.mouseover(function (e) {
+			self.saveIcon.hover.show();
+		});
+		this.saveIcon.mouseout(function (e) {
+			self.saveIcon.hover.hide();
+		});
+
+
+
 		draw.add(this.menuRect);
 		draw.add(this.scaleLabel);
+		draw.add(this.saveIcon);
 		return draw;
+	},
+	drawSaveIcon: function () {
+		var saveIcon = this.drawer.group();
+		var hover = saveIcon.rect(40, 40).radius(4);
+		saveIcon.hover = hover;
+		hover.hide();
+		var icon = saveIcon.image('/images/interface/LV_Save.png', 40, 40);
+
+		hover.fill({color: "#f1b000"});
+		saveIcon.translate(10, 0);
+		return saveIcon;
 	},
 	setScaleLabelText: function (step) {
 		if (step > 0)

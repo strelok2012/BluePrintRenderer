@@ -33,8 +33,9 @@ var ICONS = {
 	dynamic_cast: "icon_Blueprint_Cast_16x.png",
 	timeline: "icon_Blueprint_Timeline_16x.png",
 	node: "icon_Blueprint_Node_16x.png",
-	message : "MessageIcon.png",
-	latent: "LatentIcon.png"
+	message: "MessageIcon.png",
+	latent: "LatentIcon.png",
+	valid: "icon_Blueprint_IsValid_16x.png"
 }
 
 var VAR_COLORS = {
@@ -175,7 +176,7 @@ function deepCopy(obj) {
 	return obj;
 }
 
-
+var varNodeGlossSize = [64, 28];
 
 function componentToHex(c) {
 	var hex = c.toString(16);
@@ -184,4 +185,13 @@ function componentToHex(c) {
 
 function rgbToHex(r, g, b) {
 	return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+}
+
+function hexToRgb(hex) {
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
 }

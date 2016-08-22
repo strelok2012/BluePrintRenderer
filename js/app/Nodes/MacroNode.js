@@ -24,6 +24,9 @@ var MacroNode = Class(AbstractNode, {
 		else if (this.function.name.indexOf("Flip") !== -1) {
 			this.icon = ICONS["flip_flop"];
 		}
+		else if (this.function.name.indexOf("Valid") !== -1) {
+			this.icon = ICONS["valid"];
+		}
 
 		this.width = this.cellSize * this.minCellWidth;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
@@ -73,6 +76,12 @@ var MacroNode = Class(AbstractNode, {
 		if (this.icon) {
 			var icon = draw.image('/icons/{0}'.format(this.icon), 16, 16);
 			icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
+			/*icon.filter(function (add) {
+				add.colorMatrix('matrix', [1.0, 0, 0, 0, 0
+							, 0, 0.2, 0, 0, 0
+							, 0, 0, 0.2, 0, 0
+							, 0, 0, 0, 1.0, 0])
+			})*/
 		}
 
 		return draw;

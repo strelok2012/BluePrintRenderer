@@ -111,7 +111,6 @@ var BPParser = Class({
 			res++;
 		}
 
-		console.log(res, this.txt.length)
 		var original = objects;
 		var work = JSON.parse(JSON.stringify(objects));
 		for (var i = 0; i < work.length; i++) {

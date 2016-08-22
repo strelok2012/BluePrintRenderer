@@ -49,7 +49,7 @@ var AbstractNode = Class({
 		this.width = this.cellSize * this.minCellWidth;
 		this.height = this.cellHeight * this.cellSize;
 		if (this.function && this.showHeader) {
-			console.log(this.function);
+			//console.log(this.function);
 			var headerTextCheck = tmpDraw.text(this.function.name);
 			//console.log(this.function);
 			headerTextCheck.font({

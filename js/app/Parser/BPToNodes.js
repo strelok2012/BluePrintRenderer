@@ -32,12 +32,14 @@ function BPToNodes(objects, origin) {
 	for (var i = 0; i < objects.length; i++) {
 		var curObj = objects[i];
 
-		if (curObj.nodePosY > maxY)
-			maxY = curObj.nodePosY;
+		if (parseInt(curObj.nodePosY)+parseInt(curObj.nodeHeight) > maxY)
+			maxY = parseInt(curObj.nodePosY)+parseInt(curObj.nodeHeight);
 
-		if (curObj.nodePosX > maxX)
-			maxX = curObj.nodePosX;
+		if (parseInt(curObj.nodePosX)+parseInt(curObj.nodeWidth) > maxX)
+			maxX = parseInt(curObj.nodePosX)+parseInt(curObj.nodeWidth);
 	}
+	
+	console.log(maxX,maxY);
 
 
 
