@@ -25,12 +25,11 @@ var BlueprintRenderer = Class({
         this.svgCointainerNode = document.getElementById(domNodeId);
 
         this.origin = new Vector(0, 0);
-        console.log(this);
         this.config = {
         }
     },
     renderFromText: function (bpText) {
-
+        this.parse(bpText);
     },
     renderFromFile: function (bpFileName) {
         var client = new XMLHttpRequest();
