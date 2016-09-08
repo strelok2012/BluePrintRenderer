@@ -1,75 +1,80 @@
+var CONFIG = {
+    GRID_STEP: 16,
+    GRID_COEFF: 3
+}
+
 var VAR_TYPES = {
-	bool: {code: 0, name: "bool"},
-	byte: {code: 1, name: "byte"},
-	int: {code: 2, name: "int"},
-	float: {code: 3, name: "float"},
-	name: {code: 4, name: "name"},
-	string: {code: 5, name: "string"},
-	text: {code: 6, name: "text"},
-	vector: {code: 7, name: "vector"},
-	rotator: {code: 8, name: "rotator"},
-	transform: {code: 9, name: "transform"},
-	actor: {code: 10, name: "actor"},
-	event: {code: 11, name: "delegateOut"},
-	object: {code: 12, name: "object"},
-	class: {code: 13, name: "class"},
-	struct: {code: 14, name: "struct"},
-	exec: {code: 15, name: "exec"},
-	interface: {code: 16, name: "interface"},
-	macro: {code: 17, name: "macro"},
-	delegate: {code: 18, name: "delegate"},
-	wildcard: {code: 19, name: "wildcard"}
+    bool: {code: 0, name: "bool"},
+    byte: {code: 1, name: "byte"},
+    int: {code: 2, name: "int"},
+    float: {code: 3, name: "float"},
+    name: {code: 4, name: "name"},
+    string: {code: 5, name: "string"},
+    text: {code: 6, name: "text"},
+    vector: {code: 7, name: "vector"},
+    rotator: {code: 8, name: "rotator"},
+    transform: {code: 9, name: "transform"},
+    actor: {code: 10, name: "actor"},
+    event: {code: 11, name: "delegateOut"},
+    object: {code: 12, name: "object"},
+    class: {code: 13, name: "class"},
+    struct: {code: 14, name: "struct"},
+    exec: {code: 15, name: "exec"},
+    interface: {code: 16, name: "interface"},
+    macro: {code: 17, name: "macro"},
+    delegate: {code: 18, name: "delegate"},
+    wildcard: {code: 19, name: "wildcard"}
 };
 
 var ICONS = {
-	branch: "icon_Blueprint_Branch_16x.png",
-	make_struct: "icon_Blueprint_MakeStruct_16x.png",
-	break_struct: "icon_Blueprint_BreakStruct_16x.png",
-	event_custom: "icon_Blueprint_CustomEvent_16x.png",
-	event: "icon_Blueprint_Event_16x.png",
-	for_each: "icon_Blueprint_ForEach_16x.png",
-	make_array: "icon_Blueprint_MakeArray_16x.png",
-	flip_flop: "icon_Blueprint_FlipFlop_16x.png",
-	dynamic_cast: "icon_Blueprint_Cast_16x.png",
-	timeline: "icon_Blueprint_Timeline_16x.png",
-	node: "icon_Blueprint_Node_16x.png",
-	message: "MessageIcon.png",
-	latent: "LatentIcon.png",
-	valid: "icon_Blueprint_IsValid_16x.png"
+    branch: "icon_Blueprint_Branch_16x.png",
+    make_struct: "icon_Blueprint_MakeStruct_16x.png",
+    break_struct: "icon_Blueprint_BreakStruct_16x.png",
+    event_custom: "icon_Blueprint_CustomEvent_16x.png",
+    event: "icon_Blueprint_Event_16x.png",
+    for_each: "icon_Blueprint_ForEach_16x.png",
+    make_array: "icon_Blueprint_MakeArray_16x.png",
+    flip_flop: "icon_Blueprint_FlipFlop_16x.png",
+    dynamic_cast: "icon_Blueprint_Cast_16x.png",
+    timeline: "icon_Blueprint_Timeline_16x.png",
+    node: "icon_Blueprint_Node_16x.png",
+    message: "MessageIcon.png",
+    latent: "LatentIcon.png",
+    valid: "icon_Blueprint_IsValid_16x.png"
 }
 
 var VAR_COLORS = {
-	bool: "#8c0202",
-	byte: "#026960",
-	int: "#1ed6a4",
-	float: "#97ef42",
-	name: "#c07bef",
-	string: "#ef02c8",
-	text: "#d975a0",
-	vector: "#efbd22",
-	rotator: "#97a9ef",
-	transform: "#eb6b02",
-	actor: "#02a2e9",
-	execFunction: "#5b8fb1",
-	execFunctionF: "#79c9ff",
-	pureFunction: "#83b47c",
-	pureFunctionF: "#aaeea0",
-	event: "#8d1313",
-	delegate: "#ff3838",
-	object: "#0481b7",
-	class: "#5501b3",
-	struct: "#024bab",
-	exec: "#fff",
-	interface: "#c9d58f",
-	macro: "#b7b4aa",
-	wildcard: "#7f7979",
-	dynamicCast: "#258489",
-	timeline: "#9d7e24"
+    bool: "#8c0202",
+    byte: "#026960",
+    int: "#1ed6a4",
+    float: "#97ef42",
+    name: "#c07bef",
+    string: "#ef02c8",
+    text: "#d975a0",
+    vector: "#efbd22",
+    rotator: "#97a9ef",
+    transform: "#eb6b02",
+    actor: "#02a2e9",
+    execFunction: "#5b8fb1",
+    execFunctionF: "#79c9ff",
+    pureFunction: "#83b47c",
+    pureFunctionF: "#aaeea0",
+    event: "#8d1313",
+    delegate: "#ff3838",
+    object: "#0481b7",
+    class: "#5501b3",
+    struct: "#024bab",
+    exec: "#fff",
+    interface: "#c9d58f",
+    macro: "#b7b4aa",
+    wildcard: "#7f7979",
+    dynamicCast: "#258489",
+    timeline: "#9d7e24"
 };
 
 
 var createBezierPathT = function (startX, startY, control1X, control1Y, control2X, control2Y, endX, endY) {
-	return 'C ' + control1X + ',' + control1Y + ', ' + control2X + ',' + control2Y + ', ' + endX + ',' + endY;
+    return 'C ' + control1X + ',' + control1Y + ', ' + control2X + ',' + control2Y + ', ' + endX + ',' + endY;
 };
 
 
@@ -80,118 +85,115 @@ var eventArrow = "m19.666 0.0000015532c-0.635-0.00071-1.272 0.24199-1.759 0.7285
 var checkSymbol = "M 41.272753,92.252341 52.470676,104.29345 71.57596,74.519064"
 
 String.prototype.format = function () {
-	var formatted = this;
-	for (var i = 0; i < arguments.length; i++) {
-		var regexp = new RegExp('\\{' + i + '\\}', 'gi');
-		formatted = formatted.replace(regexp, arguments[i]);
-	}
-	return formatted;
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
 };
 
 String.prototype.fromCamelCase = function () {
-	var newString = '';
-	for (var i = 0; i < this.length; i++) {
-		newString += this[i];
-		if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
-			if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
-				newString += " ";
-			}
-		}
-	}
-	return newString.trim();
+    var newString = '';
+    for (var i = 0; i < this.length; i++) {
+        newString += this[i];
+        if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
+            if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
+                newString += " ";
+            }
+        }
+    }
+    return newString.trim();
 }
 
 function assert(condition, message) {
-	if (!condition) {
-		message = message || "Assertion failed";
-		if (typeof Error !== "undefined") {
-			throw new Error(message);
-		}
-		throw message; // Fallback
-	}
+    if (!condition) {
+        message = message || "Assertion failed";
+        if (typeof Error !== "undefined") {
+            throw new Error(message);
+        }
+        throw message; // Fallback
+    }
 }
 
 
 function isLetter(c) {
-	return c.toLowerCase() !== c.toUpperCase();
+    return c.toLowerCase() !== c.toUpperCase();
 }
 
 
 var createBezierPath = function (startX, startY, control1X, control1Y, control2X, control2Y, endX, endY) {
-	return 'M ' + startX + ',' + startY + ' C ' + control1X + ',' + control1Y + ', ' + control2X + ',' + control2Y + ', ' + endX + ',' + endY;
+    return 'M ' + startX + ',' + startY + ' C ' + control1X + ',' + control1Y + ', ' + control2X + ',' + control2Y + ', ' + endX + ',' + endY;
 };
 
 var createSmoothPath = function (startX, startY, endX, endY) {
-	return 'M ' + startX + ',' + startY + ' S ' + startX + ',' + startY + ' ' + endX + ',' + endY;
+    return 'M ' + startX + ',' + startY + ' S ' + startX + ',' + startY + ' ' + endX + ',' + endY;
 };
 
 
 function intersectNode(node1, node2, scale, drawer, origin) {
-	var s = scale || 1;
-	if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.height * s < node1.y) {
-		return false;
-	}
-	else {
-		return true;
-	}
+    var s = scale || 1;
+    if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.height * s < node1.y) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
-	var s = scale || 1;
-	if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.selectableHeight * s < node1.y) {
-		return false;
-	}
-	else {
-		return true;
-	}
+    var s = scale || 1;
+    if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.selectableHeight * s < node1.y) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 function inNode(node1, node2) {
-	if (node2.x >= node1.x &&
-			node2.x + node2.width <= node1.x + node1.width &&
-			node2.y >= node1.y &&
-			node2.y + node2.height <= node1.height + node1.y) {
-		return true;
-	}
-	else
-		return false;
+    if (node2.x >= node1.x &&
+            node2.x + node2.width <= node1.x + node1.width &&
+            node2.y >= node1.y &&
+            node2.y + node2.height <= node1.height + node1.y) {
+        return true;
+    } else
+        return false;
 }
 
 
 function deepCopy(obj) {
-	if (Object.prototype.toString.call(obj) === '[object Array]') {
-		var out = [], i = 0, len = obj.length;
-		for (; i < len; i++) {
-			out[i] = arguments.callee(obj[i]);
-		}
-		return out;
-	}
-	if (typeof obj === 'object') {
-		var out = {}, i;
-		for (i in obj) {
-			out[i] = arguments.callee(obj[i]);
-		}
-		return out;
-	}
-	return obj;
+    if (Object.prototype.toString.call(obj) === '[object Array]') {
+        var out = [], i = 0, len = obj.length;
+        for (; i < len; i++) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    if (typeof obj === 'object') {
+        var out = {}, i;
+        for (i in obj) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    return obj;
 }
 
 var varNodeGlossSize = [64, 28];
 
 function componentToHex(c) {
-	var hex = c.toString(16);
-	return hex.length == 1 ? "0" + hex : hex;
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
 }
 
 function rgbToHex(r, g, b) {
-	return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
 }
 
 function hexToRgb(hex) {
-	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return result ? {
-		r: parseInt(result[1], 16),
-		g: parseInt(result[2], 16),
-		b: parseInt(result[3], 16)
-	} : null;
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }

@@ -79,7 +79,7 @@ var FunctionNode = Class(AbstractNode, {
 			var headerText = draw.text(this.function.name);
 
 			headerText.font({
-				family: 'Roboto'
+				family: 'Roboto, sans-serif'
 				, size: this.fontSize
 				, anchor: 'start'
 				, color: "#ffffff"
@@ -141,7 +141,7 @@ var FunctionNode = Class(AbstractNode, {
 			nodeText.fill({color: "#fff", opacity: 0.3});
 			nodeText.style('font-weight', 'bold');
 			nodeText.font({
-				family: 'Roboto'
+				family: 'Roboto, sans-serif'
 				, size: textSize
 				, anchor: 'middle'
 				, color: "#ffffff"

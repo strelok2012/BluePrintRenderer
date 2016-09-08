@@ -232,6 +232,8 @@ var BPParser = Class({
 						else {
 							newPin.pinText = "";
 						}
+                                                
+                                                
 						newPin.isOutput = (currentNode.objects[k].Direction && currentNode.objects[k].Direction === "EGPD_Output") && true || false;
 						newPin.linkedTo = [];
 						pinCounter = 0;
@@ -288,7 +290,7 @@ var BPParser = Class({
 			}
 
 		}
-		//	console.log(work);
+		console.log(work);
 		return work;
 	}
 });

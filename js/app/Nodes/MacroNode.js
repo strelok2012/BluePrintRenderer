@@ -62,7 +62,7 @@ var MacroNode = Class(AbstractNode, {
 		var headerText = draw.text(this.function.name);
 
 		headerText.font({
-			family: 'Roboto'
+			family: 'Roboto, sans-serif'
 			, size: this.fontSize
 			, anchor: 'start'
 			, color: "#ffffff"

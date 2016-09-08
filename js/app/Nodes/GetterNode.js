@@ -17,8 +17,7 @@ var GetterNode = Class(AbstractNode, {constructor: function (getterNode, x, y, d
 
 		var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
 		opacityRect.fill(this.nodesDrawer.opacityLinearGradient);
-
-
+                
 		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
 		mainRect.fill(radGradient);
 		//mainRect.fill({color: "#fff", opacity: 0});

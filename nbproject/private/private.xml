@@ -2,6 +2,20 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/ConverterNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/ArrayFunctionNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/CallDelegateNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/FunctionNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/CastNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/EventNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Drawers/InterfaceDrawer.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Drawers/NodesDrawer.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/CommentNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/GetterNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Drawers/LinksDrawer.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Nodes/AbstractNode.js</file>
+            <file>file:/home/strelok/blueprint/js/app/Parser/BPToNodes.js</file>
+        </group>
     </open-files>
 </project-private>

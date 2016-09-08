@@ -1,6 +1,5 @@
 var InterfaceDrawer = Class({
-	constructor: function (nodes, drawer) {
-		this.nodes = nodes;
+	constructor: function (drawer) {
 		this.drawer = drawer;
 		this.scaleLabel = null;
 		this.menuRect = null;
@@ -63,7 +62,7 @@ var InterfaceDrawer = Class({
 		var scaleLabel = draw.text("Zoom 1:1");
 
 		scaleLabel.font({
-			family: 'Roboto'
+			family: 'Roboto, sans-serif'
 			, size: 24
 			, anchor: 'end'
 			, color: "#7f7f7f"
