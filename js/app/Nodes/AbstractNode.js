@@ -29,10 +29,6 @@ var AbstractNode = Class({
         //this.shadow = this.drawShadow(this.drawer);
 
         this.nested = this.setSVG(this.drawer);
-        //  var element = this.nested.element('title').words('This is a title.')
-        // console.log(this.function);
-        //this.nested.style('filter','drop-shadow( -5px -5px 5px #000 )');
-        //this.nested.style('-webkit-filter','drop-shadow( -50px -50px 50px #000 )');
 
         this.allNode = this.drawer.group();
         this.allNode.add(this.hover);
@@ -96,9 +92,6 @@ var AbstractNode = Class({
 
         }
 
-        //var l = Math.min(this.inputs.length, this.outputs.length) || 1;
-
-        //	console.log('SETTER', l);
         var maxOutSize = 0;
         var maxInSize = 0;
 
@@ -124,28 +117,31 @@ var AbstractNode = Class({
 
                     this.height += this.cellSize;
                 } else if (tIn.type === VAR_TYPES["float"] || tIn.type === VAR_TYPES["int"] || tIn.type === VAR_TYPES["byte"]) {
-                    var text = tmpDraw.text(tIn.value);
-                    var inputText = tmpDraw.text(tIn.name);
-                    inputText.font({
-                        family: 'Roboto, sans-serif'
-                        , size: this.fontSize
-                        , anchor: 'start'
-                        , color: "#ffffff"
-                    });
-                    var inputTextLength = this.getTextElementWidth(inputText)
-                    var startPosX = this.cellSize + this.inputOffset + inputTextLength;
+                    if (tIn.value) {
+                        var text = tmpDraw.text(tIn.value);
+                        var inputText = tmpDraw.text(tIn.name);
+                        inputText.font({
+                            family: 'Roboto, sans-serif'
+                            , size: this.fontSize
+                            , anchor: 'start'
+                            , color: "#ffffff"
+                        });
+                        var inputTextLength = this.getTextElementWidth(inputText)
+                        var startPosX = this.cellSize + this.inputOffset + inputTextLength;
 
-                    text.font({
-                        family: 'Roboto, sans-serif'
-                        , size: this.fontSize
-                        , anchor: 'start'
-                        , color: "#fff"
-                    });
-                    text.fill({color: "#fff"});
+                        text.font({
+                            family: 'Roboto, sans-serif'
+                            , size: this.fontSize
+                            , anchor: 'start'
+                            , color: "#fff"
+                        });
+                        text.fill({color: "#fff"});
 
-                    var textWidth = this.getTextElementWidth(text);
-                    var rect = tmpDraw.rect(textWidth + this.cellSize * 0.2, this.cellSize).radius(2);
-                    maxInSize = startPosX + rect.width();
+                        var textWidth = this.getTextElementWidth(text);
+                        var rect = tmpDraw.rect(textWidth + this.cellSize * 0.2, this.cellSize).radius(2);
+                        maxInSize = startPosX + rect.width();
+                    }
+
                 } else if (tIn.type === VAR_TYPES["actor"] || tIn.type === VAR_TYPES["object"]) {
                     if (tIn.value) {
                         var text = tmpDraw.text(tIn.value);
@@ -224,10 +220,12 @@ var AbstractNode = Class({
                 this.width = maxInSize;
             }
         }
+        tmpDraw.remove();
     },
     nearestCellWidth: function (width) {
         return Math.ceil(width / this.cellSize);
-    }, setOutputLink: function (from, to) {
+    },
+    setOutputLink: function (from, to) {
         //	console.log(from,to);
         if (from && to) {
             from.linked = true;
@@ -247,6 +245,14 @@ var AbstractNode = Class({
     getTextElementWidth: function (element) {
         if (element) {
             return document.getElementById(element.node.id).getBBox().width || 0;
+        } else {
+            return 0;
+        }
+
+    },
+    getTextElementHeight: function (element) {
+        if (element) {
+            return document.getElementById(element.node.id).getBBox().height || 0;
         } else {
             return 0;
         }
@@ -443,25 +449,27 @@ var AbstractNode = Class({
                     cellOffset += 1;
                     pinFullHeight += this.cellSize;
                 } else if (tIn.type === VAR_TYPES["float"] || tIn.type === VAR_TYPES["int"] || tIn.type === VAR_TYPES["byte"]) {
-                    var text = pinDraw.text(tIn.value);
-                    var startPosX = circleCenterX + this.cellSize + this.inputOffset + inputTextLength;
+                    if (tIn.value) {
+                        var text = pinDraw.text(tIn.value);
+                        var startPosX = circleCenterX + this.cellSize + this.inputOffset + inputTextLength;
 
-                    text.font({
-                        family: 'Roboto, sans-serif'
-                        , size: this.fontSize, anchor: 'start'
-                        , color: "#fff"
-                    });
-                    text.fill({color: "#fff"});
+                        text.font({
+                            family: 'Roboto, sans-serif'
+                            , size: this.fontSize, anchor: 'start'
+                            , color: "#fff"
+                        });
+                        text.fill({color: "#fff"});
 
-                    var textWidth = this.getTextElementWidth(text);
-                    var rect = pinDraw.rect(textWidth + this.cellSize * 0.2, this.cellSize).radius(2);
-                    rect.fill({color: "#000", opacity: 0});
-                    rect.stroke({color: "#fff", width: 1});
-                    rect.x(startPosX);
-                    rect.cy(vectorCenterY);
+                        var textWidth = this.getTextElementWidth(text);
+                        var rect = pinDraw.rect(textWidth + this.cellSize * 0.2, this.cellSize).radius(2);
+                        rect.fill({color: "#000", opacity: 0});
+                        rect.stroke({color: "#fff", width: 1});
+                        rect.x(startPosX);
+                        rect.cy(vectorCenterY);
 
-                    text.translate(startPosX + this.cellSize * 0.1, vectorCenterY - this.fontSize);
-                    pinFullLength += rect.width();
+                        text.translate(startPosX + this.cellSize * 0.1, vectorCenterY - this.fontSize);
+                        pinFullLength += rect.width();
+                    }
                 } else if (tIn.type === VAR_TYPES["bool"]) {
                     var startPosX = circleCenterX + this.cellSize + this.inputOffset + inputTextLength;
                     var rect = pinDraw.rect(this.cellSize * 0.8, this.cellSize * 0.8).radius(3);
@@ -516,7 +524,7 @@ var AbstractNode = Class({
             hoverRect.cy(circleCenterY);
             hoverRect.back();
             if (tIn.tooltip) {
-                console.log(tIn.tooltip);
+                //console.log(tIn.tooltip);
                 pinDraw.element('title').words(tIn.tooltip.replace("\\n\\n", "\n\n").replace("\\n", "\n"));
             }
             pinObj.hover = hoverRect;

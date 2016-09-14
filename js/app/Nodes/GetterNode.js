@@ -7,6 +7,7 @@ var GetterNode = Class(AbstractNode, {constructor: function (getterNode, x, y, d
 	},
 	setSVG: function (drawer) {
 		var mainColor = VAR_COLORS[this.outputs[0].type.name];
+
 		var draw = drawer.group();
 		var radGradient = draw.gradient('radial', function (stop) {
 			stop.at({offset: 0, color: mainColor, opacity: 0.74226803});

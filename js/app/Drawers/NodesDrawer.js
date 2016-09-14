@@ -146,7 +146,7 @@ var NodesDrawer = Class({
     selectAllNodes: function () {
         var self = this;
         this.selectedNodes.splice(0, this.selectedNodes.length);
-        this.nodes.forEach(function (node) {
+        this.parent.nodesObjects.forEach(function (node) {
             node.hover.show();
             self.selectedNodes.push(node);
         });

@@ -2,6 +2,8 @@ var ConverterNode = Class(AbstractNode, {
 	constructor: function (funcObj, x, y, drawer) {
 		ConverterNode.$super.call(this, x, y, drawer);
 		this.function = funcObj;
+                
+                //console.log("CONVERTER",funcObj);
 
 		this.inputs = funcObj.inputs;
 		this.outputs = funcObj.outputs;

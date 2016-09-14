@@ -13,6 +13,7 @@ var MacroNode = Class(AbstractNode, {
 		this.cellOffset = 0.5;
 		this.showHeader = true;
 		this.showPinText = true;
+                //console.log("MACRO",funcObj);
 
 
 		if (this.function.name === "Branch") {
@@ -27,6 +28,15 @@ var MacroNode = Class(AbstractNode, {
 		else if (this.function.name.indexOf("Valid") !== -1) {
 			this.icon = ICONS["valid"];
 		}
+                else if (this.function.name.indexOf("Sequence") !== -1) {
+			this.icon = ICONS["sequence"];
+		}
+                else if (this.function.name.indexOf("For Loop") !== -1) {
+			this.icon = ICONS["for_loop"];
+		}
+                else {
+                    this.icon = ICONS["macro"];
+                }
 
 		this.width = this.cellSize * this.minCellWidth;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;

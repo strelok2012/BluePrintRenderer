@@ -13,12 +13,11 @@ var CommentNode = Class(AbstractNode, {
 	},
 	setSVG: function (drawer) {
 		var draw = drawer.group();
-
+                draw.style('mix-blend-mode','exclusion')
 		var headerColor = null;
 		var opacity = 1;
 		if (this.funcObj.commentColor) {
 			var cColor = this.funcObj.commentColor;
-			var r = parseInt(parseFloat(cColor.R) * 255);
 			headerColor = rgbToHex(parseFloat(cColor.R) * 255, parseFloat(cColor.G)*255, parseFloat(cColor.B)*255);
 			opacity = parseFloat(cColor.A);
 		}
@@ -27,7 +26,8 @@ var CommentNode = Class(AbstractNode, {
 			opacity = 1;
 		}
 
-		var header = draw.rect(this.width, this.height).radius(this.angleRadius).fill({color: headerColor, opacity: opacity});
+		var header = draw.rect(this.width-this.cellSize/2, this.height-this.cellSize/2).radius(this.angleRadius).fill({color: headerColor, opacity: opacity});
+                header.translate(this.cellSize/4,this.cellSize/4)
 		var rect = draw.rect(this.width, this.height).move(0, -this.height + this.headerCellHeight * this.cellSize);
 
 		header.clipWith(rect);
@@ -45,7 +45,7 @@ var CommentNode = Class(AbstractNode, {
 		headerText.style('font-weight', 'bold');
 		headerText.style('pointer-events', 'none');
 		headerText.style('text-shadow', '2px 2px 0px rgba(0, 0, 0, 1)');
-		headerText.translate(this.cellSize, 0);
+		headerText.translate(this.cellSize, this.cellSize/4);
 		headerText.fill({color: "#fff"});
 
 

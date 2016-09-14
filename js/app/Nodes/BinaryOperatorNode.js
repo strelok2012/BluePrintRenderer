@@ -7,7 +7,7 @@ var BinaryOperatorNode = Class(AbstractNode, {
 
 		this.inputs = funcObj.inputs;
 		this.outputs = funcObj.outputs;
-		//console.log(funcObj);
+		//console.log("BINARY OPERATOR",funcObj);
 
 
 
@@ -17,10 +17,10 @@ var BinaryOperatorNode = Class(AbstractNode, {
 
 		this.cellHeight = this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
 	},
-	calculateWidth: function () {
+	/*calculateWidth: function () {
 		this.height = this.cellHeight * this.cellSize;
 		this.width = this.cellSize * this.minCellWidth;
-	},
+	},*/
 	setSVG: function (drawer) {
 		var draw = drawer.group();
 

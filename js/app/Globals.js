@@ -33,6 +33,7 @@ var ICONS = {
     event_custom: "icon_Blueprint_CustomEvent_16x.png",
     event: "icon_Blueprint_Event_16x.png",
     for_each: "icon_Blueprint_ForEach_16x.png",
+    for_loop: "icon_Blueprint_Loop_16x.png",
     make_array: "icon_Blueprint_MakeArray_16x.png",
     flip_flop: "icon_Blueprint_FlipFlop_16x.png",
     dynamic_cast: "icon_Blueprint_Cast_16x.png",
@@ -40,7 +41,166 @@ var ICONS = {
     node: "icon_Blueprint_Node_16x.png",
     message: "MessageIcon.png",
     latent: "LatentIcon.png",
-    valid: "icon_Blueprint_IsValid_16x.png"
+    valid: "icon_Blueprint_IsValid_16x.png",
+    select: "icon_Blueprint_Select_16x.png",
+    sequence: "icon_Blueprint_Sequence_16x.png",
+    macro: "icon_Blueprint_Macro_16x.png",
+    keyboard: "icon_Blueprint_KeyboardEvent_16x.png",
+    switch_on: "icon_Blueprint_Switch_16x.png"
+}
+
+var FUNCTIONS_MAPPING = {
+    K2Node_CallFunction: null,
+    K2Node_SpawnActorFromClass: {
+        text: "Spawn Actor"
+    },
+    K2Node_GetInputAxisValue: null,
+    K2Node_MakeArray: {
+        text: "Make Array"
+    },
+    K2Node_CreateWidget: {
+        text: "Construct"
+    },
+    K2Node_MakeStruct: {
+        text: "Make Struct"
+    },
+    K2Node_BreakStruct: {
+        text: "Break Struct"
+    },
+    K2Node_LatentOnlineCall: {
+        async: true
+    },
+    K2Node_AsyncAction: {
+        async: true
+    },
+    K2Node_LeaderboardQuery: {
+        text: "Read Leaderboard Integer",
+        async: true
+    },
+    K2Node_SwitchInteger: {
+        text: "Switch on Int",
+        icon: ICONS["switch_on"],
+        morpher: function (obj) {
+            obj.color = VAR_COLORS["switch_on"];
+            return obj;
+        }
+    },
+    K2Node_SwitchEnum: {
+        text: "Switch on Enum",
+        icon: ICONS["switch_on"],
+        morpher: function (obj) {
+            obj.color = VAR_COLORS["switch_on"];
+            return obj;
+        }
+    },
+    K2Node_SwitchString: {
+        text: "Switch on String",
+        icon: ICONS["switch_on"],
+        morpher: function (obj) {
+            obj.color = VAR_COLORS["switch_on"];
+            return obj;
+        }
+    },
+    K2Node_CallParentFunction: {
+        morpher: function (obj) {
+            obj.name = "Parent: " + obj.name;
+            obj.isParent = true;
+            return obj;
+        }
+    },
+    K2Node_AddComponent: null,
+    K2Node_FormatText: {
+        text: "Format Text",
+        icon: ICONS["node"],
+        morpher: function (obj) {
+            obj.isPure = true;
+            return obj;
+        }
+    },
+    K2Node_GetInputVectorAxisValue: {
+        icon: ICONS["keyboard"],
+        morpher: function (obj,node) {
+            obj.isPure = true;
+            obj.name = "Get "+node.inputAxisKey;
+            return obj;
+        }
+    },
+    K2Node_GetDataTableRow : {
+        text : "Get Data Table Row"
+    }
+}
+
+var NAME_MAPPING = {
+    "K2_Destroy Actor": "DestroyActor",
+    "VSize": "VectorLength",
+    "K2_Get Component Location": "GetWorldLocation",
+    "K2_Set Actor Relative Location": "SetActorRelativeLocation",
+    "K2_Set Relative Location": "SetRelativeLocation",
+    "K2_Set Actor Location": "SetActorLocation",
+    "K2_Set Actor Relative Rotation": "SetActorRelativeRotation",
+    "K2_Set Relative Rotation": "SetRelativeRotation",
+    "K2_Set Actor Rotation": "SetActorRotation",
+    "K2_Set Timer": "Set Timer by Function Name",
+    "K2_Get Actor Location": "GetActorLocation",
+    "K2_Get Actor Rotation": "GetActorRotation",
+    "RLerp": "Lerp (Rotator)",
+    "FTrunc": "Truncate",
+    "Conv_Int To Text": "ToText(int)",
+    "Conv_Float To Text": "ToText(float)",
+    "Conv_Text To String": "ToString(text)",
+}
+
+var FUNCTION_NAMES_MAPPING = {
+    Array_Set: "Set Array Elem"
+}
+
+var ARRAY_FUNCTION_NAMES_MAPPING = {
+    Array_Add: {
+        text: "Add"
+    },
+    "Array_Add Unique": {
+        text: "AddUnique"
+    },
+    Array_Append: {
+        text: "Append"
+    },
+    Array_Clear: {
+        text: "Clear"
+    },
+    Array_Contains: {
+        text: "Contains"
+    },
+    Array_Find: {
+        text: "Find"
+    },
+    Array_Get: {
+        text: "Get"
+    },
+    Array_Insert: {
+        text: "Insert"
+    },
+    "Array_Last Index": {
+        text: "Last Index"
+    },
+    Array_Length: {
+        text: "Length"
+    },
+    Array_Remove: {
+        text: "Remove Index"
+    },
+    "Array_Remove Item": {
+        text: "Remove"
+    },
+    Array_Resize: {
+        text: "Resize"
+    },
+    Array_Set: {
+        text: "Set Array Elem",
+        showHeader: true
+    },
+    Array_Shuffle: {
+        text: "Shuffle"
+    }
 }
 
 var VAR_COLORS = {
@@ -69,7 +229,9 @@ var VAR_COLORS = {
     macro: "#b7b4aa",
     wildcard: "#7f7979",
     dynamicCast: "#258489",
-    timeline: "#9d7e24"
+    timeline: "#9d7e24",
+    parent: "#854613",
+    switch_on: "#8f9013"
 };
 
 

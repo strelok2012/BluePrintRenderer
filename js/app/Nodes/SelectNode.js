@@ -1,54 +1,23 @@
-var FunctionNode = Class(AbstractNode, {
+var SelectNode = Class(AbstractNode, {
     constructor: function (funcObj, x, y, drawer) {
         this.minCellWidth = 8.5
-        this.minCellHeight = 4;
-        FunctionNode.$super.call(this, x, y, drawer);
+        this.minCellHeight = 2;
+        SelectNode.$super.call(this, x, y, drawer);
         this.function = funcObj;
 
         this.inputs = funcObj.inputs;
         this.outputs = funcObj.outputs;
 
-        //console.log("FUNCTION", funcObj);
+        // console.log(funcObj);
 
         this.angleRadius = 8;
         this.showHeader = true;
         this.showPinText = true;
         this.headerCellHeight = 1.5;
         this.cellOffset = 0.5;
-        if (this.function.name.indexOf("_") !== -1 && this.function.name.indexOf("Get") === -1 && this.function.name.indexOf("Conv") === -1 && this.function.name.indexOf("Set") === -1 && this.function.name.indexOf("Add") === -1 && this.function.name.indexOf("K2") === -1 && this.function.name.indexOf("Montage") === -1 && this.function.name.indexOf("Greater_Vector") === -1 && this.function.name.indexOf("Less_Vector") === -1) {
-            this.angleRadius = 0;
-            this.headerCellHeight = 0;
-            this.minCellWidth = 5;
-            this.minCellHeight = 4;
-            this.showHeader = false;
-            this.showPinText = false;
-        }
 
-        if (this.function.icon) {
-            this.icon = this.function.icon;
-        }
+        this.icon = ICONS["select"];
 
-        if (this.function.name.indexOf("Make") !== -1 && this.function.name.indexOf("Array") === -1) {
-            this.icon = ICONS["make_struct"];
-        } else if (this.function.name.indexOf("Break") !== -1) {
-            this.icon = ICONS["break_struct"];
-        } else if (this.function.name.indexOf("Make Array") !== -1) {
-            this.icon = ICONS["make_array"];
-        }
-
-        if (this.function.name.indexOf(" for ") !== -1) {
-            this.function.name = this.function.name.substring(0, this.function.name.indexOf(" for "));
-        }
-
-
-        if (FUNCTION_NAMES_MAPPING[this.function.name]) {
-            this.function.name = FUNCTION_NAMES_MAPPING[this.function.name];
-        }
-
-
-        if (NAME_MAPPING[this.function.name]) {
-            this.function.name = NAME_MAPPING[this.function.name];
-        }
 
 
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
@@ -59,19 +28,8 @@ var FunctionNode = Class(AbstractNode, {
 
 
 
-        if (!this.function.isPure) {
-            headerColor = VAR_COLORS["execFunction"];
-        } else {
-            headerColor = VAR_COLORS["pureFunction"];
-        }
 
-        if (this.function.isParent) {
-            headerColor = VAR_COLORS["parent"];
-        }
-
-        if (this.function.color) {
-            headerColor = this.function.color;
-        }
+        headerColor = VAR_COLORS["pureFunction"];
 
         var draw = drawer.group();
 
@@ -110,14 +68,6 @@ var FunctionNode = Class(AbstractNode, {
             headerText.style('font-weight', 'bold');
             headerText.translate(this.cellSize * 2, 0);
             headerText.fill({color: "#fff"});
-
-            if (this.function.name.indexOf("Delay") !== -1 || this.function.async) {
-                var latentIcon = draw.image('/icons/{0}'.format(ICONS["latent"]), 32, 32).fill({color: "#fff"});
-                this.icon = ICONS["node"];
-                latentIcon.center(this.width, 0);
-            }
-
-
             if (!this.icon) {
                 var path = draw.use(this.nodesDrawer.fLetter);
                 path.translate(this.cellSize, 1.1 * this.cellSize);
@@ -133,7 +83,10 @@ var FunctionNode = Class(AbstractNode, {
                 icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
             }
 
-
+            if (this.function.name.indexOf("Delay") !== -1 || this.function.async) {
+                var latentIcon = draw.image('/icons/{0}'.format(ICONS["latent"]), 32, 32).fill({color: "#fff"});
+                latentIcon.center(this.width, 0);
+            }
 
             this.drawPins(draw);
 
@@ -149,27 +102,11 @@ var FunctionNode = Class(AbstractNode, {
                 text = "%"
             } else if (text.indexOf("Divide") !== -1) {
                 text = "/"
-            } else if (text.indexOf("Dot") !== -1) {
-                text = "."
             } else if (text.indexOf("Greater") !== -1) {
-                if (text.indexOf("Equal") === -1)
-                    text = ">"
-                else
-                    text = ">="
-            } else if (text.indexOf("Less") !== -1) {
-                console.log(text);
-                if (text.indexOf("Equal") === -1)
-                    text = "<"
-                else
-                    text = "<="
+                text = ">"
             } else if (text.indexOf("Equal") !== -1 && text.indexOf("Not") !== -1) {
                 text = "!="
-            } else if (text.indexOf("Equal") !== -1) {
-                text = "="
-            } else if (text.indexOf("Not") !== -1) {
-                text = "NOT"
             }
-
             var textSize = 35;
             var nodeText = draw.text(text.toUpperCase());
             nodeText.translate(this.width / 2, this.height / 2 - textSize);
