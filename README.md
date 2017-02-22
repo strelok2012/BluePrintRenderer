@@ -42,7 +42,7 @@ window.addEventListener("load", function () {
 ![alt tag](https://raw.githubusercontent.com/strelok2012/BluePrintRenderer/master/demo/screen_2.png)
 
 * Online demo:
-[http://jsfiddle.net/strelok2012/zfjqjozq/embedded/result/](http://jsfiddle.net/strelok2012/zfjqjozq/embedded/result/)
+[http://jsfiddle.net/strelok2012/hr8avqtj/embedded/result/](http://jsfiddle.net/strelok2012/hr8avqtj/embedded/result/)
 
 ### Based on:
 
