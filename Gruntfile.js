@@ -10,12 +10,13 @@ module.exports = function (grunt) {
                         "node_modules/svg.absorb.js/svg.absorb.min.js",
                         "node_modules/svg.filter.js/dist/svg.filter.min.js",
                         "node_modules/jsface/dist/jsface.min.js",
+                        "dist/assets.js",
                         "src/libs/vector.js",
                         "src/libs/saveSvgAsPng.js",
+                        "src/app/Globals.js",
                         "src/app/Drawers/LinksDrawer.js",
                         "src/app/Drawers/NodesDrawer.js",
                         "src/app/Drawers/InterfaceDrawer.js",
-                        "src/app/Globals.js",
                         "src/app/Parser/BPParser.js",
                         "src/app/Parser/BPToNodes.js",
                         "src/app/Nodes/AbstractNode.js",
@@ -48,12 +49,19 @@ module.exports = function (grunt) {
                     'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>.js']
                 }
             }
+        },
+        assetenc: {
+            pathToAssets: "assets",
+            rootAlias: "icons",
+            dst: "dist/assets.js",
+            template: "src/assets/template.js"
         }
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-encode-asset-base64');
 
 
-    grunt.registerTask('default', ['concat','uglify']);
+    grunt.registerTask('default', ['assetenc','concat', 'uglify']);
 
 };

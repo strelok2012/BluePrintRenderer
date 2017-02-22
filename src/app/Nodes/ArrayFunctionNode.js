@@ -145,7 +145,7 @@ var ArrayFunctionNode = Class(AbstractNode, {
 
                 path.scale(1.65, 1.65);
             } else {
-                var icon = draw.image('/icons/{0}'.format(this.icon), 16, 16).fill({color: "#fff"});
+                var icon = draw.image(getIcon(this.icon), 16, 16).fill({color: "#fff"});
                 icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
             }
             this.drawPins(draw);

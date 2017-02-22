@@ -112,7 +112,7 @@ var FunctionNode = Class(AbstractNode, {
             headerText.fill({color: "#fff"});
 
             if (this.function.name.indexOf("Delay") !== -1 || this.function.async) {
-                var latentIcon = draw.image('/icons/{0}'.format(ICONS["latent"]), 32, 32).fill({color: "#fff"});
+                var latentIcon = draw.image(getIcon(ICONS["latent"]), 32, 32).fill({color: "#fff"});
                 this.icon = ICONS["node"];
                 latentIcon.center(this.width, 0);
             }
@@ -129,7 +129,7 @@ var FunctionNode = Class(AbstractNode, {
 
                 path.scale(1.65, 1.65);
             } else {
-                var icon = draw.image('/icons/{0}'.format(this.icon), 16, 16).fill({color: "#fff"});
+                var icon = draw.image(getIcon(this.icon), 16, 16).fill({color: "#fff"});
                 icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
             }
 

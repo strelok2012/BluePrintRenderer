@@ -199,7 +199,7 @@ function BPToNodes(objects, origin) {
                 
                  if (FUNCTIONS_MAPPING[curObj.class].morpher) {
                     FUNCTIONS_MAPPING[curObj.class].morpher(newNode,curObj);
-                    console.log("After morpher",newNode);
+                    //console.log("After morpher",newNode);
                 }
 
             }
@@ -280,7 +280,7 @@ function BPToNodes(objects, origin) {
             if (curObj.class && curObj.class.indexOf("K2Node") !== -1)
                 curObj.class = curObj.class.replace("K2Node_", "");
             curObj.class = curObj.class.fromCamelCase();
-            console.log("EVENT", curObj);
+            //console.log("EVENT", curObj);
             newNode = {
                 name: curObj.nodeName && curObj.nodeName || curObj.class,
                 inputs: inputs,

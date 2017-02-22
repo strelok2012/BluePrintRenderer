@@ -53,7 +53,7 @@ var InterfaceDrawer = Class({
         var hover = fullScreenIcon.rect(40, 40).radius(4);
         fullScreenIcon.hover = hover;
         hover.hide();
-        var icon = fullScreenIcon.image('/images/interface/LV_FullScreen.png', 40, 40);
+        fullScreenIcon.image(getIcon(ICONS["fullscreen"]), 40, 40);
 
         hover.fill({color: "#f1b000"});
         fullScreenIcon.translate(60, 0);
@@ -64,7 +64,7 @@ var InterfaceDrawer = Class({
         var hover = saveIcon.rect(40, 40).radius(4);
         saveIcon.hover = hover;
         hover.hide();
-        var icon = saveIcon.image('/images/interface/LV_Save.png', 40, 40);
+        saveIcon.image(getIcon(ICONS["save"]), 40, 40);
 
         hover.fill({color: "#f1b000"});
         saveIcon.translate(10, 0);

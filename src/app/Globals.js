@@ -47,7 +47,9 @@ var ICONS = {
     macro: "icon_Blueprint_Macro_16x.png",
     keyboard: "icon_Blueprint_KeyboardEvent_16x.png",
     switch_on: "icon_Blueprint_Switch_16x.png",
-    mouse : "icon_Blueprint_MouseEvent_16x.png"
+    mouse: "icon_Blueprint_MouseEvent_16x.png",
+    fullscreen:"LV_FullScreen.png",
+    save:"LV_Save.png"
 }
 
 var FUNCTIONS_MAPPING = {
@@ -120,14 +122,14 @@ var FUNCTIONS_MAPPING = {
     },
     K2Node_GetInputVectorAxisValue: {
         icon: ICONS["keyboard"],
-        morpher: function (obj,node) {
+        morpher: function (obj, node) {
             obj.isPure = true;
-            obj.name = "Get "+node.inputAxisKey;
+            obj.name = "Get " + node.inputAxisKey;
             return obj;
         }
     },
-    K2Node_GetDataTableRow : {
-        text : "Get Data Table Row"
+    K2Node_GetDataTableRow: {
+        text: "Get Data Table Row"
     }
 }
 
@@ -359,4 +361,10 @@ function hexToRgb(hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
+}
+
+
+function getIcon(icon) {
+    var iconPath = 'icons/{0}'.format(icon);
+    return Assets[iconPath.replace(".png", "")] || iconPath;
 }
