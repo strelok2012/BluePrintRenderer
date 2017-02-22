@@ -5,6 +5,6 @@ description: Online demo
 authors:
   - Vitaliy Rybnikov (strelok2012)
 resources:
-  - https://raw.githubusercontent.com/strelok2012/BluePrintRenderer/master/dist/blueprint-renderer.js
+  - https://cdn.rawgit.com/strelok2012/BluePrintRenderer/master/dist/blueprint-renderer.js
 ...
 */
