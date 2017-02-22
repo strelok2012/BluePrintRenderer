@@ -41,6 +41,8 @@ window.addEventListener("load", function () {
 * Result:
 ![alt tag](https://raw.githubusercontent.com/strelok2012/BluePrintRenderer/master/demo/screen.png)
 
+* Online demo:
+[http://jsfiddle.net/strelok2012/zfjqjozq/embedded/result/](http://jsfiddle.net/strelok2012/zfjqjozq/embedded/result/)
 
 ### Based on:
 
