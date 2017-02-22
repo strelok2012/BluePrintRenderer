@@ -1,0 +1,10 @@
+/*
+---
+name: Javascript UE4 Blueprint rendering demo
+description: Online demo
+authors:
+  - Vitaliy Rybnikov (strelok2012)
+resources:
+  - https://raw.githubusercontent.com/strelok2012/BluePrintRenderer/master/dist/blueprint-renderer.js
+...
+*/
