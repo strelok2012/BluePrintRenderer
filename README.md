@@ -9,8 +9,8 @@ Current features:
 This is a very early version, not for production.
 
 Usage:
-* Include library - '<script src="/dist/blueprint-renderer.js"></script>'
-* Add to '<head>' section:
+* Include library - `<script src="/dist/blueprint-renderer.js"></script>`
+* Add to `<head>` section:
 ```html
 <style>
 	* { margin:0; padding:0; }
@@ -26,7 +26,7 @@ Usage:
 	}
 </style>
 ```
-* Add to 'body' section:
+* Add to `body` section:
 ```html
 	<div id="bluePrintRenderer"></div>
 ```
