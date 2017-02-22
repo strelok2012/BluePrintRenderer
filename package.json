@@ -29,5 +29,11 @@
   "bugs": {
     "url": "https://github.com/strelok2012/BluePrintRenderer/issues"
   },
-  "homepage": "https://github.com/strelok2012/BluePrintRenderer#readme"
+  "homepage": "https://github.com/strelok2012/BluePrintRenderer#readme",
+  "dependencies": {
+    "jsface": "^2.4.9",
+    "svg.absorb.js": "^0.1.2",
+    "svg.filter.js": "^2.0.2",
+    "svg.js": "^2.4.0"
+  }
 }

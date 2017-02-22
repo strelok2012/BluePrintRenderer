@@ -6,12 +6,12 @@ module.exports = function (grunt) {
             basic_and_extras: {
                 files: {
                     'dist/<%= pkg.name %>.js': [
-                        "src/new.svg.js",
-                        "src/svg.absorb.js",
-                        "src/svg.filter.js",
-                        "src/jsface.js",
-                        "src/vector.js",
-                        "src/saveSvgAsPng.js",
+                        "node_modules/svg.js/dist/svg.min.js",
+                        "node_modules/svg.absorb.js/svg.absorb.min.js",
+                        "node_modules/svg.filter.js/dist/svg.filter.min.js",
+                        "node_modules/jsface/dist/jsface.min.js",
+                        "src/libs/vector.js",
+                        "src/libs/saveSvgAsPng.js",
                         "src/app/Drawers/LinksDrawer.js",
                         "src/app/Drawers/NodesDrawer.js",
                         "src/app/Drawers/InterfaceDrawer.js",
@@ -41,12 +41,19 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        uglify: {
+            app: {
+                files: {
+                    'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>.js']
+                }
+            }
         }
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
 
-
-    grunt.registerTask('default', ['concat']);
+    grunt.registerTask('default', ['concat','uglify']);
 
 };
