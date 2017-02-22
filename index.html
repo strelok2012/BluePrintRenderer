@@ -3,11 +3,8 @@
         <meta charset="UTF-8">
         <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <style>
-            * { margin:0; padding:0; } /* to remove the top and left whitespace */
-
-            html, body { width:100%; height:100%;} /* just to be sure these are full screen*/
-
-            #container {overflow: auto};
+            * { margin:0; padding:0; }
+            html, body { width:100%; height:100%;}
 
             #svgContainer {
                 -webkit-user-select:none;
@@ -18,72 +15,17 @@
                 user-select:none;
 
             }
-            /*svg {
-                    shape-rendering:optimizeSpeed;
-            }*/
-
-
-
-            #contenteditable {
-                display: none;
-            }
-
-
         </style>
-        <script src="/js/new.svg.js"></script>
-        <script src="/js/svg.absorb.js"></script>
-        <script src="/js/svg.filter.js"></script>
-        <script src="/js/jsface.js"></script>
-        <script src="/js/vector.js"></script>
-        <script src="/js/saveSvgAsPng.js"></script>
-        <script src="/js/app/Drawers/LinksDrawer.js"></script>
-        <script src="/js/app/Drawers/NodesDrawer.js"></script>
-        <script src="/js/app/Drawers/InterfaceDrawer.js"></script>
-
-
-        <script src="/js/app/Globals.js"></script>
-
-        <script src="/js/app/Parser/BPParser.js"></script>
-        <script src="/js/app/Parser/BPToNodes.js"></script>
-
-        <script src="/js/app/Nodes/AbstractNode.js"></script>
-        <script src="/js/app/Nodes/CommentNode.js"></script>
-        <script src="/js/app/Nodes/FunctionNode.js"></script>
-        <script src="/js/app/Nodes/GetterNode.js"></script>
-        <script src="/js/app/Nodes/SetterNode.js"></script>
-        <script src="/js/app/Nodes/EventNode.js"></script>
-        <script src="/js/app/Nodes/ConverterNode.js"></script>
-        <script src="/js/app/Nodes/BinaryOperatorNode.js"></script>
-        <script src="/js/app/Nodes/MacroNode.js"></script>
-        <script src="/js/app/Nodes/RerouteNode.js"></script>
-        <script src="/js/app/Nodes/ArrayFunctionNode.js"></script>
-        <script src="/js/app/Nodes/CastNode.js"></script>
-        <script src="/js/app/Nodes/TimelineNode.js"></script>
-        <script src="/js/app/Nodes/CallDelegateNode.js"></script>
-        <script src="/js/app/Nodes/UnknownNode.js"></script>
-        <script src="/js/app/Nodes/SelectNode.js"></script>
-        <script src="/js/app/Nodes/CompositeNode.js"></script>
-
-        <script src="/js/app/App/Config.js"></script>
-        <script src="/js/app/App/Grid.js"></script>
-        <script src="/js/app/App/BlueprintRenderer.js"></script>
-
+        <script src="/dist/blueprint-renderer.js"></script>
         <script>
             window.addEventListener("load", function () {
-                var render = new BlueprintRenderer('svgContainer');
+                var render = new BlueprintRenderer('bluePrintRenderer');
                 render.renderFromFile("/tests/file_big.txt");
             }, false);
         </script>
 
     </head>
     <body style="overflow: hidden">
-        <div id="contenteditable" contenteditable></div>
-        <div id="svgContainer"></div>
-        <div id="tmpSvgContainer"></div>
-        <div id="copyContainer"></div>
+        <div id="bluePrintRenderer"></div>
     </body>
-
-
-
-
 </html>

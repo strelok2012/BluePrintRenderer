@@ -7,7 +7,7 @@ var EventNode = Class(AbstractNode, {
 
         //console.log("EVENT", funcObj);
 
-        this.minCellWidth = 8;
+        this.minCellWidth = 6;
         this.minCellHeight = 4;
 
         this.showHeader = true;
@@ -30,9 +30,12 @@ var EventNode = Class(AbstractNode, {
                 break;
             }
         }
-        
-        if(this.function.inputKey){
-            this.icon = ICONS["keyboard"];
+
+        if (this.function.inputKey) {
+            if (this.function.inputKey.indexOf("Mouse") !== -1)
+                this.icon = ICONS["mouse"];
+            else
+                this.icon = ICONS["keyboard"];
             this.function.name = this.function.inputKey;
         }
 

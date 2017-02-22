@@ -46,7 +46,8 @@ var ICONS = {
     sequence: "icon_Blueprint_Sequence_16x.png",
     macro: "icon_Blueprint_Macro_16x.png",
     keyboard: "icon_Blueprint_KeyboardEvent_16x.png",
-    switch_on: "icon_Blueprint_Switch_16x.png"
+    switch_on: "icon_Blueprint_Switch_16x.png",
+    mouse : "icon_Blueprint_MouseEvent_16x.png"
 }
 
 var FUNCTIONS_MAPPING = {

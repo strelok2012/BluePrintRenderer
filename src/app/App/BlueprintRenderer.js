@@ -21,11 +21,29 @@ var BlueprintRenderer = Class({
     nodesLayer: null,
     current: null,
     constructor: function (domNodeId) {
-        this.svgContainerId = domNodeId;
-        this.svgCointainerNode = document.getElementById(domNodeId);
+        this.mainContainer = document.getElementById(domNodeId);
+        var contentEditable = document.createElement("div");
+        contentEditable.setAttribute("style", "display:none");
+        contentEditable.setAttribute("contenteditable", "")
+        this.mainContainer.appendChild(contentEditable);
+
+        var svgContainer = document.createElement("div");
+        svgContainer.setAttribute("id", "svgContainer");
+        this.mainContainer.appendChild(svgContainer);
+        this.svgContainerId = "svgContainer";
+        this.svgCointainerNode = svgContainer;
+
+
+
+        var tmpSvgContainer = document.createElement("div");
+        tmpSvgContainer.setAttribute("id", "tmpSvgContainer");
+        this.mainContainer.appendChild(tmpSvgContainer);
+
+        var copyContainer = document.createElement("div");
+        copyContainer.setAttribute("id", "copyContainer");
+        this.mainContainer.appendChild(copyContainer);
+
         this.origin = new Vector(0, 0);
-        this.config = {
-        }
     },
     renderFromText: function (bpText) {
         this.parse(bpText);
@@ -87,10 +105,6 @@ var BlueprintRenderer = Class({
         this.interfaceDrawer.render();
         var self = this;
         this.interfaceDrawer.setSaveCallback(function (e) {
-            //var elem = document.body; // Make the body go full screen.
-            //requestFullScreen(elem);
-            // this.grid.width(7552);
-            //this.grid.height(4272);
             var xmlns = "http://www.w3.org/2000/xmlns/";
             var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.innerHTML = self.mainDrawer.svg();

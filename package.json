@@ -1,0 +1,33 @@
+{
+  "name": "blueprint-renderer",
+  "version": "1.0.0",
+  "description": "Current features:",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-uglify": "^2.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strelok2012/BluePrintRenderer.git"
+  },
+  "keywords": [
+    "js",
+    "ue4",
+    "unreal-engine-4",
+    "blueprint"
+  ],
+  "author": "strelok2012",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/strelok2012/BluePrintRenderer/issues"
+  },
+  "homepage": "https://github.com/strelok2012/BluePrintRenderer#readme"
+}

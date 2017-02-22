@@ -211,6 +211,7 @@ var AbstractNode = Class({
             }
 
             var lineWidth = this.cellSize * 1.5 + this.circleRadius * 2 + maxInSize + maxOutSize + this.circleRadius * 2;
+            console.log("Line width",lineWidth);
             newWidth = this.nearestCellWidth(lineWidth) * this.cellSize;
             if (newWidth > this.width) {
                 this.width = newWidth;
@@ -220,6 +221,7 @@ var AbstractNode = Class({
                 this.width = maxInSize;
             }
         }
+        console.log("Drawer width",this.width,this.width/this.cellSize);
         tmpDraw.remove();
     },
     nearestCellWidth: function (width) {
