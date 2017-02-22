@@ -10,19 +10,19 @@ This is a very early version, not for production.
 
 Usage:
 * Include library - `<script src="/dist/blueprint-renderer.js"></script>`
-* Add style section:
+* Add some css:
 ```html
-	* { margin:0; padding:0; }
-	html, body { width:100%; height:100%;}
-	body {overflow: hidden;}
-	#svgContainer {
-		-webkit-user-select:none;
-		-khtml-user-select:none;
-		-moz-user-select:none;
-		-ms-user-select:none;
-		-o-user-select:none;
-		user-select:none;
-	}
+* { margin:0; padding:0; }
+html, body { width:100%; height:100%;}
+body {overflow: hidden;}
+#svgContainer {
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	-o-user-select:none;
+	user-select:none;
+}
 ```
 * Add to `body` section:
 ```html
