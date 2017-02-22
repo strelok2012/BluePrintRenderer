@@ -6,5 +6,6 @@ authors:
   - Vitaliy Rybnikov (strelok2012)
 resources:
   - https://cdn.rawgit.com/strelok2012/BluePrintRenderer/master/dist/blueprint-renderer.js
+  - https://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic
 ...
 */
