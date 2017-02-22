@@ -10,9 +10,8 @@ This is a very early version, not for production.
 
 Usage:
 * Include library - `<script src="/dist/blueprint-renderer.js"></script>`
-* Add to `<head>` section:
+* Add style section:
 ```html
-<style>
 	* { margin:0; padding:0; }
 	html, body { width:100%; height:100%;}
 	body {overflow: hidden;}
@@ -24,7 +23,6 @@ Usage:
 		-o-user-select:none;
 		user-select:none;
 	}
-</style>
 ```
 * Add to `body` section:
 ```html
