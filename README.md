@@ -9,23 +9,33 @@ Current features:
 This is a very early version, not for production.
 
 Usage:
-* Include dependencies - [jsface](https://github.com/tnhu/jsface) and [svg.js](https://github.com/wout/svg.js)
-* Connect library - now it splitten to several files, but i concat it soon
-* Add to your HTML (will generates programmatically soon):
+* Include library - '<script src="/dist/blueprint-renderer.js"></script>'
+* Add to '<head>' section:
 ```html
-<div id="contenteditable" contenteditable></div>
-<div id="svgContainer"></div>
-<div id="tmpSvgContainer"></div>
-<div id="copyContainer"></div>
+<style>
+	* { margin:0; padding:0; }
+	html, body { width:100%; height:100%;}
+	body {overflow: hidden;}
+	#svgContainer {
+		-webkit-user-select:none;
+		-khtml-user-select:none;
+		-moz-user-select:none;
+		-ms-user-select:none;
+		-o-user-select:none;
+		user-select:none;
+	}
+</style>
+```
+* Add to 'body' section:
+```html
+	<div id="bluePrintRenderer"></div>
 ```
 * Add code:
 
 ```javascript
 window.addEventListener("load", function () {
-	var render = new BlueprintRenderer('svgContainer');
-	render.renderFromFile("PATH_TO_BLUEPRINT_IN_TXT")
-    //OR
-    render.renderFromText("BLUEPRINT_TEXT")
+	var render = new BlueprintRenderer('bluePrintRenderer');
+	render.renderFromFile("tests/file_big.txt")
 }, false);
 ```
 * Result:
