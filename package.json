@@ -10,7 +10,8 @@
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-uglify": "^2.1.0",
-    "grunt-encode-asset-base64": "0.0.3"
+    "grunt-encode-asset-base64": "0.0.3",
+    "uglify-js": "github:mishoo/UglifyJS2#harmony"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,7 +33,6 @@
   },
   "homepage": "https://github.com/strelok2012/BluePrintRenderer#readme",
   "dependencies": {
-    "jsface": "^2.4.9",
     "svg.absorb.js": "^0.1.2",
     "svg.filter.js": "^2.0.2",
     "svg.js": "^2.4.0"

@@ -1,6 +1,6 @@
-var MacroNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
-        MacroNode.$super.call(this, x, y, drawer);
+class MacroNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
         this.function = funcObj;
         this.inputs = funcObj.inputs;
         this.outputs = funcObj.outputs;
@@ -34,8 +34,8 @@ var MacroNode = Class(AbstractNode, {
 
         this.width = this.cellSize * this.minCellWidth;
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = VAR_COLORS["macro"];
 
         var draw = drawer.group();
@@ -91,4 +91,4 @@ var MacroNode = Class(AbstractNode, {
         return draw;
 
     }
-});
+}

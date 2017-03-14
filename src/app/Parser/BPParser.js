@@ -1,13 +1,12 @@
-
-var BPParser = Class({
-    constructor: function (text) {
+class BPParser {
+    constructor(text) {
         this.text = text;
         this.txt = this.text.split("\n");
-    },
-    getObject: function () {
+    }
+    getObject() {
 
-    },
-    strToObject: function (str, obj) {
+    }
+    strToObject(str, obj) {
         var retObj = {};
         str = str.replace("Begin Object", "");
         str = str.replace("End Object", "");
@@ -33,8 +32,8 @@ var BPParser = Class({
             }
         }
         return retObj;
-    },
-    strToObjectParams: function (str, obj) {
+    }
+    strToObjectParams(str, obj) {
         str = str.trim();
         var left = str.substr(0, str.indexOf('='));
         var right = str.substr(str.indexOf('=') + 1);
@@ -52,8 +51,8 @@ var BPParser = Class({
             obj[left] = right;
         }
 
-    },
-    parseObject: function (lineCounter, stack) {
+    }
+    parseObject(lineCounter, stack) {
         if (this.txt[lineCounter].length === 0)
             return lineCounter;
         var obj = this.strToObject(this.txt[lineCounter]);
@@ -75,8 +74,8 @@ var BPParser = Class({
         }
 
         return lineCounter;
-    },
-    verify: function (txt) {
+    }
+    verify(txt) {
         var bCount = 0, eCount = 0;
         txt.forEach(function (str) {
             if (str.indexOf("Begin Object") !== -1) {
@@ -92,8 +91,8 @@ var BPParser = Class({
 
         return false;
 
-    },
-    parseText: function () {
+    }
+    parseText() {
         var txt = this.txt;
         var retObj = {};
         var objects = [];
@@ -106,10 +105,10 @@ var BPParser = Class({
         }
         var original = objects;
         var work = JSON.parse(JSON.stringify(objects));
-        
+
         for (var i = 0; i < work.length; i++) {
             var currentNode = work[i];
-            
+
             if (currentNode.FunctionReference) {
                 currentNode["nodeName"] = currentNode.FunctionReference.MemberName.replace(/["']/g, "");
                 currentNode["nodeName"] = currentNode["nodeName"].fromCamelCase();
@@ -291,4 +290,4 @@ var BPParser = Class({
         //console.log(work);
         return work;
     }
-});
+}

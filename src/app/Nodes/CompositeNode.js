@@ -1,8 +1,10 @@
-var CompositeNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
+class CompositeNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
+        
         this.minCellWidth = 8.5
         this.minCellHeight = 4;
-        CompositeNode.$super.call(this, x, y, drawer);
+        
         this.function = funcObj;
 
         this.inputs = funcObj.inputs;
@@ -19,8 +21,8 @@ var CompositeNode = Class(AbstractNode, {
         //console.log(funcObj);
 
         this.cellHeight = this.headerCellHeight + this.cellOffset * 3 + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = null;
 
 
@@ -43,11 +45,11 @@ var CompositeNode = Class(AbstractNode, {
         var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
         mainRect.fill({color: "#000", opacity: 0.5});
         mainRect.stroke({color: '#000000', opacity: 1, width: 1});
-        
-        
-        var opRect = draw.rect(this.width*0.8, this.height*0.8).radius(this.angleRadius);
+
+
+        var opRect = draw.rect(this.width * 0.8, this.height * 0.8).radius(this.angleRadius);
         opRect.fill({color: "#FFF", opacity: 0.1});
-        opRect.translate(this.width/2-this.width*0.4, this.height/2-this.height*0.4);
+        opRect.translate(this.width / 2 - this.width * 0.4, this.height / 2 - this.height * 0.4);
 
 
 
@@ -75,11 +77,11 @@ var CompositeNode = Class(AbstractNode, {
             , color: "#9b9c77"
         });
 
-        this.drawPins(draw,this.headerCellHeight+this.cellOffset*2);
+        this.drawPins(draw, this.headerCellHeight + this.cellOffset * 2);
 
 
 
         return draw;
 
     }
-});
+}

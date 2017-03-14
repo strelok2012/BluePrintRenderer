@@ -1,6 +1,6 @@
-var RerouteNode = Class(AbstractNode, {
-	constructor: function (funcObj, x, y, drawer) {
-		RerouteNode.$super.call(this, x, y, drawer);
+class RerouteNode extends AbstractNode {
+	constructor(funcObj, x, y, drawer) {
+		super(x, y, drawer);
 		this.function = funcObj;
 		this.inputs = funcObj.inputs;
 		this.outputs = funcObj.outputs;
@@ -10,12 +10,12 @@ var RerouteNode = Class(AbstractNode, {
 		this.cellOffset = 0.5;
 		this.width = this.cellSize * this.minCellWidth;
 		this.cellHeight = this.cellSize * this.minCellHeight;
-	},
-	calculateWidth: function () {
+	}
+	calculateWidth() {
 		this.height = this.minCellHeight * this.cellSize;
 		this.width = this.cellSize * this.minCellWidth;
-	},
-	drawPins: function (draw) {
+	}
+	drawPins(draw) {
 		var cellOffset = 0.5;
 		var tIn = this.outputs[0];
 		var circleCenterX = this.cellSize + this.circleRadius / 2;
@@ -43,8 +43,8 @@ var RerouteNode = Class(AbstractNode, {
 		this.inputs[0].center = {x: circleCenterX - this.circleRadius / 2 + this.circleRadius / 2, y: circleCenterY - this.circleRadius / 2 + this.circleRadius / 2};
 		hoverRect.hide();
 		this.pins.push(pinObj);
-	},
-	setSVG: function (drawer) {
+	}
+	setSVG(drawer) {
 		var draw = drawer.group();
 		var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
 		mainRect.fill({color: "#000", opacity: 0});
@@ -53,4 +53,4 @@ var RerouteNode = Class(AbstractNode, {
 		this.drawPins(draw);
 		return draw;
 	}
-});
+}

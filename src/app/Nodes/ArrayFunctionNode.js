@@ -1,8 +1,10 @@
-var ArrayFunctionNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
+class ArrayFunctionNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
+        
         this.minCellWidth = 8.5
         this.minCellHeight = 2;
-        ArrayFunctionNode.$super.call(this, x, y, drawer);
+        
         this.function = funcObj;
 
         this.inputs = funcObj.inputs;
@@ -41,9 +43,9 @@ var ArrayFunctionNode = Class(AbstractNode, {
 
 
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    calculateWidth: function () {
-        ArrayFunctionNode.$superp.calculateWidth.call(this);
+    }
+    calculateWidth() {
+        super.calculateWidth();
         if (this.showHeader) {
             return
         }
@@ -90,8 +92,8 @@ var ArrayFunctionNode = Class(AbstractNode, {
             this.height += this.cellSize;
         }
 
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = null;
         if (!this.function.isPure) {
             headerColor = VAR_COLORS["execFunction"];
@@ -190,7 +192,7 @@ var ArrayFunctionNode = Class(AbstractNode, {
                 });
                 var textHeight = this.getTextElementHeight(nodeText);
                 //var textWidth = this.getTextElementWidth(nodeText);
-                nodeText.translate(this.width/2, this.height / 2 - textSize - textHeight / 2);
+                nodeText.translate(this.width / 2, this.height / 2 - textSize - textHeight / 2);
                 nodeText.font({
                     family: 'Roboto'
                     , size: textSize
@@ -222,4 +224,4 @@ var ArrayFunctionNode = Class(AbstractNode, {
         return draw;
 
     }
-});
+}

@@ -1,26 +1,26 @@
 document.addEventListener('dragstart', function (e) {
     e.preventDefault();
 });
-var BlueprintRenderer = Class({
-    drawerHeight: 0,
-    drawerWidth: 0,
-    svgContainer: null,
-    currentScaleStep: 0,
-    grid: null,
-    currentScale: 1,
-    blueprintObjects: [],
-    nodesObjects: [],
-    mainDrawer: null,
-    linksDrawer: null,
-    nodesDrawer: null,
-    interfaceDrawer: null,
-    origin: null,
-    config: null,
-    layersContainer: null,
-    linksLayer: null,
-    nodesLayer: null,
-    current: null,
-    constructor: function (domNodeId) {
+class BlueprintRenderer {
+    constructor(domNodeId) {
+        this.drawerHeight = 0;
+        this.drawerWidth = 0;
+        this.svgContainer = null;
+        this.currentScaleStep = 0;
+        this.grid = null;
+        this.currentScale = 1;
+        this.blueprintObjects = [];
+        this.nodesObjects = [];
+        this.mainDrawer = null;
+        this.linksDrawer = null;
+        this.nodesDrawer = null;
+        this.interfaceDrawer = null;
+        this.origin = null;
+        this.config = null;
+        this.layersContainer = null;
+        this.linksLayer = null;
+        this.nodesLayer = null;
+        this.current = null;
         this.mainContainer = document.getElementById(domNodeId);
         var contentEditable = document.createElement("div");
         contentEditable.setAttribute("style", "display:none");
@@ -44,11 +44,11 @@ var BlueprintRenderer = Class({
         this.mainContainer.appendChild(copyContainer);
 
         this.origin = new Vector(0, 0);
-    },
-    renderFromText: function (bpText) {
+    }
+    renderFromText(bpText) {
         this.parse(bpText);
-    },
-    renderFromFile: function (bpFileName) {
+    }
+    renderFromFile(bpFileName) {
         var client = new XMLHttpRequest();
         var self = this;
         client.open('GET', bpFileName);
@@ -60,13 +60,13 @@ var BlueprintRenderer = Class({
             }
         }
         client.send();
-    },
-    parse: function (bpText) {
+    }
+    parse(bpText) {
         var parser = new BPParser(bpText);
         this.blueprintObjects = parser.parseText();
         this.draw();
-    },
-    getCoords: function (e) {
+    }
+    getCoords(e) {
         var can = this.svgCointainerNode;
         var x, y;
         if (e.pageX || e.pageY) {
@@ -80,8 +80,8 @@ var BlueprintRenderer = Class({
         x -= can.offsetLeft;
         y -= can.offsetTop;
         return new Vector(x, y);
-    },
-    draw: function () {
+    }
+    draw() {
         this.drawerWidth = window.innerWidth;
         this.drawerHeight = window.innerHeight;
         this.mainDrawer = SVG(this.svgContainerId).size(this.drawerWidth, this.drawerHeight).spof();
@@ -143,8 +143,8 @@ var BlueprintRenderer = Class({
         }, false);
         this.subscribeMainDrawer();
         this.subscribeDocument();
-    },
-    subscribeDocument: function () {
+    }
+    subscribeDocument() {
         var self = this;
         document.addEventListener('paste', function (e) {
             var pastedText = undefined;
@@ -205,8 +205,8 @@ var BlueprintRenderer = Class({
                 document.getElementById('copyContainer').innerHTML = '';
             }
         };
-    },
-    subscribeMainDrawer: function () {
+    }
+    subscribeMainDrawer() {
         var self = this;
         this.mainDrawer.mousedown(function (e) {
             if (e.button === 2) {
@@ -332,8 +332,8 @@ var BlueprintRenderer = Class({
             }
 
         });
-    },
-    wheelHandler: function (e) {
+    }
+    wheelHandler(e) {
         var sign = e.deltaY > 0 && -1 || 1;
         var newScaleStep = this.currentScaleStep + sign;
         if (newScaleStep >= -12 && newScaleStep <= 7) {
@@ -353,21 +353,21 @@ var BlueprintRenderer = Class({
             this.grid.gridPattern.scale(this.currentScale);
             this.grid.updatePattern(this.origin.x, this.origin.y, this.currentScale);
         }
-    },
-    drawNodes: function (nodes) {
+    }
+    drawNodes(nodes) {
         var nodesDraw = this.nodesDrawer.renderNodes(nodes);
         return nodesDraw;
-    },
-    drawGrid: function () {
+    }
+    drawGrid() {
         this.grid = new Grid(this.mainDrawer, this.drawerWidth, this.drawerHeight);
-    },
-    setupListeners: function () {
+    }
+    setupListeners() {
 
-    },
-    getNearestCell: function (x, y) {
+    }
+    getNearestCell(x, y) {
         return new Vector(Math.floor(x / CONFIG["GRID_STEP"]) * CONFIG["GRID_STEP"], Math.floor(y / CONFIG["GRID_STEP"]) * CONFIG["GRID_STEP"]);
-    },
-    requestFullScreen: function (element) {
+    }
+    requestFullScreen(element) {
         // Supports most browsers and their versions.
         if (this.isFullScreen) {
             if (document.cancelFullScreen) {
@@ -392,4 +392,4 @@ var BlueprintRenderer = Class({
         }
 
     }
-});
+}

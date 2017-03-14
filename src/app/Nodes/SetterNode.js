@@ -1,6 +1,6 @@
-var SetterNode = Class(AbstractNode, {
-	constructor: function (setterNode, x, y, drawer) {
-		SetterNode.$super.call(this, x, y, drawer);
+class SetterNode extends AbstractNode {
+	constructor(setterNode, x, y, drawer) {
+		super(x, y, drawer);
 		this.inputs = setterNode.inputs;
 		this.outputs = setterNode.outputs;
 		this.minCellWidth = 10;
@@ -11,8 +11,8 @@ var SetterNode = Class(AbstractNode, {
 		this.width = this.cellSize * this.minCellWidth;
 		this.headerCellHeight= 1.5;
 		this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(setterNode.outputs.length, setterNode.inputs.length) + Math.max(setterNode.outputs.length, setterNode.inputs.length) * this.cellOffset;
-	},
-	setSVG: function (drawer) {
+	}
+	setSVG(drawer) {
 		var draw = drawer.group();
 
 		var mainColor = null;
@@ -52,4 +52,4 @@ var SetterNode = Class(AbstractNode, {
 
 		return draw;
 	}
-});
+}

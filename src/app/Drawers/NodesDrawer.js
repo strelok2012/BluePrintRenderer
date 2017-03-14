@@ -1,8 +1,8 @@
-var NodesDrawer = Class({
-    dragNode: null,
-    selectedNodes: [],
-    movingNodes : [],
-    constructor: function (drawer, parent) {
+class NodesDrawer {
+    constructor(drawer, parent) {
+        this.dragNode = null;
+        this.selectedNodes = [];
+        this.movingNodes = [];
         this.drawer = drawer;
         this.parent = parent;
         this.circleRadius = 8.5;
@@ -22,8 +22,8 @@ var NodesDrawer = Class({
             stop.at({offset: 1, color: '#ffffff', opacity: 1});
         });
         this.opacityLinearGradient.from(0, 1).to(0, 0);
-    },
-    renderNodes: function (nodes) {
+    }
+    renderNodes(nodes) {
         var draw = this.drawer.group();
         for (var i = 0; i < nodes.length; i++) {
             var currentNode = nodes[i];
@@ -47,8 +47,8 @@ var NodesDrawer = Class({
         }
 
         return draw;
-    },
-    subscribeNode: function (el) {
+    }
+    subscribeNode(el) {
         var self = this;
         if (el instanceof CommentNode) {
             //console.log(el);
@@ -126,8 +126,8 @@ var NodesDrawer = Class({
 
             });
         }
-    },
-    makeUnselectable: function (node) {
+    }
+    makeUnselectable(node) {
         if (node.node)
             node = node.node;
         if (node.nodeType === 1) {
@@ -139,11 +139,11 @@ var NodesDrawer = Class({
             this.makeUnselectable(child);
             child = child.nextSibling;
         }
-    },
-    isNodeSelected: function (el) {
+    }
+    isNodeSelected(el) {
         return this.selectedNodes.indexOf(el) !== -1;
-    },
-    selectAllNodes: function () {
+    }
+    selectAllNodes() {
         var self = this;
         this.selectedNodes.splice(0, this.selectedNodes.length);
         this.parent.nodesObjects.forEach(function (node) {
@@ -151,8 +151,9 @@ var NodesDrawer = Class({
             self.selectedNodes.push(node);
         });
         //console.log('len', selectedNodes.length);
-    },
-    selectOneNode: function (el) {
+    }
+
+    selectOneNode(el) {
         this.selectedNodes.forEach(function (node) {
             node.hover.hide();
         });
@@ -165,8 +166,8 @@ var NodesDrawer = Class({
                 node.hover.show();
             }
         })
-    },
-    selectNodeGroup: function (group) {
+    }
+    selectNodeGroup(group) {
         this.selectedNodes.forEach(function (node) {
             node.hover.hide();
         });
@@ -175,8 +176,8 @@ var NodesDrawer = Class({
         this.selectedNodes.forEach(function (node) {
             node.hover.show();
         })
-    },
-    addNodeGroupToSelect: function (group) {
+    }
+    addNodeGroupToSelect(group) {
         var self = this;
         group.forEach(function (node) {
             if (self.selectedNodes.indexOf(node) === -1) {
@@ -184,8 +185,8 @@ var NodesDrawer = Class({
                 node.hover.show();
             }
         });
-    },
-    selectNode: function (el, event) {
+    }
+    selectNode(el, event) {
         this.selectedNodes.forEach(function (node) {
             node.hover.hide();
         });
@@ -214,11 +215,11 @@ var NodesDrawer = Class({
                 node.hover.show();
             }
         })
-    },
-    unselectAllNodes: function () {
+    }
+    unselectAllNodes() {
         this.selectedNodes.forEach(function (node) {
             node.hover.hide();
         });
         this.selectedNodes.splice(0, this.selectedNodes.length);
     }
-});
+}

@@ -1,8 +1,10 @@
-var TimelineNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
+class TimelineNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super.call(x, y, drawer);
+        
         this.minCellWidth = 8.5
         this.minCellHeight = 2;
-        TimelineNode.$super.call(this, x, y, drawer);
+        
         this.function = funcObj;
 
         this.inputs = funcObj.inputs;
@@ -21,8 +23,8 @@ var TimelineNode = Class(AbstractNode, {
 
 
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = VAR_COLORS["timeline"];
         ;
 
@@ -69,4 +71,4 @@ var TimelineNode = Class(AbstractNode, {
         return draw;
 
     }
-});
+}

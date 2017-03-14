@@ -9,7 +9,6 @@ module.exports = function (grunt) {
                         "node_modules/svg.js/dist/svg.min.js",
                         "node_modules/svg.absorb.js/svg.absorb.min.js",
                         "node_modules/svg.filter.js/dist/svg.filter.min.js",
-                        "node_modules/jsface/dist/jsface.min.js",
                         "dist/assets.js",
                         "src/libs/vector.js",
                         "src/libs/saveSvgAsPng.js",
@@ -62,6 +61,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-encode-asset-base64');
 
 
-    grunt.registerTask('default', ['assetenc','concat', 'uglify']);
+    grunt.registerTask('default', ['assetenc','concat','uglify']);
 
 };

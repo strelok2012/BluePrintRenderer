@@ -1,17 +1,14 @@
-var EventNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
-        EventNode.$super.call(this, x, y, drawer);
+class EventNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
         this.function = funcObj;
         this.outputs = funcObj.outputs;
         this.delegateOutput = {};
-
         //console.log("EVENT", funcObj);
 
         this.minCellWidth = 6;
         this.minCellHeight = 4;
-
         this.showHeader = true;
-
         this.angleRadius = 10;
         this.icon = ICONS["event"];
         this.headerCellHeight = 1.5;
@@ -23,7 +20,6 @@ var EventNode = Class(AbstractNode, {
         this.cellOffset = 0.5;
         this.width = this.cellSize * this.minCellWidth;
         this.hasDelegateOut = false;
-
         for (var i = 0; i < this.outputs.length; i++) {
             if (this.outputs[i].name.indexOf("Output Delegate") !== -1) {
                 this.hasDelegateOut = true;
@@ -43,23 +39,19 @@ var EventNode = Class(AbstractNode, {
             this.cellHeight = this.headerCellHeight + this.cellOffset + (funcObj.outputs.length - 1) + (funcObj.outputs.length - 1) * this.cellOffset + this.cellOffset;
         else
             this.cellHeight = this.headerCellHeight + this.cellOffset + (funcObj.outputs.length) + (funcObj.outputs.length) * this.cellOffset + this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = VAR_COLORS["event"];
         var draw = drawer.group();
-
-
         var headerGradient = draw.gradient('linear', function (stop) {
             stop.at({offset: 0, color: headerColor, opacity: 0.74226803});
             stop.at({offset: 1, color: headerColor, opacity: 0});
         });
-
         var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
         opacityRect.fill(this.nodesDrawer.opacityLinearGradient);
         var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
         mainRect.fill({color: "#000", opacity: 0.5});
         mainRect.stroke({color: '#000000', opacity: 1, width: 1});
-
         var headerGradient = draw.gradient('linear', function (stop) {
             stop.at({offset: 0, color: headerColor, opacity: 1});
             stop.at({offset: 1, color: headerColor, opacity: 0});
@@ -70,7 +62,6 @@ var EventNode = Class(AbstractNode, {
 
         header.clipWith(rect)
         var headerText = draw.text(this.function.name);
-
         headerText.font({
             family: 'Roboto'
             , size: this.fontSize
@@ -80,7 +71,6 @@ var EventNode = Class(AbstractNode, {
         headerText.style('font-weight', 'bold');
         headerText.translate(this.cellSize * 2, 0);
         headerText.fill({color: "#fff"});
-
         if (this.function.isCustom) {
             var nodeText = draw.text(this.customText);
             nodeText.translate(this.cellSize * 2, this.fontSize);
@@ -96,13 +86,11 @@ var EventNode = Class(AbstractNode, {
 
         var icon = draw.image(getIcon(this.icon), 16, 16).fill({color: "#fff"});
         icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
-
         if (this.hasDelegateOut) {
             var dOut = draw.rect(this.circleRadius, this.circleRadius).radius(1).stroke({color: VAR_COLORS.delegate, width: 2});
             dOut.translate(this.width - this.cellSize, this.headerCellHeight * this.cellSize / 2 - this.circleRadius / 2);
             if (this.delegateOutput.linked)
                 dOut.fill({color: VAR_COLORS.delegateOut});
-
             this.delegateOutput.color = VAR_COLORS.delegateOut;
             for (var i = 0; i < this.outputs.length; i++) {
                 if (this.outputs[i].name.indexOf("Output Delegate") !== -1) {
@@ -116,7 +104,6 @@ var EventNode = Class(AbstractNode, {
             this.drawPins(draw);
         else
             this.drawPins(draw, 3.5);
-
         return draw;
     }
-});
+}

@@ -1,8 +1,10 @@
-var SelectNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
+class SelectNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
+        
         this.minCellWidth = 8.5
         this.minCellHeight = 2;
-        SelectNode.$super.call(this, x, y, drawer);
+        
         this.function = funcObj;
 
         this.inputs = funcObj.inputs;
@@ -21,8 +23,8 @@ var SelectNode = Class(AbstractNode, {
 
 
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = null;
 
 
@@ -128,4 +130,4 @@ var SelectNode = Class(AbstractNode, {
         return draw;
 
     }
-});
+}

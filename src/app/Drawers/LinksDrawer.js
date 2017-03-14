@@ -1,11 +1,11 @@
-var LinksDrawer = Class({
-    allNodes: [],
-    constructor: function (drawer) {
+class LinksDrawer {
+    constructor(drawer) {
+        this.allNodes = [];
         this.controlOffset = 85;
         this.drawer = drawer;
         this.linksGroup = this.drawer.group();
-    },
-    renderNodes: function (nodes) {
+    }
+    renderNodes(nodes) {
         var draw = this.linksGroup;
         this.allNodes = this.allNodes.concat(nodes);
         for (var i = 0; i < nodes.length; i++) {
@@ -26,8 +26,8 @@ var LinksDrawer = Class({
         }
 
         return draw;
-    },
-    redrawNodes: function (nodes) {
+    }
+    redrawNodes(nodes) {
         var affectedOutputs = [];
         var allOutputs = [];
         var nodesInputs = [];
@@ -85,8 +85,9 @@ var LinksDrawer = Class({
                 }
             }
         })
-    },
-    drawPath: function (draw, node, pin, link, color) {
+    }
+
+    drawPath(draw, node, pin, link, color) {
         var line = draw.group();
         var minOffset = 16;
         var startX = node.x + node.width;
@@ -125,4 +126,4 @@ var LinksDrawer = Class({
         line.path(createSmoothPath(endX + 1, endY, link.center.x + link.parent.x, link.center.y + link.parent.y)).stroke({color: color, width: 1}).style('pointer-events', 'none');
         return line;
     }
-});
+}

@@ -1,9 +1,9 @@
-var Grid = Class({
-    gridPattern: null,
-    constructor: function (drawer, drawerWidth, drawerHeight) {
+class Grid {
+    constructor(drawer, drawerWidth, drawerHeight) {
         var gridStep = CONFIG["GRID_STEP"];
         var gridPattern = null;
         var grid = drawer.group();
+        this.gridPattern = null;
 
         gridPattern = drawer.pattern(gridStep * 8, gridStep * 8, function (add) {
             add.rect(136, 136).fill('#262626');
@@ -20,12 +20,12 @@ var Grid = Class({
         grid.style('pointer-events', 'none');
 
         this.gridPattern = gridPattern;
-    },
-    updatePattern: function (x, y, scale) {
+    }
+    updatePattern(x, y, scale) {
         this.gridPattern.x(x / scale);
         this.gridPattern.y(y / scale);
-    },
-    updatePatternScale: function (newScale) {
+    }
+    updatePatternScale(newScale) {
         this.gridPattern.scale(newScale);
     }
-});
+}

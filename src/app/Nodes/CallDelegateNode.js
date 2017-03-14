@@ -1,44 +1,34 @@
-var CallDelegateNode = Class(AbstractNode, {
-    constructor: function (funcObj, x, y, drawer) {
+class CallDelegateNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
+        
         this.minCellWidth = 8.5
         this.minCellHeight = 2;
-        CallDelegateNode.$super.call(this, x, y, drawer);
+        
         this.function = funcObj;
-
         this.inputs = funcObj.inputs;
         this.outputs = funcObj.outputs;
-
-
-
         this.angleRadius = 10;
         this.showHeader = true;
         this.showPinText = true;
         this.headerCellHeight = 1.5;
         this.cellOffset = 0.5;
-
         this.icon = ICONS["node"];
-
-
-
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+    setSVG(drawer) {
         var headerColor = VAR_COLORS["execFunction"];
         ;
-
         var draw = drawer.group();
-
         var headerGradient = draw.gradient('linear', function (stop) {
             stop.at({offset: 0, color: headerColor, opacity: 0.74226803});
             stop.at({offset: 1, color: headerColor, opacity: 0});
         });
-
         var opacityRect = draw.rect(this.width, this.height).radius(this.angleRadius);
         opacityRect.fill(this.nodesDrawer.opacityLinearGradient);
         var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
         mainRect.fill({color: "#000", opacity: 0.5});
         mainRect.stroke({color: '#000000', opacity: 1, width: 1});
-
         var headerGradient = draw.gradient('linear', function (stop) {
             stop.at({offset: 0, color: headerColor, opacity: 1});
             stop.at({offset: 1, color: headerColor, opacity: 0});
@@ -50,7 +40,6 @@ var CallDelegateNode = Class(AbstractNode, {
         header.clipWith(rect)
 
         var headerText = draw.text(this.function.name);
-
         headerText.font({
             family: 'Roboto'
             , size: this.fontSize
@@ -62,13 +51,9 @@ var CallDelegateNode = Class(AbstractNode, {
         headerText.fill({color: "#fff"});
         var icon = draw.image(getIcon(this.icon), 16, 16).fill({color: "#fff"});
         icon.center(this.cellSize, this.headerCellHeight * this.cellSize / 2);
-
         var message_icon = draw.image(getIcon(ICONS["message"]), 32, 32).fill({color: "#fff"});
         message_icon.center(this.width, 0);
         this.drawPins(draw);
-
-
         return draw;
-
     }
-});
+}

@@ -1,7 +1,10 @@
-var UnknownNode = Class(AbstractNode, {constructor: function (funcObj, x, y, drawer) {
+class UnknownNode extends AbstractNode {
+    constructor(funcObj, x, y, drawer) {
+        super(x, y, drawer);
+        
         this.minCellWidth = 8.5
         this.minCellHeight = 2;
-        UnknownNode.$super.call(this, x, y, drawer);
+        
         this.function = funcObj;
 
         this.inputs = funcObj.inputs;
@@ -19,8 +22,9 @@ var UnknownNode = Class(AbstractNode, {constructor: function (funcObj, x, y, dra
 
 
         this.cellHeight = this.headerCellHeight + this.cellOffset + Math.max(funcObj.outputs.length, funcObj.inputs.length) + Math.max(funcObj.outputs.length, funcObj.inputs.length) * this.cellOffset;
-    },
-    setSVG: function (drawer) {
+    }
+
+    setSVG(drawer) {
         var headerColor = null;
 
         headerColor = VAR_COLORS["execFunction"];
@@ -68,4 +72,4 @@ var UnknownNode = Class(AbstractNode, {constructor: function (funcObj, x, y, dra
         return draw;
 
     }
-});
+}

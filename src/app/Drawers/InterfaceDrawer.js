@@ -1,22 +1,22 @@
-var InterfaceDrawer = Class({
-    constructor: function (drawer) {
+class InterfaceDrawer {
+    constructor(drawer) {
         this.drawer = drawer;
         this.scaleLabel = null;
         this.menuRect = null;
         this.selectRect = null;
         this.saveCallback = null;
-    },
-    setSaveCallback: function (cb) {
+    }
+    setSaveCallback(cb) {
         this.saveIcon.click(function (e) {
             cb(e);
         });
-    },
-    setFullScreenCallback: function (cb) {
+    }
+    setFullScreenCallback(cb) {
         this.fullScreenIcon.click(function (e) {
             cb(e);
         });
-    },
-    render: function () {
+    }
+    render() {
         var draw = this.drawer.group();
         this.scaleLabel = this.drawScaleLabel();
         this.scaleLabel.style('pointer-events', 'none')
@@ -47,8 +47,8 @@ var InterfaceDrawer = Class({
         draw.add(this.saveIcon);
         draw.add(this.fullScreenIcon);
         return draw;
-    },
-    drawFullScreenIcon: function () {
+    }
+    drawFullScreenIcon() {
         var fullScreenIcon = this.drawer.group();
         var hover = fullScreenIcon.rect(40, 40).radius(4);
         fullScreenIcon.hover = hover;
@@ -58,8 +58,8 @@ var InterfaceDrawer = Class({
         hover.fill({color: "#f1b000"});
         fullScreenIcon.translate(60, 0);
         return fullScreenIcon;
-    },
-    drawSaveIcon: function () {
+    }
+    drawSaveIcon() {
         var saveIcon = this.drawer.group();
         var hover = saveIcon.rect(40, 40).radius(4);
         saveIcon.hover = hover;
@@ -69,21 +69,21 @@ var InterfaceDrawer = Class({
         hover.fill({color: "#f1b000"});
         saveIcon.translate(10, 0);
         return saveIcon;
-    },
-    setScaleLabelText: function (step) {
+    }
+    setScaleLabelText(step) {
         if (step > 0)
             step = "+" + step;
         else if (step === 0)
             step = "1:1"
         this.scaleLabel.text("Zoom {0}".format(step));
-    },
-    drawMenuRect: function () {
+    }
+    drawMenuRect() {
         var rect = this.drawer.rect(this.drawer.width(), 48);
         rect.opacity(0.4);
         rect.backward();
         return rect;
-    },
-    drawScaleLabel: function () {
+    }
+    drawScaleLabel() {
         var draw = this.drawer.group();
         var scaleLabel = draw.text("Zoom 1:1");
 
@@ -103,8 +103,8 @@ var InterfaceDrawer = Class({
 
         return scaleLabel;
 
-    },
-    drawSelectRect: function (coordsStart, coordsEnd) {
+    }
+    drawSelectRect(coordsStart, coordsEnd) {
         if (this.selectRect)
             this.selectRect.remove();
         var draw = this.drawer.group();
@@ -118,9 +118,9 @@ var InterfaceDrawer = Class({
         } else {
             this.selectRect.move(coordsEnd.x, coordsEnd.y);
         }
-    },
-    removeSelectRect: function () {
+    }
+    removeSelectRect() {
         if (this.selectRect)
             this.selectRect.remove();
     }
-});
+}
