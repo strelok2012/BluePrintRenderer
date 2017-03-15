@@ -49,6 +49,15 @@ module.exports = function (grunt) {
                 }
             }
         },
+        watch: {
+            scripts: {
+                files: ['src/app/**/*.js'],
+                tasks: ['assetenc', 'concat'],
+                options: {
+                    spawn: false
+                }
+            }
+        },
         assetenc: {
             pathToAssets: "assets",
             rootAlias: "icons",
@@ -57,10 +66,8 @@ module.exports = function (grunt) {
         }
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-encode-asset-base64');
-
-
-    grunt.registerTask('default', ['assetenc','concat','uglify']);
-
+    grunt.registerTask('default', ['assetenc', 'concat', 'uglify']);
 };

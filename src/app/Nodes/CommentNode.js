@@ -13,7 +13,7 @@ class CommentNode extends AbstractNode {
     }
     setSVG(drawer) {
         var draw = drawer.group();
-        draw.style('mix-blend-mode', 'exclusion')
+        draw.style('mix-blend-mode', 'screen');
         var headerColor = null;
         var opacity = 1;
         if (this.funcObj.commentColor) {

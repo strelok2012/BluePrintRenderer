@@ -93,8 +93,6 @@ class BPParser {
 
     }
     parseText() {
-        var txt = this.txt;
-        var retObj = {};
         var objects = [];
         var res = 0;
         if (!this.verify(this.txt))
@@ -103,7 +101,6 @@ class BPParser {
             res = this.parseObject(res, objects);
             res++;
         }
-        var original = objects;
         var work = JSON.parse(JSON.stringify(objects));
 
         for (var i = 0; i < work.length; i++) {
@@ -186,7 +183,7 @@ class BPParser {
                         currentNode.objects.splice(j, 1);
                 }
             }
-            //assert(currentNode.pins.length === currentNode.objects.length,"currentNode.pins.length !== currentNode.objects.length");
+
             var tmpPins = [];
             for (var j = 0; j < currentNode.pins.length; j++) {
                 var currentPin = currentNode.pins[j];
