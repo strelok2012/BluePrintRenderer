@@ -80,7 +80,7 @@ class AbstractNode {
 
         }
 
-        var maxOutSize = 0;
+        var maxOutSize = this.cellSize*2.5;
         var maxInSize = 0;
         for (var i = 0; i < this.inputs.length; i++) {
             var tIn = this.inputs[i];
@@ -156,31 +156,35 @@ class AbstractNode {
         if (this.showPinText) {
             for (var i = 0; i < this.inputs.length; i++) {
                 var tIn = this.inputs[i];
-                var tInputText = tmpDraw.text(tIn.name);
-                tInputText.font({
-                    family: 'Roboto, sans-serif'
-                    , size: this.fontSize
-                    , anchor: 'start'
-                    , color: "#ffffff"
-                });
-                var size = this.getTextElementWidth(tInputText);
-                if (size > maxInSize)
-                    maxInSize = size;
+                if (HIDDEN_PIN_NAMES.indexOf(tIn.name) === -1 && tIn.type !== VAR_TYPES["exec"]) {
+                    var tInputText = tmpDraw.text(tIn.name);
+                    tInputText.font({
+                        family: 'Roboto, sans-serif'
+                        , size: this.fontSize
+                        , anchor: 'start'
+                        , color: "#ffffff"
+                    });
+                    var size = this.getTextElementWidth(tInputText);
+                    if (size > maxInSize)
+                        maxInSize = size;
+                }
             }
 
 
             for (var i = 0; i < this.outputs.length; i++) {
                 var tOut = this.outputs[i];
-                var tOutText = tmpDraw.text(tOut.name);
-                tOutText.font({
-                    family: 'Roboto, sans-serif'
-                    , size: this.fontSize
-                    , anchor: 'start'
-                    , color: "#ffffff"
-                });
-                var size = this.getTextElementWidth(tOutText)
-                if (size > maxOutSize)
-                    maxOutSize = size;
+                if (HIDDEN_PIN_NAMES.indexOf(tOut.name) === -1 && tOut.type !== VAR_TYPES["exec"]) {
+                    var tOutText = tmpDraw.text(tOut.name);
+                    tOutText.font({
+                        family: 'Roboto, sans-serif'
+                        , size: this.fontSize
+                        , anchor: 'start'
+                        , color: "#ffffff"
+                    });
+                    var size = this.getTextElementWidth(tOutText)
+                    if (size > maxOutSize)
+                        maxOutSize = size;
+                }
             }
 
             var lineWidth = this.cellSize * 1.5 + this.circleRadius * 2 + maxInSize + maxOutSize + this.circleRadius * 2;
