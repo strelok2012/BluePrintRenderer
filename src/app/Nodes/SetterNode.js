@@ -3,7 +3,7 @@ class SetterNode extends AbstractNode {
 		super(x, y, drawer);
 		this.inputs = setterNode.inputs;
 		this.outputs = setterNode.outputs;
-		this.minCellWidth = 10;
+		this.minCellWidth = 9;
 		this.cellHeight = 5;
 		this.showPinText = true;
 		this.cellOffset = 0.5;

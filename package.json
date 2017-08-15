@@ -10,6 +10,7 @@
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-uglify": "^2.1.0",
+    "grunt-contrib-watch": "^1.0.0",
     "grunt-encode-asset-base64": "0.0.3",
     "uglify-js": "github:mishoo/UglifyJS2#harmony"
   },

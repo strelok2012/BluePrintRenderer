@@ -22,17 +22,7 @@ class GetterNode extends AbstractNode {
 
         var mainRect = draw.rect(this.width, this.height).radius(this.angleRadius);
         mainRect.fill(radGradient);
-        //mainRect.fill({color: "#fff", opacity: 0});
         mainRect.stroke({color: '#000000', opacity: 1, width: 1});
-
-        /*	var imgColor = hexToRgb(mainColor);
-         var spill = draw.image('/images/varnode/VarNode_color_spill.png', this.width, this.height);
-         spill.filter(function (add) {
-         add.colorMatrix('matrix', [imgColor.r / 255, 0, 0, 0, 0
-         , 0, imgColor.g / 255, 0, 0, 0
-         , 0, 0, imgColor.b / 255, 0, 0
-         , 0, 0, 0, 1.0, 0]);
-         })*/
 
         this.drawPins(draw, 1);
 

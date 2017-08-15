@@ -47,4 +47,3 @@ window.addEventListener("load", function () {
 ### Based on:
 
  * [svg.js](https://github.com/wout/svg.js)
- * [jsface](https://github.com/tnhu/jsface)
