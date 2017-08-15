@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello World</title>
+        <style>
+            body {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <script src="node_modules/pixi.js/dist/pixi.min.js"></script>
+
+    <script src="src/App/BlueprintRenderer.js"></script>
+
+    <script src="src/Parser/BPParser.js"></script>
+    <script src="src/Parser/BPToNodes.js"></script>
+
+    <script src="src/libs/vector.js"></script>
+    <body>
+        <script type="text/javascript">
+            var CONFIG = {
+                CELL_SIZE: 16
+            }
+
+            var VAR_COLORS = {
+                bool: 0x8c0202,
+                byte: 0x026960,
+                int: 0x1ed6a4,
+                float: 0x97ef42,
+                name: 0xc07bef,
+                string: 0xef02c8,
+                text: 0xd975a0,
+                vector: 0xefbd22,
+                rotator: 0x97a9ef,
+                transform: 0xeb6b02,
+                actor: 0x02a2e9,
+                execFunction: 0x5b8fb1,
+                execFunctionF: 0x79c9ff,
+                pureFunction: 0x83b47c,
+                pureFunctionF: 0xaaeea0,
+                event: 0x8d1313,
+                delegate: 0xff3838,
+                object: 0x0481b7,
+                class: 0x5501b3,
+                struct: 0x024bab,
+                exec: 0xfff,
+                interface: 0xc9d58f,
+                macro: 0xb7b4aa,
+                wildcard: 0x7f7979,
+                dynamicCast: 0x258489,
+                timeline: 0x9d7e24,
+                parent: 0x854613,
+                switch_on: 0x8f9013
+            };
+
+            var app = new PIXI.Application(window.innerWidth, window.innerHeight, {backgroundColor: 0x2a2a2a});
+            document.body.appendChild(app.view);
+
+            var myGraph = new PIXI.Graphics();
+            app.stage.addChild(myGraph);
+
+// Move it to the beginning of the line
+            myGraph.position.set(0, 0);
+
+// Draw the line (endPoint should be relative to myGraph's position)
+            var gridThickness = 1;
+            for (var i = 0; i < parseInt(window.innerWidth / CONFIG.CELL_SIZE); i++) {
+                if (i !== 0 || i % 8 !== 0) {
+                    myGraph.lineStyle(gridThickness, 0x353535)
+                            .moveTo(i * CONFIG.CELL_SIZE, 0)
+                            .lineTo(i * CONFIG.CELL_SIZE, window.innerHeight);
+                }
+            }
+
+
+            for (var i = 0; i < parseInt(window.innerHeight / CONFIG.CELL_SIZE); i++) {
+                if (i !== 0 || i % 8 !== 0) {
+                    myGraph.lineStyle(gridThickness, 0x353535)
+                            .moveTo(0, i * CONFIG.CELL_SIZE)
+                            .lineTo(window.innerWidth, i * CONFIG.CELL_SIZE);
+                }
+            }
+
+            for (var i = 0; i < parseInt(window.innerWidth / CONFIG.CELL_SIZE); i += 8) {
+                myGraph.lineStyle(gridThickness, 0x1c1c1c)
+                        .moveTo(i * CONFIG.CELL_SIZE, 0)
+                        .lineTo(i * CONFIG.CELL_SIZE, window.innerHeight);
+            }
+
+            for (var i = 0; i < parseInt(window.innerHeight / CONFIG.CELL_SIZE); i += 8) {
+                myGraph.lineStyle(gridThickness, 0x1c1c1c)
+                        .moveTo(0, i * CONFIG.CELL_SIZE)
+                        .lineTo(window.innerWidth, i * CONFIG.CELL_SIZE);
+            }
+
+
+
+
+
+            var bodyTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_body.png');
+            var glossTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_title_gloss.png');
+            var titleHighlightTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_title_highlight.png');
+            var shadowTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow.png');
+            var colorSpillTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_color_spill.png');
+
+            var render = new BlueprintRenderer();
+            render.renderFromFile("/tests/file_big.txt", function (nodes) {
+
+                //var nodesObjects = BPToNodes(nodes)
+                console.log(nodes);
+                for (var i = 0, l = nodes.length; i < l; i++) {
+                    constructRegularNode(app, {
+                        x: nodes[i].nodePosX,
+                        y: nodes[i].nodePosY,
+                        width: CONFIG.CELL_SIZE * 8,
+                        height: CONFIG.CELL_SIZE * 6
+                    })
+                }
+
+
+            });
+
+
+
+            function constructRegularNode(app, options) {
+                options = options || {};
+                var body = new PIXI.mesh.NineSlicePlane(bodyTexture, 14, 14, 14, 14);
+                var gloss = new PIXI.mesh.NineSlicePlane(glossTexture, 7, 7, 7, 7);
+                var shadow = new PIXI.mesh.NineSlicePlane(shadowTexture, 21, 21, 21, 21);
+                var titleHighlight = new PIXI.mesh.NineSlicePlane(titleHighlightTexture, 7, 7, 7, 7);
+
+                var colorSpill = new PIXI.mesh.NineSlicePlane(colorSpillTexture, 6, 6, 1, 1);
+
+                colorSpill.tint = VAR_COLORS.int;
+
+                var coeffX = options.width / (options.width - 20);
+                var coeffY = options.height / (options.height - 20);
+
+                shadow.width = options.width * coeffX;
+                shadow.height = options.height * coeffY;
+
+                body.width = options.width;
+                body.height = options.height;
+
+                gloss.width = options.width;
+                gloss.height = 24;
+
+                titleHighlight.width = options.width;
+                titleHighlight.height = 24;
+
+                colorSpill.width = options.width;
+                colorSpill.height = 24;
+
+
+                shadow.x = options.x - shadow.width / 2;
+                shadow.y = options.y - shadow.height / 2;
+
+                body.x = options.x - body.width / 2;
+                body.y = options.y - body.height / 2;
+
+                gloss.x = options.x - gloss.width / 2;
+                gloss.y = options.y - body.height / 2;
+
+                titleHighlight.x = options.x - titleHighlight.width / 2;
+                titleHighlight.y = options.y - body.height / 2;
+
+                colorSpill.x = options.x - colorSpill.width / 2;
+                colorSpill.y = options.y - body.height / 2;
+
+                app.stage.addChild(shadow);
+                app.stage.addChild(body);
+
+                app.stage.addChild(colorSpill);
+                app.stage.addChild(gloss);
+                app.stage.addChild(titleHighlight);
+            }
+
+            String.prototype.format = function () {
+                var formatted = this;
+                for (var i = 0; i < arguments.length; i++) {
+                    var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+                    formatted = formatted.replace(regexp, arguments[i]);
+                }
+                return formatted;
+            };
+
+            String.prototype.fromCamelCase = function () {
+                var newString = '';
+                for (var i = 0; i < this.length; i++) {
+                    newString += this[i];
+                    if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
+                        if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
+                            newString += " ";
+                        }
+                    }
+                }
+                return newString.trim();
+            }
+
+            function isLetter(c) {
+                return c.toLowerCase() !== c.toUpperCase();
+            }
+
+
+
+        </script>
+    </body>
+</html>
