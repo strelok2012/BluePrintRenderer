@@ -1,4 +1,4 @@
-function BPToNodes(objects, origin) {
+function BPToNodes(objects, texturesHanlder) {
     var origin = origin || new Vector(0, 0);
     var minX, minY;
     var newNodes = [];
@@ -65,8 +65,8 @@ function BPToNodes(objects, origin) {
             };
             if (curObj.commentColor)
                 newNode.commentColor = curObj.commentColor;
-            nN = new CommentNode(newNode, x, y);
-            newNodes.push(nN);
+            //nN = new CommentNode(newNode, x, y);
+            //newNodes.push(nN);
         }
 
 
@@ -196,9 +196,9 @@ function BPToNodes(objects, origin) {
                 if (FUNCTIONS_MAPPING[curObj.class].icon) {
                     newNode.icon = FUNCTIONS_MAPPING[curObj.class].icon;
                 }
-                
-                 if (FUNCTIONS_MAPPING[curObj.class].morpher) {
-                    FUNCTIONS_MAPPING[curObj.class].morpher(newNode,curObj);
+
+                if (FUNCTIONS_MAPPING[curObj.class].morpher) {
+                    FUNCTIONS_MAPPING[curObj.class].morpher(newNode, curObj);
                     //console.log("After morpher",newNode);
                 }
 
@@ -208,9 +208,9 @@ function BPToNodes(objects, origin) {
                 newNode.isPure = true;
 
             if (newNode.name.indexOf("Conv_") !== -1 && newNode.name.indexOf("Int To Text") === -1 && newNode.name.indexOf("Float To Text") === -1) {
-                nN = new ConverterNode(newNode, x, y);
+                //nN = new ConverterNode(newNode, x, y);
             } else {
-                nN = new FunctionNode(newNode, x, y);
+                nN = new FunctionNode(newNode, x, y, texturesHanlder);
             }
 
         } else if (curObj.class.indexOf("K2Node_DynamicCast") !== -1) {
@@ -223,7 +223,7 @@ function BPToNodes(objects, origin) {
             };
 
 
-            nN = new CastNode(newNode, x, y);
+            //nN = new CastNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Timeline") !== -1) {
             newNode = {
                 name: curObj.timelineName,
@@ -232,7 +232,7 @@ function BPToNodes(objects, origin) {
             };
 
 
-            nN = new TimelineNode(newNode, x, y);
+            //nN = new TimelineNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_CallDelegate") !== -1) {
             // console.log(curObj);
             newNode = {
@@ -242,7 +242,7 @@ function BPToNodes(objects, origin) {
             };
 
 
-            nN = new CallDelegateNode(newNode, x, y);
+            //nN = new CallDelegateNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_CallArrayFunction") !== -1) {
             newNode = {
                 isPure: curObj.bIsPureFunc && curObj.bIsPureFunc === "True",
@@ -253,7 +253,7 @@ function BPToNodes(objects, origin) {
             if (curObj.nodeName.indexOf("_Set") !== -1) {
                 nN = new FunctionNode(newNode, x, y);
             } else {
-                nN = new ArrayFunctionNode(newNode, x, y);
+                //nN = new ArrayFunctionNode(newNode, x, y);
             }
 
 
@@ -274,7 +274,7 @@ function BPToNodes(objects, origin) {
                 outputs: outputs
             };
 
-            nN = new MacroNode(newNode, x, y);
+            //nN = new MacroNode(newNode, x, y);
 
         } else if (curObj.class.indexOf("K2Node_Event") !== -1 || curObj.class.indexOf("K2Node_CustomEvent") !== -1 || curObj.class.indexOf("K2Node_ComponentBoundEvent") !== -1 || curObj.class.indexOf("K2Node_InputTouch") !== -1 || curObj.class.indexOf("K2Node_InputAction") !== -1 || curObj.class.indexOf("K2Node_InputAxisEvent") !== -1 || curObj.class.indexOf("K2Node_InputKey") !== -1) {
             if (curObj.class && curObj.class.indexOf("K2Node") !== -1)
@@ -292,7 +292,7 @@ function BPToNodes(objects, origin) {
                 newNode.inputKey = curObj.inputKey;
             }
 
-            nN = new EventNode(newNode, x, y);
+            //nN = new EventNode(newNode, x, y);
 
         } else if (curObj.class.indexOf("K2Node_VariableGet") !== -1 || curObj.class.indexOf("K2Node_Self") !== -1) {
             newNode = {
@@ -300,21 +300,21 @@ function BPToNodes(objects, origin) {
             };
 
 
-            nN = new GetterNode(newNode, x, y);
+            //nN = new GetterNode(newNode, x, y);
 
         } else if (curObj.class.indexOf("Set") !== -1) {
             newNode = {
                 outputs: outputs,
                 inputs: inputs
             };
-            nN = new SetterNode(newNode, x, y);
+            //nN = new SetterNode(newNode, x, y);
         } else if (curObj.class.indexOf("Operator") !== -1 || curObj.class.indexOf("K2Node_EnumEquality") !== -1) {
             newNode = {
                 name: curObj.nodeName && curObj.nodeName || curObj.class,
                 inputs: inputs,
                 outputs: outputs
             };
-            nN = new BinaryOperatorNode(newNode, x, y);
+            //nN = new BinaryOperatorNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Knot") !== -1) {
             //console.log('KNIT');
             newNode = {
@@ -322,21 +322,21 @@ function BPToNodes(objects, origin) {
                 inputs: inputs,
                 outputs: outputs
             };
-            nN = new RerouteNode(newNode, x, y);
+            //nN = new RerouteNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Select") !== -1) {
             newNode = {
                 name: "Select",
                 inputs: inputs,
                 outputs: outputs
             };
-            nN = new SelectNode(newNode, x, y);
+            //nN = new SelectNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Composite") !== -1) {
             newNode = {
                 name: curObj.boundGraph.replace("EdGraph", "").replace(/["']/g, ""),
                 inputs: inputs,
                 outputs: outputs
             };
-            nN = new CompositeNode(newNode, x, y);
+            //nN = new CompositeNode(newNode, x, y);
         } else {
             newNode = {
                 name: curObj.nodeName && curObj.nodeName || curObj.class || curObj.name,
@@ -345,10 +345,12 @@ function BPToNodes(objects, origin) {
             };
             if (curObj.class.indexOf("Material") === -1)
                 console.log("Unknown Node", curObj);
-            nN = new UnknownNode(newNode, x, y);
+            //nN = new UnknownNode(newNode, x, y);
+        }
+        if (nN) {
+            newNodes.push(nN);
         }
 
-        newNodes.push(nN);
     }
     //console.log(newNodes);
 
@@ -378,8 +380,10 @@ function BPToNodes(objects, origin) {
                 }
             }
         }
+        if (nodeFrom) {
+            nodeFrom.setOutputLink(from, to);
+        }
 
-        nodeFrom.setOutputLink(from, to);
 
     }
 
