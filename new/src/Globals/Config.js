@@ -2,6 +2,12 @@ var CONFIG = {
     CELL_SIZE: 16
 }
 
+var defaultTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    fill: ['#ffffff'], // gradient
+});
+
 var VAR_COLORS = {
     bool: 0x8c0202,
     byte: 0x026960,
@@ -237,3 +243,30 @@ var ARRAY_FUNCTION_NAMES_MAPPING = {
         text: "Shuffle"
     }
 }
+
+String.prototype.format = function () {
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};
+
+String.prototype.fromCamelCase = function () {
+    var newString = '';
+    for (var i = 0; i < this.length; i++) {
+        newString += this[i];
+        if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
+            if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
+                newString += " ";
+            }
+        }
+    }
+    return newString.trim();
+}
+
+function isLetter(c) {
+    return c.toLowerCase() !== c.toUpperCase();
+}
+

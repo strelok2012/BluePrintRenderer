@@ -1,7 +1,6 @@
 class FunctionNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
-        super(x, y, texturesHanlder);
-        console.log(node);
+        super(node, x, y, texturesHanlder);
         if (!node.isPure) {
             this.colorTint = VAR_COLORS["execFunction"];
         } else {
@@ -23,17 +22,12 @@ class FunctionNode extends RegularNode {
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }
     draw(app) {
-        var style = new PIXI.TextStyle({
-            fontFamily: 'Roboto',
-            fontSize: 12,
-            fill: ['#ffffff'], // gradient
-        });
 
-        this.headerText = new PIXI.Text(this.functionName, style);
+        this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
         this.fIcon = PIXI.Sprite.fromImage('assets/icons/function.png')
-
-        this.calculateWidth();
+        //this.calculateWidth();
         super.draw(app);
+
 
 
         this.headerText.x = -this.body.width / 2;
@@ -60,6 +54,8 @@ class FunctionNode extends RegularNode {
 
         this.container.addChild(this.headerText);
         this.container.addChild(this.fIcon);
+
+
     }
     calculateWidth() {
         var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;

@@ -11,6 +11,8 @@
     </head>
     <script src="node_modules/pixi.js/dist/pixi.min.js"></script>
 
+    <script src="src/libs/pixi-display.js"></script>
+
     <script src="src/App/BlueprintRenderer.js"></script>
 
     <script src="src/Parser/BPParser.js"></script>
@@ -30,6 +32,7 @@
 
 
             var app = new PIXI.Application(window.innerWidth, window.innerHeight, {backgroundColor: 0x2a2a2a});
+            app.stage.displayList = new PIXI.DisplayList();
             document.body.appendChild(app.view);
 
             drawGrid(app);
@@ -37,40 +40,21 @@
             var texturesHandler = new TexturesHandler();
 
 
+            var myGraph = new PIXI.Graphics();
+            myGraph.lineStyle(2, 0xFF00FF);
+            app.stage.addChild(myGraph);
 
             var render = new BlueprintRenderer();
             render.renderFromFile("/tests/file_big.txt", function (nodes) {
                 var nodesObjects = BPToNodes(nodes, texturesHandler);
                 for (var i = 0, l = nodesObjects.length; i < l; i++) {
                     nodesObjects[i].draw(app);
+                    //myGraph.drawCircle(nodesObjects[i].x, nodesObjects[i].y, 5);
                 }
             });
 
-            String.prototype.format = function () {
-                var formatted = this;
-                for (var i = 0; i < arguments.length; i++) {
-                    var regexp = new RegExp('\\{' + i + '\\}', 'gi');
-                    formatted = formatted.replace(regexp, arguments[i]);
-                }
-                return formatted;
-            };
+            //myGraph.endFill();
 
-            String.prototype.fromCamelCase = function () {
-                var newString = '';
-                for (var i = 0; i < this.length; i++) {
-                    newString += this[i];
-                    if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
-                        if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
-                            newString += " ";
-                        }
-                    }
-                }
-                return newString.trim();
-            }
-
-            function isLetter(c) {
-                return c.toLowerCase() !== c.toUpperCase();
-            }
 
 
 
