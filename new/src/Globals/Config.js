@@ -8,6 +8,13 @@ var defaultTextStyle = new PIXI.TextStyle({
     fill: ['#ffffff'], // gradient
 });
 
+var customEventTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    fontStyle: 'italic',
+    fill: ['#a1825d'] // gradient
+});
+
 var VAR_COLORS = {
     bool: 0x8c0202,
     byte: 0x026960,

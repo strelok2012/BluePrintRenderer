@@ -192,7 +192,6 @@ function BPToNodes(objects, texturesHanlder) {
                 if (FUNCTIONS_MAPPING[curObj.class].async) {
                     newNode.async = true;
                 }
-
                 if (FUNCTIONS_MAPPING[curObj.class].icon) {
                     newNode.icon = FUNCTIONS_MAPPING[curObj.class].icon;
                 }
@@ -292,7 +291,7 @@ function BPToNodes(objects, texturesHanlder) {
                 newNode.inputKey = curObj.inputKey;
             }
 
-            //nN = new EventNode(newNode, x, y);
+            nN = new EventNode(newNode, x, y, texturesHandler);
 
         } else if (curObj.class.indexOf("K2Node_VariableGet") !== -1 || curObj.class.indexOf("K2Node_Self") !== -1) {
             newNode = {

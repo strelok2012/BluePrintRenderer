@@ -9,9 +9,9 @@ class RegularNode {
         this.pins = [];
         this.showPinText = true;
         this.minCellWidth = 8;
-        this.minCellHeight = 4;
+        this.minCellHeight = 3;
         this.width = CONFIG.CELL_SIZE * this.minCellWidth;
-        this.height = CONFIG.CELL_SIZE * this.minCellWidth;
+        this.height = CONFIG.CELL_SIZE * this.minCellHeight;
         this.inputOffset = this.cellSize * 0.2;
 
         this.innerRowOffsetCells = 1.5;
@@ -19,6 +19,8 @@ class RegularNode {
         this.pinRows = [];
 
         this.colorTint = VAR_COLORS.bool;
+
+        this.titleHeight = CONFIG.CELL_SIZE * 1.5;
 
         this.node = node;
 
@@ -34,7 +36,7 @@ class RegularNode {
         this.pinsLayer = new PIXI.DisplayGroup(1, true);
 
         this.lastPinY = 0;
-        
+
         this.preparePinRows();
 
     }
@@ -57,13 +59,13 @@ class RegularNode {
 
 
         this.gloss.width = this.width;
-        this.gloss.height = 24;
+        this.gloss.height = this.titleHeight;
 
         this.titleHighlight.width = this.width;
-        this.titleHighlight.height = 24;
+        this.titleHighlight.height = this.titleHeight;
 
         this.colorSpill.width = this.width;
-        this.colorSpill.height = 24;
+        this.colorSpill.height = this.titleHeight;
 
 
         this.shadow.x = -this.shadow.width / 2;
@@ -111,15 +113,18 @@ class RegularNode {
         pinSprite.x = -this.body.width / 2 + CONFIG.CELL_SIZE;
         pinSprite.y = pinStartY + idx * CONFIG.CELL_SIZE * 1.5;
 
-        var pinText = input.text;
-
-        pinText.x = pinSprite.x + CONFIG.CELL_SIZE * (3 / 4);
-        pinText.y = pinSprite.y;
-
-        pinText.displayGroup = this.pinsLayer;
-
         this.container.addChild(pinSprite);
-        this.container.addChild(pinText);
+
+        if (input.text) {
+            var pinText = input.text;
+            pinText.x = pinSprite.x + CONFIG.CELL_SIZE * (3 / 4);
+            pinText.y = pinSprite.y;
+            this.container.addChild(pinText);
+        }
+
+
+
+
 
         if (input.valueText) {
             var valueText = input.valueText;
@@ -139,16 +144,16 @@ class RegularNode {
 
         pinSprite.x = this.body.width / 2 - CONFIG.CELL_SIZE;
         pinSprite.y = pinStartY + idx * CONFIG.CELL_SIZE * 1.5;
-
-        var pinText = output.text;
-
-        pinText.x = pinSprite.x - CONFIG.CELL_SIZE * (3 / 4);
-        pinText.y = pinSprite.y;
-
-        pinText.displayGroup = this.pinsLayer;
-
         this.container.addChild(pinSprite);
-        this.container.addChild(pinText);
+
+        if (output.text) {
+            var pinText = output.text;
+
+            pinText.x = pinSprite.x - CONFIG.CELL_SIZE * (3 / 4);
+            pinText.y = pinSprite.y;
+
+            this.container.addChild(pinText);
+        }
 
         if (output.valueText) {
             var valueText = output.valueText;
@@ -167,7 +172,7 @@ class RegularNode {
         var maxRowWidth = 0;
         for (var i = 0; i < l; i++) {
             var rowWidth = 0;
-            if (this.node.inputs[i] || this.node.outputs[i]) {
+            if ((this.node.inputs[i] && this.node.inputs[i].name !== "Output Delegate") || (this.node.outputs[i] && this.node.outputs[i].name !== "Output Delegate")) {
                 var newRow = {};
                 if (this.node.inputs[i]) {
                     var pin = this.preparePin(this.node.inputs[i]);
@@ -189,13 +194,14 @@ class RegularNode {
             }
         }
 
-
-
         if (this.width < maxRowWidth) {
             this.width = this.nearestCellWidth(maxRowWidth) * CONFIG.CELL_SIZE;
-            if (this.node.name === "Break Rotator") {
-                console.log("WIDTH ON PREPARE", this.width, maxRowWidth);
-            }
+        }
+
+        var height = this.titleHeight + CONFIG.CELL_SIZE + this.pinRows.length * CONFIG.CELL_SIZE * 1.5;
+
+        if (this.height < height) {
+            this.height = this.nearestCellWidth(height) * CONFIG.CELL_SIZE - CONFIG.CELL_SIZE / 2;
         }
     }
     preparePin(pin, isOutput) {
@@ -204,20 +210,29 @@ class RegularNode {
             width: 0
         };
         var pinSprite = PIXI.Sprite.fromImage(this.getPinSprite(pin));
-        pinSprite.tint = VAR_COLORS[pin.type.name];
+        if (pin.type.name !== "exec") {
+            pinSprite.tint = VAR_COLORS[pin.type.name];
+        }
+
         pinSprite.anchor.set(0.5, 0.5);
         pinSprite.displayGroup = this.pinsLayer;
         ret.pin.sprite = pinSprite;
 
-        var pinText = new PIXI.Text(pin.name, defaultTextStyle);
-        pinText.anchor.set(0, 0.5);
-        if (isOutput) {
-            pinText.anchor.set(1, 0.5);
-        }
-        pinText.displayGroup = this.pinsLayer;
-        ret.pin.text = pinText;
+        ret.width = pinSprite.width + CONFIG.CELL_SIZE;
 
-        ret.width = pinSprite.width + CONFIG.CELL_SIZE + pinText.width + CONFIG.CELL_SIZE * (3 / 4)
+
+        if (pin.name && pin.name !== "execute" && pin.name !== "then") {
+            var pinText = new PIXI.Text(pin.name, defaultTextStyle);
+            pinText.anchor.set(0, 0.5);
+            if (isOutput) {
+                pinText.anchor.set(1, 0.5);
+            }
+            pinText.displayGroup = this.pinsLayer;
+            ret.pin.text = pinText;
+
+            ret.width += pinText.width + CONFIG.CELL_SIZE * (3 / 4)
+        }
+
 
         if (pin.value) {
             var valueText = new PIXI.Text(pin.value, defaultTextStyle);
@@ -237,6 +252,9 @@ class RegularNode {
         return ret;
     }
     getPinSprite(pin) {
+        if (pin.type.name === "exec") {
+            return pin.linked ? 'assets/nodes/ExecPin_Connected.png' : 'assets/nodes/ExecPin_Disconnected.png';
+        }
         return pin.linked ? 'assets/nodes/Pin_connected_VarA.png' : 'assets/nodes/Pin_disconnected_VarA.png';
     }
     nearestCellWidth(width) {

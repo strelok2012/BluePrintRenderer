@@ -19,13 +19,14 @@ class FunctionNode extends RegularNode {
         this.isPure = node.isPure;
         this.functionName = node.name;
 
+
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }
     draw(app) {
 
         this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
         this.fIcon = PIXI.Sprite.fromImage('assets/icons/function.png')
-        //this.calculateWidth();
+        this.calculateWidth();
         super.draw(app);
 
 
