@@ -1,39 +1,50 @@
-function drawGrid(app) {
-    var myGraph = new PIXI.Graphics();
-    app.stage.addChild(myGraph);
+class Grid {
+    constructor(app, x, y) {
+        this.grid = new PIXI.Graphics();
+        this.gridThickness = 1;
+        this.origin = {x: x, y: y};
+        app.stage.addChild(this.grid);
+        this.grid.position.set(0, 0);
+        this.draw();
 
-// Move it to the beginning of the line
-    myGraph.position.set(0, 0);
+    }
+    draw() {
+        var gridThickness = this.gridThickness;
+        var cellsWidth = parseInt(window.innerWidth / CONFIG.CELL_SIZE);
+        var cellsHeight = parseInt(window.innerHeight / CONFIG.CELL_SIZE);
+        
+        for (var i = 0; i < cellsWidth; i++) {
+            if (i !== 0 || i % 8 !== 0) {
+                this.grid.lineStyle(gridThickness, 0x353535)
+                        .moveTo(i * CONFIG.CELL_SIZE - this.origin.x, 0)
+                        .lineTo(i * CONFIG.CELL_SIZE - this.origin.x, window.innerHeight);
+            }
+        }
 
-// Draw the line (endPoint should be relative to myGraph's position)
-    var gridThickness = 1;
-    for (var i = 0; i < parseInt(window.innerWidth / CONFIG.CELL_SIZE); i++) {
-        if (i !== 0 || i % 8 !== 0) {
-            myGraph.lineStyle(gridThickness, 0x353535)
-                    .moveTo(i * CONFIG.CELL_SIZE, 0)
-                    .lineTo(i * CONFIG.CELL_SIZE, window.innerHeight);
+
+        for (var i = 0; i < cellsHeight; i++) {
+            if (i !== 0 || i % 8 !== 0) {
+                this.grid.lineStyle(gridThickness, 0x353535)
+                        .moveTo(0, i * CONFIG.CELL_SIZE - this.origin.y)
+                        .lineTo(window.innerWidth, i * CONFIG.CELL_SIZE - this.origin.y);
+            }
+        }
+
+        for (var i = 0; i < cellsWidth; i += 8) {
+            this.grid.lineStyle(gridThickness, 0x1c1c1c)
+                    .moveTo(i * CONFIG.CELL_SIZE - this.origin.x, 0)
+                    .lineTo(i * CONFIG.CELL_SIZE - this.origin.x, window.innerHeight);
+        }
+
+        for (var i = 0; i < cellsHeight; i += 8) {
+            this.grid.lineStyle(gridThickness, 0x1c1c1c)
+                    .moveTo(0, i * CONFIG.CELL_SIZE - this.origin.y)
+                    .lineTo(window.innerWidth, i * CONFIG.CELL_SIZE - this.origin.y);
         }
     }
-
-
-    for (var i = 0; i < parseInt(window.innerHeight / CONFIG.CELL_SIZE); i++) {
-        if (i !== 0 || i % 8 !== 0) {
-            myGraph.lineStyle(gridThickness, 0x353535)
-                    .moveTo(0, i * CONFIG.CELL_SIZE)
-                    .lineTo(window.innerWidth, i * CONFIG.CELL_SIZE);
-        }
+    redraw(x, y) {
+        this.grid.x += x;
+        this.grid.y += y;
+        // this.draw();
     }
-
-    for (var i = 0; i < parseInt(window.innerWidth / CONFIG.CELL_SIZE); i += 8) {
-        myGraph.lineStyle(gridThickness, 0x1c1c1c)
-                .moveTo(i * CONFIG.CELL_SIZE, 0)
-                .lineTo(i * CONFIG.CELL_SIZE, window.innerHeight);
-    }
-
-    for (var i = 0; i < parseInt(window.innerHeight / CONFIG.CELL_SIZE); i += 8) {
-        myGraph.lineStyle(gridThickness, 0x1c1c1c)
-                .moveTo(0, i * CONFIG.CELL_SIZE)
-                .lineTo(window.innerWidth, i * CONFIG.CELL_SIZE);
-    }
-
 }

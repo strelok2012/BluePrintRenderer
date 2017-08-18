@@ -14,6 +14,14 @@ class RegularNode {
         this.height = CONFIG.CELL_SIZE * this.minCellHeight;
         this.inputOffset = this.cellSize * 0.2;
 
+        if (node.inputs) {
+            this.inputs = node.inputs;
+        }
+        if (node.outputs) {
+            this.outputs = node.outputs;
+        }
+
+
         this.innerRowOffsetCells = 1.5;
 
         this.pinRows = [];
@@ -37,10 +45,10 @@ class RegularNode {
 
         this.lastPinY = 0;
 
-        this.preparePinRows();
-
     }
-    draw(app) {
+    draw(nodesContainer) {
+
+
         this.container.x = this.x;
         this.container.y = this.y;
 
@@ -92,7 +100,7 @@ class RegularNode {
 
         this.drawPinRows();
 
-        app.stage.addChild(this.container);
+        nodesContainer.addChild(this.container);
 
     }
     drawPinRows() {
@@ -168,20 +176,21 @@ class RegularNode {
         }
     }
     preparePinRows() {
-        var l = Math.max(this.node.inputs.length, this.node.outputs.length);
+        var l = Math.max(this.inputs.length, this.outputs.length);
+
         var maxRowWidth = 0;
         for (var i = 0; i < l; i++) {
             var rowWidth = 0;
-            if ((this.node.inputs[i] && this.node.inputs[i].name !== "Output Delegate") || (this.node.outputs[i] && this.node.outputs[i].name !== "Output Delegate")) {
+            if ((this.inputs[i] && this.inputs.name !== "Output Delegate") || (this.outputs[i] && this.outputs[i].name !== "Output Delegate")) {
                 var newRow = {};
-                if (this.node.inputs[i]) {
-                    var pin = this.preparePin(this.node.inputs[i]);
+                if (this.inputs[i]) {
+                    var pin = this.preparePin(this.inputs[i]);
                     newRow.input = pin.pin;
                     rowWidth += pin.width;
                 }
                 rowWidth += this.innerRowOffsetCells * CONFIG.CELL_SIZE;
-                if (this.node.outputs[i]) {
-                    var pin = this.preparePin(this.node.outputs[i], true);
+                if (this.outputs[i]) {
+                    var pin = this.preparePin(this.outputs[i], true);
                     newRow.output = pin.pin;
                     rowWidth += pin.width;
                 }
@@ -206,13 +215,27 @@ class RegularNode {
     }
     preparePin(pin, isOutput) {
         var ret = {
-            pin: {},
+            pin: {
+                links: []
+            },
             width: 0
         };
+
+        //console.log(pin);
         var pinSprite = PIXI.Sprite.fromImage(this.getPinSprite(pin));
         if (pin.type.name !== "exec") {
             pinSprite.tint = VAR_COLORS[pin.type.name];
         }
+
+        if (pin.links) {
+            ret.pin.links = pin.links;
+        }
+
+        ret.pin.type = pin.type;
+        ret.pin.id = pin.id;
+
+
+
 
         pinSprite.anchor.set(0.5, 0.5);
         pinSprite.displayGroup = this.pinsLayer;
@@ -259,6 +282,15 @@ class RegularNode {
     }
     nearestCellWidth(width) {
         return Math.ceil(width / CONFIG.CELL_SIZE);
+    }
+    setOutputLink(from, to) {
+        if (from && to) {
+            from.linked = true;
+            if (!from.links)
+                from.links = [];
+            from.links.push(to);
+            to.linked = true;
+        }
     }
 }
 

@@ -21,6 +21,7 @@
     <script src="src/Globals/Config.js"></script>
 
     <script src="src/Grid/Grid.js"></script>
+    <script src="src/Drawers/LinksDrawer.js"></script>
 
     <script src="src/Nodes/RegularNode.js"></script>
     <script src="src/Nodes/FunctionNode.js"></script>
@@ -35,27 +36,82 @@
             var app = new PIXI.Application(window.innerWidth, window.innerHeight, {backgroundColor: 0x2a2a2a});
             app.stage.displayList = new PIXI.DisplayList();
             document.body.appendChild(app.view);
+            console.log(app);
 
-            drawGrid(app);
+            var grid = new Grid(app, 0, 0);
 
             var texturesHandler = new TexturesHandler();
 
+            var dragging = false;
 
-            var myGraph = new PIXI.Graphics();
-            myGraph.lineStyle(2, 0xFF00FF);
-            app.stage.addChild(myGraph);
+            var eventData = null;
+
+
+            var mainContainer = new PIXI.Container();
+
+            var allNodes = [];
+
+            var linksDrawer;
+
+            app.renderer.plugins.interaction
+                    .on('pointerdown', onDragStart)
+                    .on('pointerup', onDragEnd)
+                    .on('pointerupoutside', onDragEnd)
+                    .on('pointermove', onDragMove);
+
+            app.stage.addChild(mainContainer);
 
             var render = new BlueprintRenderer();
             render.renderFromFile("/tests/file_big.txt", function (nodes) {
                 var nodesObjects = BPToNodes(nodes, texturesHandler);
                 for (var i = 0, l = nodesObjects.length; i < l; i++) {
-                    nodesObjects[i].draw(app);
-                    //myGraph.drawCircle(nodesObjects[i].x, nodesObjects[i].y, 5);
+                    nodesObjects[i].draw(mainContainer);
+                    allNodes.push(nodesObjects[i]);
                 }
+                linksDrawer = new LinksDrawer(app, allNodes);
+                var canvas = document.body.querySelector("canvas");
+                disableContextMenu(canvas);
             });
 
-            //myGraph.endFill();
 
+
+
+            function isRightClick(e) {
+                return e.which === 3;
+            }
+
+            function disableContextMenu(canvas) {
+                canvas.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                });
+            }
+
+            function onDragStart(event) {
+                if (isRightClick(event.data.originalEvent)) {
+                    dragging = true;
+                    eventData = event.data;
+                }
+            }
+
+            function onDragEnd(event) {
+                if (isRightClick(event.data.originalEvent)) {
+                    dragging = false;
+                    eventData = null;
+                }
+
+            }
+
+            function onDragMove(event) {
+                if (dragging) {
+                    mainContainer.x += event.data.originalEvent.movementX;
+                    mainContainer.y += event.data.originalEvent.movementY;
+                    
+                    linksDrawer.links.x += event.data.originalEvent.movementX;
+                    linksDrawer.links.y += event.data.originalEvent.movementY;
+
+                    grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
+                }
+            }
 
 
 

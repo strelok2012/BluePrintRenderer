@@ -19,6 +19,10 @@ class FunctionNode extends RegularNode {
         this.isPure = node.isPure;
         this.functionName = node.name;
 
+        if (this.functionName === "Make Rotator") {
+            console.log("Creating makerot");
+        }
+
 
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }

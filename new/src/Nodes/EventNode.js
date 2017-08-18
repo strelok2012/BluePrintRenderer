@@ -1,9 +1,7 @@
 class EventNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
         super(node, x, y, texturesHanlder);
-
-        console.log(node);
-
+        
         this.colorTint = VAR_COLORS["event"];
         this.functionName = node.name;
 

@@ -80,7 +80,7 @@ class AbstractNode {
 
         }
 
-        var maxOutSize = this.cellSize*2.5;
+        var maxOutSize = this.cellSize * 2.5;
         var maxInSize = 0;
         for (var i = 0; i < this.inputs.length; i++) {
             var tIn = this.inputs[i];
@@ -205,8 +205,9 @@ class AbstractNode {
         return Math.ceil(width / this.cellSize);
     }
     setOutputLink(from, to) {
-//	console.log(from,to);
+//	
         if (from && to) {
+            console.log("Setting links");
             from.linked = true;
             if (!from.links)
                 from.links = [];

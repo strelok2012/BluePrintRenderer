@@ -53,7 +53,7 @@ function BPToNodes(objects, texturesHanlder) {
     for (var i = 0; i < objects.length; i++) {
         var curObj = objects[i];
         var x, y;
-        var newNode;
+        var newNode = null;
         var nN;
         x = curObj.nodePosX;
         y = curObj.nodePosY;
@@ -75,12 +75,11 @@ function BPToNodes(objects, texturesHanlder) {
 
     for (var i = 0; i < objects.length; i++) {
         var curObj = objects[i];
-
         var inputs = [];
         var outputs = [];
         var x, y;
-        var newNode;
-        var nN;
+        var newNode = null;
+        var nN = null;
         x = curObj.nodePosX;
         y = curObj.nodePosY;
 
@@ -163,8 +162,12 @@ function BPToNodes(objects, texturesHanlder) {
             }
         }
 
-        if (!curObj.class || (inputs.length === 0 && outputs.length === 0))
+        if (!curObj.class || (inputs.length === 0 && outputs.length === 0)) {
             continue
+        }
+
+
+
 
         if (typeof FUNCTIONS_MAPPING[curObj.class] !== "undefined") {
             var async = false;
@@ -178,9 +181,6 @@ function BPToNodes(objects, texturesHanlder) {
                 }
 
             }
-
-
-
             newNode = {
                 isPure: curObj.bIsPureFunc && curObj.bIsPureFunc === "True",
                 name: curObj.nodeName,
@@ -254,12 +254,6 @@ function BPToNodes(objects, texturesHanlder) {
             } else {
                 //nN = new ArrayFunctionNode(newNode, x, y);
             }
-
-
-
-
-
-
         } else if (curObj.class.indexOf("EdGraphNode_Comment") !== -1) {
             continue
         } else if (curObj.class.indexOf("K2Node_MacroInstance") !== -1 || curObj.class.indexOf("K2Node_IfThenElse") !== -1 || curObj.class.indexOf("K2Node_ExecutionSequence") !== -1) {
@@ -346,45 +340,49 @@ function BPToNodes(objects, texturesHanlder) {
                 console.log("Unknown Node", curObj);
             //nN = new UnknownNode(newNode, x, y);
         }
+
+
         if (nN) {
             newNodes.push(nN);
+            nn = null;
+            newNode = null;
         }
-
     }
-    //console.log(newNodes);
+
+    for (var i = 0; i < newNodes.length; i++) {
+        newNodes[i].preparePinRows();
+    }
+
 
     for (var i = 0; i < links.length; i++) {
         var curLink = links[i];
         var from = null;
         var to = null;
         var nodeFrom = null;
-        //console.log('current link', curLink);
+
         for (var j = 0; j < newNodes.length; j++) {
-            if (newNodes[j].outputs) {
-                for (var k = 0; k < newNodes[j].outputs.length; k++) {
-                    if (newNodes[j].outputs[k].id === curLink.from) {
-                        from = newNodes[j].outputs[k];
-                        nodeFrom = newNodes[j];
-                        break;
-                    }
+            for (var z = 0; z < newNodes[j].pinRows.length; z++) {
+                var row = newNodes[j].pinRows[z];
+                if (row.output && row.output.id === curLink.from) {
+                    nodeFrom = newNodes[j];
+                    from = row.output;
                 }
-            }
-            if (newNodes[j].inputs) {
-                for (var k = 0; k < newNodes[j].inputs.length; k++) {
-                    if (newNodes[j].inputs[k].id === curLink.to) {
-
-                        to = newNodes[j].inputs[k];
-                        break;
-                    }
+                if (row.input && row.input.id === curLink.to) {
+                    to = row.input;
+                    to.parentX = newNodes[j].x;
+                    to.parentY = newNodes[j].y;
                 }
             }
         }
+
         if (nodeFrom) {
-            nodeFrom.setOutputLink(from, to);
+            if (to) {
+                nodeFrom.setOutputLink(from, to);
+            }
         }
-
-
     }
+
+
 
     return newNodes;
 }
