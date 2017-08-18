@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <title>Hello World</title>
         <style>
-            body {
-                margin: 0;
-            }
+            * { margin:0; padding:0; }
+            html, body { width:100%; height:100%;}
+            body {overflow: hidden;}
         </style>
     </head>
     <script src="node_modules/pixi.js/dist/pixi.min.js"></script>
@@ -22,6 +22,7 @@
 
     <script src="src/Grid/Grid.js"></script>
     <script src="src/Drawers/LinksDrawer.js"></script>
+    <script src="src/Drawers/Link.js"></script>
 
     <script src="src/Nodes/RegularNode.js"></script>
     <script src="src/Nodes/FunctionNode.js"></script>
@@ -33,7 +34,7 @@
         <script type="text/javascript">
 
 
-            var app = new PIXI.Application(window.innerWidth, window.innerHeight, {backgroundColor: 0x2a2a2a});
+            var app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, {backgroundColor: 0x2a2a2a, antialias: true});
             app.stage.displayList = new PIXI.DisplayList();
             document.body.appendChild(app.view);
             console.log(app);
@@ -53,6 +54,12 @@
 
             var linksDrawer;
 
+            var nodesLayer = new PIXI.DisplayGroup(1, true);
+            var linksLayer = new PIXI.DisplayGroup(0, true);
+
+            var linksContainer = new PIXI.Container();
+            app.stage.addChild(linksContainer);
+
             app.renderer.plugins.interaction
                     .on('pointerdown', onDragStart)
                     .on('pointerup', onDragEnd)
@@ -68,7 +75,7 @@
                     nodesObjects[i].draw(mainContainer);
                     allNodes.push(nodesObjects[i]);
                 }
-                linksDrawer = new LinksDrawer(app, allNodes);
+                linksDrawer = new LinksDrawer(linksContainer, allNodes);
                 var canvas = document.body.querySelector("canvas");
                 disableContextMenu(canvas);
             });
@@ -105,7 +112,7 @@
                 if (dragging) {
                     mainContainer.x += event.data.originalEvent.movementX;
                     mainContainer.y += event.data.originalEvent.movementY;
-                    
+
                     linksDrawer.links.x += event.data.originalEvent.movementX;
                     linksDrawer.links.y += event.data.originalEvent.movementY;
 

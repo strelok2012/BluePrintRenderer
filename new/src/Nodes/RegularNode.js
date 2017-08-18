@@ -35,19 +35,79 @@ class RegularNode {
         this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.bodyTexture, 14, 14, 14, 14);
         this.gloss = new PIXI.mesh.NineSlicePlane(texturesHandler.glossTexture, 7, 7, 7, 7);
         this.shadow = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowTexture, 21, 21, 21, 21);
+        //console.log(texturesHandler);
+        this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
         this.titleHighlight = new PIXI.mesh.NineSlicePlane(texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
         this.colorSpill = new PIXI.mesh.NineSlicePlane(texturesHandler.colorSpillTexture, 6, 6, 1, 1);
 
         this.container = new PIXI.Container();
+        this.container.interactive = true;
+        this.container.buttonMode = true;
 
-        this.nodeLayer = new PIXI.DisplayGroup(0, true);
-        this.pinsLayer = new PIXI.DisplayGroup(1, true);
+
+        var self = this;
+        this.container.on('click', function (e) {
+            self.onNodeClick(e);
+        });
+
+        this.container.on('mousedown', function (e) {
+            self.onDragStart(e);
+        });
+
+        this.container.on('mouseup', function (e) {
+            self.onDragEnd(e);
+        });
+        this.container.on('mouseupoutside', function (e) {
+            self.onDragEnd(e);
+        })
+        this.container.on('mousemove', function (e) {
+            self.onDragMove(e);
+        });
+
 
         this.lastPinY = 0;
 
     }
-    draw(nodesContainer) {
+    onDragStart(e) {
+        this.dragging = true;
+        this.eventData = e.data;
+        this.oldPosition = this.container.position;
+    }
+    onDragMove(e) {
+        if (this.dragging) {
+            var pos = e.data.getLocalPosition(this.nodesContainer);
+            this.container.x = this.nearestCellWidth(pos.x) * CONFIG.CELL_SIZE;
+            this.container.y = this.nearestCellWidth(pos.y) * CONFIG.CELL_SIZE;
 
+            this.x = this.container.x;
+            this.y = this.container.y;
+
+            for (var i = 0; i < this.pinRows.length; i++) {
+                if (this.pinRows[i].output && this.pinRows[i].output.lines) {
+                    for (var j = 0; j < this.pinRows[i].output.lines.length; j++) {
+                        this.pinRows[i].output.lines[j].redraw();
+                    }
+                }
+                if (this.pinRows[i].input && this.pinRows[i].input.backward && this.pinRows[i].input.backward.lines) {
+                    for (var j = 0; j < this.pinRows[i].input.backward.lines.length; j++) {
+                        console.log("Backward redraw");
+                        this.pinRows[i].input.backward.lines[j].redraw();
+                    }
+                }
+            }
+        }
+    }
+    onDragEnd(e) {
+        this.dragging = false;
+        this.eventData = null;
+        this.oldPosition = null;
+    }
+    onNodeClick(e) {
+        this.shadow.visible = false;
+        this.shadowSelected.visible = true;
+    }
+    draw(nodesContainer) {
+        this.nodesContainer = nodesContainer;
 
         this.container.x = this.x;
         this.container.y = this.y;
@@ -55,11 +115,14 @@ class RegularNode {
 
         this.colorSpill.tint = this.colorTint;
 
-        var coeffX = this.width / (this.width - 20);
-        var coeffY = this.height / (this.height - 20);
+        var coeffX = this.width / (this.width - 19);
+        var coeffY = this.height / (this.height - 19);
 
         this.shadow.width = this.width * coeffX;
         this.shadow.height = this.height * coeffY;
+
+        this.shadowSelected.width = this.width * coeffX;
+        this.shadowSelected.height = this.height * coeffY;
 
         this.body.width = this.width;
         this.body.height = this.height;
@@ -79,6 +142,9 @@ class RegularNode {
         this.shadow.x = -this.shadow.width / 2;
         this.shadow.y = -this.shadow.height / 2;
 
+        this.shadowSelected.x = -this.shadowSelected.width / 2;
+        this.shadowSelected.y = -this.shadowSelected.height / 2;
+
         this.body.x = -this.body.width / 2;
         this.body.y = -this.body.height / 2;
 
@@ -92,6 +158,8 @@ class RegularNode {
         this.colorSpill.y = -this.body.height / 2;
 
         this.container.addChild(this.shadow);
+        this.shadowSelected.visible = false;
+        this.container.addChild(this.shadowSelected);
         this.container.addChild(this.body);
 
         this.container.addChild(this.colorSpill);
@@ -238,7 +306,7 @@ class RegularNode {
 
 
         pinSprite.anchor.set(0.5, 0.5);
-        pinSprite.displayGroup = this.pinsLayer;
+        //pinSprite.displayGroup = this.pinsLayer;
         ret.pin.sprite = pinSprite;
 
         ret.width = pinSprite.width + CONFIG.CELL_SIZE;
@@ -250,7 +318,7 @@ class RegularNode {
             if (isOutput) {
                 pinText.anchor.set(1, 0.5);
             }
-            pinText.displayGroup = this.pinsLayer;
+            //pinText.displayGroup = this.pinsLayer;
             ret.pin.text = pinText;
 
             ret.width += pinText.width + CONFIG.CELL_SIZE * (3 / 4)
@@ -260,10 +328,10 @@ class RegularNode {
         if (pin.value) {
             var valueText = new PIXI.Text(pin.value, defaultTextStyle);
             valueText.anchor.set(0, 0.5);
-            valueText.displayGroup = this.pinsLayer;
+            //valueText.displayGroup = this.pinsLayer;
 
             var valueBorder = new PIXI.Graphics();
-            valueBorder.displayGroup = this.pinsLayer;
+            //valueBorder.displayGroup = this.pinsLayer;
             valueBorder.lineStyle(1, 0xFFFFFF);
 
             ret.pin.valueText = valueText;
@@ -289,6 +357,7 @@ class RegularNode {
             if (!from.links)
                 from.links = [];
             from.links.push(to);
+            to.backward = from;
             to.linked = true;
         }
     }

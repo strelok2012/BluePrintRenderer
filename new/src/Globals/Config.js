@@ -36,7 +36,7 @@ var VAR_COLORS = {
     object: 0x0481b7,
     class: 0x5501b3,
     struct: 0x024bab,
-    exec: 0xfff,
+    exec: 0xffffff,
     interface: 0xc9d58f,
     macro: 0xb7b4aa,
     wildcard: 0x7f7979,

@@ -369,8 +369,7 @@ function BPToNodes(objects, texturesHanlder) {
                 }
                 if (row.input && row.input.id === curLink.to) {
                     to = row.input;
-                    to.parentX = newNodes[j].x;
-                    to.parentY = newNodes[j].y;
+                    to.parent = newNodes[j];
                 }
             }
         }

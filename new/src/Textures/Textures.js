@@ -4,6 +4,7 @@ class TexturesHandler {
         this.glossTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_title_gloss.png');
         this.titleHighlightTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_title_highlight.png');
         this.shadowTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow.png');
+        this.shadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow_selected.png');
         this.colorSpillTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_color_spill.png');
     }
 }
