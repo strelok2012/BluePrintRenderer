@@ -293,14 +293,14 @@ function BPToNodes(objects, texturesHanlder) {
             };
 
 
-            //nN = new GetterNode(newNode, x, y);
+            nN = new GetterNode(newNode, x, y, texturesHandler);
 
         } else if (curObj.class.indexOf("Set") !== -1) {
             newNode = {
                 outputs: outputs,
                 inputs: inputs
             };
-            //nN = new SetterNode(newNode, x, y);
+            nN = new SetterNode(newNode, x, y, texturesHandler);
         } else if (curObj.class.indexOf("Operator") !== -1 || curObj.class.indexOf("K2Node_EnumEquality") !== -1) {
             newNode = {
                 name: curObj.nodeName && curObj.nodeName || curObj.class,
@@ -350,7 +350,7 @@ function BPToNodes(objects, texturesHanlder) {
     }
 
     for (var i = 0; i < newNodes.length; i++) {
-        newNodes[i].preparePinRows();
+        newNodes[i].init();
     }
 
 

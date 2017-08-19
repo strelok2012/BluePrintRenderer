@@ -1,7 +1,7 @@
 class EventNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
         super(node, x, y, texturesHanlder);
-        
+
         this.colorTint = VAR_COLORS["event"];
         this.functionName = node.name;
 
@@ -16,11 +16,14 @@ class EventNode extends RegularNode {
 
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }
-    draw(app) {
-
+    init() {
         this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
         this.fIcon = PIXI.Sprite.fromImage(this.icon);
         this.calculateWidth();
+        super.init();
+    }
+    draw(app) {
+
         super.draw(app);
 
 
@@ -72,8 +75,6 @@ class EventNode extends RegularNode {
 
             this.container.addChild(delegate);
         }
-
-
     }
     calculateWidth() {
         var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;

@@ -14,6 +14,18 @@ class RegularNode {
         this.height = CONFIG.CELL_SIZE * this.minCellHeight;
         this.inputOffset = this.cellSize * 0.2;
 
+
+        if (!this.config) {
+            this.config = {
+                body: true,
+                gloss: true,
+                shadow: true,
+                titleHighlight: true,
+                colorSpill: true
+            }
+        }
+
+
         if (node.inputs) {
             this.inputs = node.inputs;
         }
@@ -32,17 +44,12 @@ class RegularNode {
 
         this.node = node;
 
-        this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.bodyTexture, 14, 14, 14, 14);
-        this.gloss = new PIXI.mesh.NineSlicePlane(texturesHandler.glossTexture, 7, 7, 7, 7);
-        this.shadow = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowTexture, 21, 21, 21, 21);
-        //console.log(texturesHandler);
-        this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
-        this.titleHighlight = new PIXI.mesh.NineSlicePlane(texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
-        this.colorSpill = new PIXI.mesh.NineSlicePlane(texturesHandler.colorSpillTexture, 6, 6, 1, 1);
-
         this.container = new PIXI.Container();
         this.container.interactive = true;
         this.container.buttonMode = true;
+
+        this.container.x = this.x;
+        this.container.y = this.y;
 
 
         var self = this;
@@ -66,7 +73,6 @@ class RegularNode {
 
 
         this.lastPinY = 0;
-
     }
     onDragStart(e) {
         this.dragging = true;
@@ -97,6 +103,89 @@ class RegularNode {
             }
         }
     }
+    init() {
+        this.preparePinRows();
+        this.initBody();
+        this.initShadow();
+        this.initGloss();
+        this.initTitleHighlight();
+        this.initColorSpill();
+    }
+    initBody() {
+        if (this.config.body) {
+            if (!this.body) {
+                this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.bodyTexture, 14, 14, 14, 14);
+            }
+            this.body.width = this.width;
+            this.body.height = this.height;
+            this.body.x = -this.body.width / 2;
+            this.body.y = -this.body.height / 2;
+        }
+    }
+    initShadow() {
+        if (this.config.shadow) {
+            if (!this.shadow) {
+                this.shadow = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowTexture, 21, 21, 21, 21);
+            }
+
+            if (!this.shadowSelected) {
+                this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
+            }
+
+            var coeffX = this.width / (this.width - 19);
+            var coeffY = this.height / (this.height - 19);
+
+            this.shadow.width = this.width * coeffX;
+            this.shadow.height = this.height * coeffY;
+
+            this.shadowSelected.width = this.width * coeffX;
+            this.shadowSelected.height = this.height * coeffY;
+
+            this.shadow.x = -this.shadow.width / 2;
+            this.shadow.y = -this.shadow.height / 2;
+
+            this.shadowSelected.x = -this.shadowSelected.width / 2;
+            this.shadowSelected.y = -this.shadowSelected.height / 2;
+
+            this.shadowSelected.visible = false;
+        }
+    }
+    initGloss() {
+        if (this.config.gloss) {
+            if (!this.gloss) {
+                this.gloss = new PIXI.mesh.NineSlicePlane(texturesHandler.glossTexture, 7, 7, 7, 7);
+            }
+            this.gloss.width = this.width;
+            this.gloss.height = this.titleHeight;
+            this.gloss.x = -this.gloss.width / 2;
+            this.gloss.y = -this.body.height / 2;
+        }
+
+    }
+    initTitleHighlight() {
+        if (this.config.titleHighlight) {
+            if (!this.titleHighlight) {
+                this.titleHighlight = new PIXI.mesh.NineSlicePlane(texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
+            }
+            this.titleHighlight.width = this.width;
+            this.titleHighlight.height = this.titleHeight;
+
+            this.titleHighlight.x = -this.titleHighlight.width / 2;
+            this.titleHighlight.y = -this.body.height / 2;
+        }
+    }
+    initColorSpill() {
+        if (this.config.colorSpill) {
+            if (!this.colorSpill) {
+                this.colorSpill = new PIXI.mesh.NineSlicePlane(texturesHandler.colorSpillTexture, 6, 6, 1, 1);
+            }
+            this.colorSpill.tint = this.colorTint;
+            this.colorSpill.width = this.width;
+            this.colorSpill.height = this.titleHeight;
+            this.colorSpill.x = -this.colorSpill.width / 2;
+            this.colorSpill.y = -this.body.height / 2;
+        }
+    }
     onDragEnd(e) {
         this.dragging = false;
         this.eventData = null;
@@ -109,64 +198,35 @@ class RegularNode {
     draw(nodesContainer) {
         this.nodesContainer = nodesContainer;
 
-        this.container.x = this.x;
-        this.container.y = this.y;
+        if (this.config.shadow) {
+            this.container.addChild(this.shadow);
+            this.container.addChild(this.shadowSelected);
+        }
+
+        if (this.config.body) {
+            this.container.addChild(this.body);
+        }
+
+        if (this.config.gloss) {
+            this.container.addChild(this.gloss);
+        }
+
+        if (this.config.colorSpill) {
+            this.container.addChild(this.colorSpill);
+        }
+
+        if (this.config.titleHighlight) {
+            this.container.addChild(this.titleHighlight);
+        }
 
 
-        this.colorSpill.tint = this.colorTint;
-
-        var coeffX = this.width / (this.width - 19);
-        var coeffY = this.height / (this.height - 19);
-
-        this.shadow.width = this.width * coeffX;
-        this.shadow.height = this.height * coeffY;
-
-        this.shadowSelected.width = this.width * coeffX;
-        this.shadowSelected.height = this.height * coeffY;
-
-        this.body.width = this.width;
-        this.body.height = this.height;
+        if (this.config.titleHighlight) {
+            this.pinStartY = this.titleHighlight.y + this.titleHighlight.height + CONFIG.CELL_SIZE;
+            this.drawPinRows();
+        }
 
 
 
-        this.gloss.width = this.width;
-        this.gloss.height = this.titleHeight;
-
-        this.titleHighlight.width = this.width;
-        this.titleHighlight.height = this.titleHeight;
-
-        this.colorSpill.width = this.width;
-        this.colorSpill.height = this.titleHeight;
-
-
-        this.shadow.x = -this.shadow.width / 2;
-        this.shadow.y = -this.shadow.height / 2;
-
-        this.shadowSelected.x = -this.shadowSelected.width / 2;
-        this.shadowSelected.y = -this.shadowSelected.height / 2;
-
-        this.body.x = -this.body.width / 2;
-        this.body.y = -this.body.height / 2;
-
-        this.gloss.x = -this.gloss.width / 2;
-        this.gloss.y = -this.body.height / 2;
-
-        this.titleHighlight.x = -this.titleHighlight.width / 2;
-        this.titleHighlight.y = -this.body.height / 2;
-
-        this.colorSpill.x = -this.colorSpill.width / 2;
-        this.colorSpill.y = -this.body.height / 2;
-
-        this.container.addChild(this.shadow);
-        this.shadowSelected.visible = false;
-        this.container.addChild(this.shadowSelected);
-        this.container.addChild(this.body);
-
-        this.container.addChild(this.colorSpill);
-        this.container.addChild(this.gloss);
-        this.container.addChild(this.titleHighlight);
-
-        this.drawPinRows();
 
         nodesContainer.addChild(this.container);
 
@@ -184,7 +244,7 @@ class RegularNode {
     }
     drawInput(input, idx) {
         var pinSprite = input.sprite;
-        var pinStartY = this.titleHighlight.y + this.titleHighlight.height + CONFIG.CELL_SIZE;
+        var pinStartY = this.pinStartY;
 
         pinSprite.x = -this.body.width / 2 + CONFIG.CELL_SIZE;
         pinSprite.y = pinStartY + idx * CONFIG.CELL_SIZE * 1.5;
@@ -216,7 +276,7 @@ class RegularNode {
     }
     drawOutput(output, idx) {
         var pinSprite = output.sprite;
-        var pinStartY = this.titleHighlight.y + this.titleHighlight.height + CONFIG.CELL_SIZE;
+        var pinStartY = this.pinStartY;
 
         pinSprite.x = this.body.width / 2 - CONFIG.CELL_SIZE;
         pinSprite.y = pinStartY + idx * CONFIG.CELL_SIZE * 1.5;
@@ -312,7 +372,7 @@ class RegularNode {
         ret.width = pinSprite.width + CONFIG.CELL_SIZE;
 
 
-        if (pin.name && pin.name !== "execute" && pin.name !== "then") {
+        if (pin.name && pin.name !== "execute" && pin.name !== "then" && pin.name !== "Output_Get") {
             var pinText = new PIXI.Text(pin.name, defaultTextStyle);
             pinText.anchor.set(0, 0.5);
             if (isOutput) {

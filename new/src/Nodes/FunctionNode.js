@@ -27,10 +27,6 @@ class FunctionNode extends RegularNode {
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }
     draw(app) {
-
-        this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
-        this.fIcon = PIXI.Sprite.fromImage('assets/icons/function.png')
-        this.calculateWidth();
         super.draw(app);
 
 
@@ -61,6 +57,12 @@ class FunctionNode extends RegularNode {
         this.container.addChild(this.fIcon);
 
 
+    }
+    init() {
+        this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
+        this.fIcon = PIXI.Sprite.fromImage('assets/icons/function.png');
+        this.calculateWidth();
+        super.init(); 
     }
     calculateWidth() {
         var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;

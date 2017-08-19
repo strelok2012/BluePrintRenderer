@@ -6,5 +6,11 @@ class TexturesHandler {
         this.shadowTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow.png');
         this.shadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow_selected.png');
         this.colorSpillTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_color_spill.png');
+
+        this.varNodeBodyTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_body.png');
+        this.varNodeGlossTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_gloss.png');
+        this.varNodeShadowTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_shadow.png');
+        this.varNodeShadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_shadow_selected.png');
+        this.varNodeColorSpillTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_color_spill.png');
     }
 }
