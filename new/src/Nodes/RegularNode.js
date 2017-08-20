@@ -132,17 +132,17 @@ class RegularNode {
                 this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
             }
 
-            var coeffX = this.width / (this.width - 19);
-            var coeffY = this.height / (this.height - 19);
+            
+            this.shadow.width = this.body.width + 26;
+            this.shadow.height = this.body.height + 26;
 
-            this.shadow.width = this.width * coeffX;
-            this.shadow.height = this.height * coeffY;
-
-            this.shadowSelected.width = this.width * coeffX;
-            this.shadowSelected.height = this.height * coeffY;
+            this.shadowSelected.width = this.body.width + 26;
+            this.shadowSelected.height = this.body.height + 26;
 
             this.shadow.x = -this.shadow.width / 2;
             this.shadow.y = -this.shadow.height / 2;
+
+
 
             this.shadowSelected.x = -this.shadowSelected.width / 2;
             this.shadowSelected.y = -this.shadowSelected.height / 2;
