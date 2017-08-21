@@ -65,8 +65,8 @@ function BPToNodes(objects, texturesHanlder) {
             };
             if (curObj.commentColor)
                 newNode.commentColor = curObj.commentColor;
-            //nN = new CommentNode(newNode, x, y);
-            //newNodes.push(nN);
+            nN = new CommentNode(newNode, x, y,texturesHandler);
+            newNodes.push(nN);
         }
 
 
@@ -269,7 +269,7 @@ function BPToNodes(objects, texturesHanlder) {
                 outputs: outputs
             };
 
-            //nN = new MacroNode(newNode, x, y);
+            nN = new MacroNode(newNode, x, y,texturesHandler);
 
         } else if (curObj.class.indexOf("K2Node_Event") !== -1 || curObj.class.indexOf("K2Node_CustomEvent") !== -1 || curObj.class.indexOf("K2Node_ComponentBoundEvent") !== -1 || curObj.class.indexOf("K2Node_InputTouch") !== -1 || curObj.class.indexOf("K2Node_InputAction") !== -1 || curObj.class.indexOf("K2Node_InputAxisEvent") !== -1 || curObj.class.indexOf("K2Node_InputKey") !== -1) {
             if (curObj.class && curObj.class.indexOf("K2Node") !== -1)

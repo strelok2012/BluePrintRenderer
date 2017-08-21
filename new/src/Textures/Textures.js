@@ -15,5 +15,7 @@ class TexturesHandler {
         
         this.mathNodeBodyTexture = PIXI.Texture.fromImage('assets/nodes/MathNode_body.png');
         this.mathNodeShadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/MathNode_shadow_selected.png');
+        
+        this.commentNodeBody = PIXI.Texture.fromImage('assets/nodes/Comment_Background.png');
     }
 }

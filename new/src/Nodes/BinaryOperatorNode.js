@@ -1,6 +1,7 @@
 class BinaryOperatorNode extends RegularNode {
     constructor(node, x, y, texturesHandler) {
         super(node, x, y, texturesHandler);
+        this.minCellWidth = 4;
         this.showPinText = true;
         this.inputOffset = this.cellSize * 0.2;
 
@@ -21,9 +22,8 @@ class BinaryOperatorNode extends RegularNode {
             colorSpill: false
         };
     }
-    draw(nodesContainer) {
-        super.draw(nodesContainer);
-        this.pinStartY = -this.body.height / 2 + CONFIG.CELL_SIZE;
+    init() {
+        this.width = this.minCellWidth * CONFIG.CELL_SIZE;
 
         var text = this.node.name;
         if (text.indexOf("Boolean") !== -1) {
@@ -69,6 +69,16 @@ class BinaryOperatorNode extends RegularNode {
         }
 
         this.operatorText = new PIXI.Text(text, binaryOperatorTextStyle);
+        if (this.operatorText.width > this.width) {
+            this.width = super.nearestCellWidth(this.operatorText.width) * CONFIG.CELL_SIZE + CONFIG.CELL_SIZE / 2;
+        };
+
+        super.init();
+    }
+    draw(nodesContainer) {
+        super.draw(nodesContainer);
+        this.pinStartY = -this.body.height / 2 + CONFIG.CELL_SIZE;
+
         this.operatorText.anchor.set(0.5, 0.5);
         this.container.addChild(this.operatorText);
         super.drawPinRows();

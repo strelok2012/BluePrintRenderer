@@ -10,7 +10,7 @@ var defaultTextStyle = new PIXI.TextStyle({
 
 var binaryOperatorTextStyle = new PIXI.TextStyle({
     fontFamily: 'Roboto',
-    fontSize: 35,
+    fontSize: 36,
     fill: ['#626262'], // gradient
 });
 
@@ -20,6 +20,19 @@ var customEventTextStyle = new PIXI.TextStyle({
     fontStyle: 'italic',
     fill: ['#a1825d'] // gradient
 });
+
+var commentTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    fill: ['#eeeeee'], // gradient
+    dropShadow: true,
+    dropShadowColor: '#000000',
+    dropShadowBlur: 2,
+    dropShadowAngle: Math.PI / 6,
+    dropShadowDistance: 2,
+    fontWeight: 'bold'
+});
+
 
 var VAR_COLORS = {
     bool: 0x8c0202,
@@ -283,3 +296,15 @@ function isLetter(c) {
     return c.toLowerCase() !== c.toUpperCase();
 }
 
+function getIcon(iconName) {
+    return 'assets/nodes_icons/' + ICONS[iconName];
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+}

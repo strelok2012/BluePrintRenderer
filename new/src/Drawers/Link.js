@@ -1,7 +1,7 @@
 class Link {
     constructor(node, pin, link, color) {
         this.line = new PIXI.Graphics();
-        this.linkThickness = 2;
+        this.linkThickness = 1;
         this.pin = pin;
         this.link = link;
         this.color = color;

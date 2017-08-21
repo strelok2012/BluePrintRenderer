@@ -10,8 +10,6 @@ class RegularNode {
         this.showPinText = true;
         this.minCellWidth = 8;
         this.minCellHeight = 3;
-        this.width = CONFIG.CELL_SIZE * this.minCellWidth;
-        this.height = CONFIG.CELL_SIZE * this.minCellHeight;
         this.inputOffset = this.cellSize * 0.2;
 
 
@@ -24,6 +22,9 @@ class RegularNode {
                 colorSpill: true
             }
         }
+
+        this.width = CONFIG.CELL_SIZE * this.minCellWidth;
+        this.height = CONFIG.CELL_SIZE * this.minCellHeight;
 
 
         if (node.inputs) {
@@ -104,6 +105,13 @@ class RegularNode {
     }
     init() {
         this.preparePinRows();
+
+        this.container.x += this.width / 2;
+        this.container.y += this.height / 2;
+
+        this.x += this.width / 2;
+        this.y += this.height / 2;
+
         this.initBody();
         this.initShadow();
         this.initGloss();
@@ -131,7 +139,7 @@ class RegularNode {
                 this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
             }
 
-            
+
             this.shadow.width = this.body.width + 26;
             this.shadow.height = this.body.height + 26;
 
@@ -223,7 +231,6 @@ class RegularNode {
             this.pinStartY = this.titleHighlight.y + this.titleHighlight.height + CONFIG.CELL_SIZE;
             this.drawPinRows();
         }
-
 
 
 
@@ -370,8 +377,15 @@ class RegularNode {
 
         ret.width = pinSprite.width + CONFIG.CELL_SIZE;
 
+        var drawText = true;
 
-        if (pin.name && pin.name !== "execute" && pin.name !== "then" && pin.name !== "Output_Get") {
+        if (pin.name && (pin.name === "execute" || pin.name === "then" || pin.name === "Output_Get")) {
+            drawText = false;
+        } else if (this instanceof BinaryOperatorNode && pin.name === "Return Value") {
+            drawText = false;
+        }
+
+        if (drawText) {
             var pinText = new PIXI.Text(pin.name, defaultTextStyle);
             pinText.anchor.set(0, 0.5);
             if (isOutput) {

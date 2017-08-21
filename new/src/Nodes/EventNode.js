@@ -86,9 +86,14 @@ class EventNode extends RegularNode {
     }
     calculateWidth() {
         var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
+        if (this.node.outputs && this.node.outputs[0].name === "Output Delegate") {
+            headerFullWidth += CONFIG.CELL_SIZE;
+        }
         if (headerFullWidth > this.width) {
             this.width = super.nearestCellWidth(headerFullWidth) * CONFIG.CELL_SIZE;
         }
+
+
     }
 }
 
