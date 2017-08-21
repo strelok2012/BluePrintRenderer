@@ -14,6 +14,14 @@ class EventNode extends RegularNode {
             this.height += CONFIG.CELL_SIZE;
         }
 
+        if (this.node.inputKey) {
+            if (this.node.inputKey.indexOf("Mouse") !== -1)
+                this.icon = 'assets/nodes_icons/icon_Blueprint_MouseEvent_16x.png';
+            else
+                this.icon = 'assets/nodes_icons/icon_Blueprint_KeyboardEvent_16x.png';
+            this.functionName = this.node.inputKey;
+        }
+
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }
     init() {

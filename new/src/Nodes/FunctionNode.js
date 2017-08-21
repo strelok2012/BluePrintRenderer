@@ -19,9 +19,25 @@ class FunctionNode extends RegularNode {
         this.isPure = node.isPure;
         this.functionName = node.name;
 
-        if (this.functionName === "Make Rotator") {
-            console.log("Creating makerot");
+        if (!this.isPure) {
+            this.iconTint = VAR_COLORS["execFunction"];
+        } else {
+            this.iconTint = VAR_COLORS["pureFunction"];
         }
+
+        this.icon = 'assets/icons/function.png';
+
+        if (this.functionName.indexOf("Make") !== -1 && this.functionName.indexOf("Array") === -1) {
+            this.icon = "assets/nodes_icons/icon_Blueprint_MakeStruct_16x.png";
+            this.iconTint = null;
+        } else if (this.functionName.indexOf("Break") !== -1) {
+            this.icon = "assets/nodes_icons/icon_Blueprint_BreakStruct_16x.png";
+            this.iconTint = null;
+        } else if (this.functionName.indexOf("Make Array") !== -1) {
+            this.icon = "assets/nodes_icons/icon_Blueprint_MakeArray_16x.png";
+            this.iconTint = null;
+        }
+
 
 
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
@@ -47,10 +63,8 @@ class FunctionNode extends RegularNode {
         this.fIcon.y += this.gloss.height / 2;
         this.fIcon.x += CONFIG.CELL_SIZE;
 
-        if (!this.isPure) {
-            this.fIcon.tint = VAR_COLORS["execFunction"];
-        } else {
-            this.fIcon.tint = VAR_COLORS["pureFunction"];
+        if (this.iconTint) {
+            this.fIcon.tint = this.iconTint;
         }
 
         this.container.addChild(this.headerText);
@@ -60,9 +74,9 @@ class FunctionNode extends RegularNode {
     }
     init() {
         this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
-        this.fIcon = PIXI.Sprite.fromImage('assets/icons/function.png');
+        this.fIcon = PIXI.Sprite.fromImage(this.icon);
         this.calculateWidth();
-        super.init(); 
+        super.init();
     }
     calculateWidth() {
         var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;

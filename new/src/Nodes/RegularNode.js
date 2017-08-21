@@ -96,7 +96,6 @@ class RegularNode {
                 }
                 if (this.pinRows[i].input && this.pinRows[i].input.backward && this.pinRows[i].input.backward.lines) {
                     for (var j = 0; j < this.pinRows[i].input.backward.lines.length; j++) {
-                        console.log("Backward redraw");
                         this.pinRows[i].input.backward.lines[j].redraw();
                     }
                 }
