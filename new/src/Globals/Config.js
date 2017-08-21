@@ -8,6 +8,12 @@ var defaultTextStyle = new PIXI.TextStyle({
     fill: ['#ffffff'], // gradient
 });
 
+var binaryOperatorTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 35,
+    fill: ['#626262'], // gradient
+});
+
 var customEventTextStyle = new PIXI.TextStyle({
     fontFamily: 'Roboto',
     fontSize: 12,

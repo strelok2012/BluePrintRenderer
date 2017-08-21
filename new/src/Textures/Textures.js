@@ -12,5 +12,8 @@ class TexturesHandler {
         this.varNodeShadowTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_shadow.png');
         this.varNodeShadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_shadow_selected.png');
         this.varNodeColorSpillTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_color_spill.png');
+        
+        this.mathNodeBodyTexture = PIXI.Texture.fromImage('assets/nodes/MathNode_body.png');
+        this.mathNodeShadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/MathNode_shadow_selected.png');
     }
 }

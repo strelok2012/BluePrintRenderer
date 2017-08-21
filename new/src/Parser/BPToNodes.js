@@ -208,6 +208,8 @@ function BPToNodes(objects, texturesHanlder) {
 
             if (newNode.name.indexOf("Conv_") !== -1 && newNode.name.indexOf("Int To Text") === -1 && newNode.name.indexOf("Float To Text") === -1) {
                 //nN = new ConverterNode(newNode, x, y);
+            } else if (newNode.name.indexOf("_") !== -1 && newNode.name.indexOf("Get") === -1 && newNode.name.indexOf("Conv") === -1 && newNode.name.indexOf("Set") === -1 && newNode.name.indexOf("Add") === -1 && newNode.name.indexOf("K2") === -1 && newNode.name.indexOf("Montage") === -1 && newNode.name.indexOf("Greater_Vector") === -1 && newNode.name.indexOf("Less_Vector") === -1) {
+                nN = new BinaryOperatorNode(newNode, x, y, texturesHanlder);
             } else {
                 nN = new FunctionNode(newNode, x, y, texturesHanlder);
             }
@@ -307,7 +309,7 @@ function BPToNodes(objects, texturesHanlder) {
                 inputs: inputs,
                 outputs: outputs
             };
-            //nN = new BinaryOperatorNode(newNode, x, y);
+            nN = new BinaryOperatorNode(newNode, x, y, texturesHandler);
         } else if (curObj.class.indexOf("K2Node_Knot") !== -1) {
             //console.log('KNIT');
             newNode = {
