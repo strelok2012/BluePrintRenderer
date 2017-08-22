@@ -66,6 +66,7 @@
             var linksContainer = new PIXI.Container();
             app.stage.addChild(linksContainer);
 
+
             app.renderer.plugins.interaction
                     .on('pointerdown', onDragStart)
                     .on('pointerup', onDragEnd)
@@ -89,8 +90,13 @@
 
 
 
+
             function isRightClick(e) {
                 return e.which === 3;
+            }
+
+            function isLeftClick(e) {
+                return e.which === 1;
             }
 
             function disableContextMenu(canvas) {
@@ -99,10 +105,22 @@
                 });
             }
 
+            function dropNodesSelection(e) {
+                for (var i = 0, l = allNodes.length; i < l; i++) {
+                    if (allNodes[i].selected) {
+                        if (!allNodes[i].inNode(e.data.global)) {
+                            allNodes[i].dropSelection();
+                        }
+                    }
+                }
+            }
+
             function onDragStart(event) {
                 if (isRightClick(event.data.originalEvent)) {
                     dragging = true;
                     eventData = event.data;
+                } else if (isLeftClick(event.data.originalEvent)) {
+                    dropNodesSelection(event);
                 }
             }
 

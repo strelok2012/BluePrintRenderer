@@ -11,6 +11,7 @@ class RegularNode {
         this.minCellWidth = 8;
         this.minCellHeight = 3;
         this.inputOffset = this.cellSize * 0.2;
+        this.pointOnNode = null;
 
 
         if (!this.config) {
@@ -79,29 +80,72 @@ class RegularNode {
         this.dragging = true;
         this.eventData = e.data;
         this.oldPosition = this.container.position;
+
+        this.shadow.visible = false;
+        this.shadowSelected.visible = true;
+        this.selected = true;
+
+        var bounds = this.container.getBounds();
+        var posGlobal = e.data.global;
+
+        var onNodeX = posGlobal.x - bounds.x;
+        var onNodeY = posGlobal.y - bounds.y;
+
+        this.pointOnNode = {
+            x: onNodeX,
+            y: onNodeY
+        };
     }
     onDragMove(e) {
         if (this.dragging) {
             var pos = e.data.getLocalPosition(this.nodesContainer);
+
+
+            pos.x += this.width / 2 - this.pointOnNode.x;
+            pos.y += this.height / 2 - this.pointOnNode.y;
+
             this.container.x = this.nearestCellWidth(pos.x) * CONFIG.CELL_SIZE;
             this.container.y = this.nearestCellWidth(pos.y) * CONFIG.CELL_SIZE;
 
             this.x = this.container.x;
             this.y = this.container.y;
 
-            for (var i = 0; i < this.pinRows.length; i++) {
-                if (this.pinRows[i].output && this.pinRows[i].output.lines) {
-                    for (var j = 0; j < this.pinRows[i].output.lines.length; j++) {
-                        this.pinRows[i].output.lines[j].redraw();
-                    }
+            this.redrawLinks();
+
+        }
+    }
+    redrawLinks() {
+        for (var i = 0; i < this.pinRows.length; i++) {
+            if (this.pinRows[i].output && this.pinRows[i].output.lines) {
+                for (var j = 0; j < this.pinRows[i].output.lines.length; j++) {
+                    this.pinRows[i].output.lines[j].redraw();
                 }
-                if (this.pinRows[i].input && this.pinRows[i].input.backward && this.pinRows[i].input.backward.lines) {
-                    for (var j = 0; j < this.pinRows[i].input.backward.lines.length; j++) {
-                        this.pinRows[i].input.backward.lines[j].redraw();
-                    }
+            }
+            if (this.pinRows[i].input && this.pinRows[i].input.backward && this.pinRows[i].input.backward.lines) {
+                for (var j = 0; j < this.pinRows[i].input.backward.lines.length; j++) {
+                    this.pinRows[i].input.backward.lines[j].redraw();
                 }
             }
         }
+    }
+    onDragEnd(e) {
+        this.dragging = false;
+        this.eventData = null;
+        this.oldPosition = null;
+    }
+    onNodeClick(e) {
+        this.shadow.visible = false;
+        this.shadowSelected.visible = true;
+        this.selected = true;
+    }
+    inNode(e) {
+        var bounds = this.container.getBounds();
+        if (e.x >= bounds.x && e.x <= bounds.x + bounds.width) {
+            if (e.y >= bounds.y && e.y <= bounds.y + bounds.height) {
+                return true;
+            }
+        }
+        return false;
     }
     init() {
         this.preparePinRows();
@@ -193,14 +237,10 @@ class RegularNode {
             this.colorSpill.y = -this.body.height / 2;
         }
     }
-    onDragEnd(e) {
-        this.dragging = false;
-        this.eventData = null;
-        this.oldPosition = null;
-    }
-    onNodeClick(e) {
-        this.shadow.visible = false;
-        this.shadowSelected.visible = true;
+    dropSelection() {
+        this.shadow.visible = true;
+        this.shadowSelected.visible = false;
+        this.selected = false;
     }
     draw(nodesContainer) {
         this.nodesContainer = nodesContainer;
