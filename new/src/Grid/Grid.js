@@ -1,18 +1,61 @@
 class Grid {
     constructor(app, x, y) {
+        var tmpContainer = new PIXI.Container;
+        var background = new PIXI.Graphics();
+        background.beginFill(0x2a2a2a);
+        var fullCellSize = 8 * CONFIG.CELL_SIZE;
+        background.drawRect(0, 0, fullCellSize, fullCellSize);
+        tmpContainer.addChild(background);
+
         this.grid = new PIXI.Graphics();
         this.gridThickness = 1;
-        this.origin = {x: x, y: y};
-        app.stage.addChild(this.grid);
-        this.grid.position.set(0, 0);
-        this.draw();
+        tmpContainer.addChild(this.grid);
+        this.drawQuad();
 
+        let renderTexture = PIXI.RenderTexture.create(fullCellSize + 1, fullCellSize + 1);
+        app.renderer.render(tmpContainer, renderTexture, false);
+
+
+        let newSprite = new PIXI.extras.TilingSprite(renderTexture,7552, 4272);
+        app.stage.addChild(newSprite);
+    }
+    drawQuad() {
+        var gridThickness = this.gridThickness;
+        var fullCellSize = 8 * CONFIG.CELL_SIZE;
+        for (var i = 0; i < fullCellSize; i += CONFIG.CELL_SIZE) {
+            this.grid.lineStyle(gridThickness, 0x353535)
+                    .moveTo(i, 0)
+                    .lineTo(i, fullCellSize);
+        }
+
+        for (var i = 0; i < fullCellSize; i += CONFIG.CELL_SIZE) {
+            this.grid.lineStyle(gridThickness, 0x353535)
+                    .moveTo(0, i)
+                    .lineTo(fullCellSize, i);
+        }
+
+        this.grid.lineStyle(gridThickness, 0x1c1c1c)
+                .moveTo(0, 0)
+                .lineTo(0, fullCellSize+1);
+
+        this.grid.lineStyle(gridThickness, 0x1c1c1c)
+                .moveTo(fullCellSize + 1, 0)
+                .lineTo(fullCellSize + 1, fullCellSize+1);
+
+
+        this.grid.lineStyle(gridThickness, 0x1c1c1c)
+                .moveTo(0, 0)
+                .lineTo(fullCellSize+1, 0);
+
+        this.grid.lineStyle(gridThickness, 0x1c1c1c)
+                .moveTo(0, fullCellSize + 1)
+                .lineTo(fullCellSize+1, fullCellSize + 1);
     }
     draw() {
         var gridThickness = this.gridThickness;
         this.grid.clear();
 
-        var fullCellSize = 8 * CONFIG.CELL_SIZE;
+        var fullCellSize = fullCellSize;
 
         for (var i = -fullCellSize; i < window.innerWidth + fullCellSize; i += CONFIG.CELL_SIZE) {
             this.grid.lineStyle(gridThickness, 0x353535)
@@ -44,16 +87,16 @@ class Grid {
         this.origin.x -= x;
         this.origin.y -= y;
 
-        if (this.origin.x > 8 * CONFIG.CELL_SIZE) {
-            this.origin.x = this.origin.x - 8 * CONFIG.CELL_SIZE;
-        } else if (this.origin.x < -8 * CONFIG.CELL_SIZE) {
-            this.origin.x = this.origin.x + 8 * CONFIG.CELL_SIZE;
+        if (this.origin.x > fullCellSize) {
+            this.origin.x = this.origin.x - fullCellSize;
+        } else if (this.origin.x < -fullCellSize) {
+            this.origin.x = this.origin.x + fullCellSize;
         }
 
-        if (this.origin.y > 8 * CONFIG.CELL_SIZE) {
-            this.origin.y = this.origin.y - 8 * CONFIG.CELL_SIZE;
-        } else if (this.origin.y < -8 * CONFIG.CELL_SIZE) {
-            this.origin.y = this.origin.y + 8 * CONFIG.CELL_SIZE;
+        if (this.origin.y > fullCellSize) {
+            this.origin.y = this.origin.y - fullCellSize;
+        } else if (this.origin.y < -fullCellSize) {
+            this.origin.y = this.origin.y + fullCellSize;
         }
         this.draw();
     }

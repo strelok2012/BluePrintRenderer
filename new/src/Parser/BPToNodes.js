@@ -45,7 +45,7 @@ function BPToNodes(objects, texturesHanlder) {
             maxX = parseInt(curObj.nodePosX) + parseInt(curObj.nodeWidth);
     }
 
-    //console.log(maxX, maxY);
+    console.log(maxX, maxY);
 
 
 

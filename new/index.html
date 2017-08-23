@@ -40,16 +40,18 @@
         <script type="text/javascript">
 
 
-            var app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, {backgroundColor: 0x2a2a2a, antialias: true});
+            var app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, {antialias: true});
             app.stage.displayList = new PIXI.DisplayList();
             document.body.appendChild(app.view);
-            console.log(app);
 
             var grid = new Grid(app, 0, 0);
 
             var texturesHandler = new TexturesHandler();
 
             var dragging = false;
+
+            var draggingLeft = false;
+            var dragLeftStartPoint = null;
 
             var eventData = null;
 
@@ -59,6 +61,8 @@
             var allNodes = [];
 
             var linksDrawer;
+
+
 
             var nodesLayer = new PIXI.DisplayGroup(1, true);
             var linksLayer = new PIXI.DisplayGroup(0, true);
@@ -121,6 +125,11 @@
                     eventData = event.data;
                 } else if (isLeftClick(event.data.originalEvent)) {
                     dropNodesSelection(event);
+                    draggingLeft = true;
+                    dragLeftStartPoint = {
+                        x: event.data.global.x,
+                        y: event.data.global.y
+                    };
                 }
             }
 
@@ -128,6 +137,9 @@
                 if (isRightClick(event.data.originalEvent)) {
                     dragging = false;
                     eventData = null;
+                } else if (isLeftClick(event.data.originalEvent)) {
+                    draggingLeft = false;
+                    dragLeftStartPoint = null;
                 }
 
             }
@@ -140,9 +152,22 @@
                     linksDrawer.links.x += event.data.originalEvent.movementX;
                     linksDrawer.links.y += event.data.originalEvent.movementY;
 
-                    grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
+                    // grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
+                } else if (draggingLeft) {
+                    console.log("Dragging lrg");
+                    if (dragLeftStartPoint) {
+                        console.log(dragLeftStartPoint, event.data.global);
+                    }
                 }
             }
+
+            setTimeout(function () {
+                let renderTexture = PIXI.RenderTexture.create(7552, 4272);
+                app.renderer.render(app.stage, renderTexture, false);
+                //grid.show();
+                window.open(app.renderer.extract.base64(renderTexture));
+            }, 3000);
+
 
 
 

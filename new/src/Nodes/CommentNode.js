@@ -3,6 +3,8 @@ class CommentNode {
         this.x = parseInt(x);
         this.y = parseInt(y);
 
+        this.affectedNodes = [];
+
         this.body = new PIXI.Sprite.from(texturesHandler.commentNodeBody);
         this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
 
@@ -39,6 +41,19 @@ class CommentNode {
             x: onNodeX,
             y: onNodeY
         };
+
+        var containerBounds = this.container.getBounds();
+
+        for (var i = 0; i < allNodes.length; i++) {
+            var bounds = allNodes[i].container.getBounds();
+            if (bounds.x >= containerBounds.x && bounds.x <= containerBounds.x + containerBounds.width) {
+                if (bounds.y >= containerBounds.y && bounds.y <= containerBounds.y + containerBounds.height) {
+                    this.affectedNodes.push(allNodes[i]);
+                }
+            }
+        }
+
+
     }
     onDragMove(e) {
         if (this.dragging) {
@@ -50,25 +65,15 @@ class CommentNode {
             var deltaX = this.container.x - this.nearestCellWidth(pos.x) * CONFIG.CELL_SIZE;
             var deltaY = this.container.y - this.nearestCellWidth(pos.y) * CONFIG.CELL_SIZE;
 
-            for (var i = 0; i < allNodes.length; i++) {
-                if (!(allNodes[i] instanceof CommentNode)) {
-                    var bounds = allNodes[i].container.getBounds();
-                    //console.log(bounds, this.container.x, this.container.y);
-                    if (bounds.x >= this.container.x && bounds.x <= this.container.x + this.container.width) {
-                        if (bounds.y >= this.container.y && bounds.y <= this.container.y + this.container.height) {
-                            console.log("AFFECTED");
-                            allNodes[i].container.x -= deltaX;
-                            allNodes[i].container.y -= deltaY;
-                            allNodes[i].x -= deltaX;
-                            allNodes[i].y -= deltaY;
-                            allNodes[i].redrawLinks();
-                        }
+            for (var i = 0; i < this.affectedNodes.length; i++) {
+                this.affectedNodes[i].container.x -= deltaX;
+                this.affectedNodes[i].container.y -= deltaY;
+                this.affectedNodes[i].x -= deltaX;
+                this.affectedNodes[i].y -= deltaY;
 
-                    }
-                }
-
+                if (this.affectedNodes[i].redrawLinks)
+                    this.affectedNodes[i].redrawLinks();
             }
-
 
 
             this.container.x = this.nearestCellWidth(pos.x) * CONFIG.CELL_SIZE;
@@ -90,6 +95,7 @@ class CommentNode {
         this.dragging = false;
         this.eventData = null;
         this.oldPosition = null;
+        this.affectedNodes = [];
     }
     onNodeClick(e) {
         this.shadowSelected.visible = true;
