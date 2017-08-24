@@ -60,6 +60,8 @@
 
             var allNodes = [];
 
+            var selectedNodes = [];
+
             var linksDrawer;
 
 
@@ -78,6 +80,15 @@
                     .on('pointermove', onDragMove);
 
             app.stage.addChild(mainContainer);
+
+            var selector = new PIXI.mesh.NineSlicePlane(texturesHandler.selector, 2, 2, 2, 2);
+
+            selector.width = 100;
+            selector.height = 100;
+            selector.visible = false;
+
+            app.stage.addChild(selector);
+            app.bpConfig = {draggingNode: false};
 
             var render = new BlueprintRenderer();
             render.renderFromFile("/tests/file_big.txt", function (nodes) {
@@ -140,6 +151,7 @@
                 } else if (isLeftClick(event.data.originalEvent)) {
                     draggingLeft = false;
                     dragLeftStartPoint = null;
+                    selector.visible = false;
                 }
 
             }
@@ -155,18 +167,37 @@
                     // grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
                 } else if (draggingLeft) {
                     console.log("Dragging lrg");
-                    if (dragLeftStartPoint) {
-                        console.log(dragLeftStartPoint, event.data.global);
+                    if (dragLeftStartPoint && !app.bpConfig.draggingNode) {
+                        selector.visible = true;
+                        selector.x = dragLeftStartPoint.x;
+                        selector.y = dragLeftStartPoint.y;
+
+                        selector.width = event.data.global.x - dragLeftStartPoint.x;
+                        selector.height = event.data.global.y - dragLeftStartPoint.y;
+
+                        var selectorBounds = selector.getBounds();
+
+                        for (var i = 0; i < allNodes.length; i++) {
+                            if (!allNodes[i] instanceof CommentNode) {
+                                var bounds = allNodes[i].container.getBounds();
+                                if (intersectNodeSelectable(bounds, selectorBounds)) {
+                                    allNodes[i].select();
+                                } else {
+                                    allNodes[i].dropSelection();
+                                }
+                            }
+
+                        }
                     }
                 }
             }
 
-            setTimeout(function () {
-                let renderTexture = PIXI.RenderTexture.create(7552, 4272);
-                app.renderer.render(app.stage, renderTexture, false);
-                //grid.show();
-                window.open(app.renderer.extract.base64(renderTexture));
-            }, 3000);
+            /*setTimeout(function () {
+             let renderTexture = PIXI.RenderTexture.create(7552, 4272);
+             app.renderer.render(app.stage, renderTexture, false);
+             //grid.show();
+             window.open(app.renderer.extract.base64(renderTexture));
+             }, 3000);*/
 
 
 

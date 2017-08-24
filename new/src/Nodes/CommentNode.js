@@ -58,6 +58,7 @@ class CommentNode {
     onDragMove(e) {
         if (this.dragging) {
             var pos = e.data.getLocalPosition(this.nodesContainer);
+            app.bpConfig.draggingNode = true;
 
             pos.x += -this.pointOnNode.x;
             pos.y += -this.pointOnNode.y;
@@ -96,6 +97,7 @@ class CommentNode {
         this.eventData = null;
         this.oldPosition = null;
         this.affectedNodes = [];
+        app.bpConfig.draggingNode = false;
     }
     onNodeClick(e) {
         this.shadowSelected.visible = true;

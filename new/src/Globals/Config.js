@@ -308,3 +308,12 @@ function componentToHex(c) {
 function rgbToHex(r, g, b) {
     return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
 }
+
+function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
+    var s = scale || 1;
+    if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.selectableHeight * s < node1.y) {
+        return false;
+    } else {
+        return true;
+    }
+}

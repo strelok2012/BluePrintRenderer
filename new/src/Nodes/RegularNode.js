@@ -99,7 +99,7 @@ class RegularNode {
     onDragMove(e) {
         if (this.dragging) {
             var pos = e.data.getLocalPosition(this.nodesContainer);
-
+            app.bpConfig.draggingNode = true;
 
             pos.x += this.width / 2 - this.pointOnNode.x;
             pos.y += this.height / 2 - this.pointOnNode.y;
@@ -132,8 +132,14 @@ class RegularNode {
         this.dragging = false;
         this.eventData = null;
         this.oldPosition = null;
+        app.bpConfig.draggingNode = false;
     }
     onNodeClick(e) {
+        this.shadow.visible = false;
+        this.shadowSelected.visible = true;
+        this.selected = true;
+    }
+    select(e) {
         this.shadow.visible = false;
         this.shadowSelected.visible = true;
         this.selected = true;
