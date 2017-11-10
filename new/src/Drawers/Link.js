@@ -1,4 +1,4 @@
-class Link {
+export default class Link {
     constructor(node, pin, link, color) {
         this.line = new PIXI.Graphics();
         this.linkThickness = 1;

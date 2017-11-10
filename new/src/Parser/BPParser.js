@@ -1,4 +1,4 @@
-class BPParser {
+export default class BPParser {
     constructor(text) {
         this.text = text;
         this.txt = this.text.split("\n");

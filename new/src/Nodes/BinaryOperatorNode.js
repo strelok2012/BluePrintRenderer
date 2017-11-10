@@ -1,4 +1,7 @@
-class BinaryOperatorNode extends RegularNode {
+import {RegularNode} from './RegularNode.js';
+import {CONFIG, VAR_COLORS, binaryOperatorTextStyle} from '../config.js';
+
+export default class BinaryOperatorNode extends RegularNode {
     constructor(node, x, y, texturesHandler) {
         super(node, x, y, texturesHandler);
         this.minCellWidth = 4;
@@ -71,7 +74,8 @@ class BinaryOperatorNode extends RegularNode {
         this.operatorText = new PIXI.Text(text, binaryOperatorTextStyle);
         if (this.operatorText.width > this.width) {
             this.width = super.nearestCellWidth(this.operatorText.width) * CONFIG.CELL_SIZE + CONFIG.CELL_SIZE / 2;
-        };
+        }
+        ;
 
         super.init();
     }

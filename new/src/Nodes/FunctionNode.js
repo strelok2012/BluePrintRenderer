@@ -1,4 +1,7 @@
-class FunctionNode extends RegularNode {
+import {RegularNode} from './RegularNode.js';
+import {CONFIG, VAR_COLORS, defaultTextStyle} from '../config.js';
+
+export default class FunctionNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
         super(node, x, y, texturesHanlder);
         if (!node.isPure) {

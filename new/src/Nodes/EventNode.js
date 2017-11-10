@@ -1,4 +1,7 @@
-class EventNode extends RegularNode {
+import {RegularNode} from './RegularNode.js';
+import {CONFIG, VAR_COLORS, defaultTextStyle, customEventTextStyle} from '../config.js';
+
+export default class EventNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
         super(node, x, y, texturesHanlder);
 

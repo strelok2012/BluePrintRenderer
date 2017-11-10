@@ -1,4 +1,6 @@
-class BlueprintRenderer {
+import BPParser from '../Parser/BPParser.js';
+
+export default class BlueprintRenderer {
     renderFromText(bpText) {
         this.parse(bpText);
     }

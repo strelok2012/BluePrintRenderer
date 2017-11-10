@@ -1,9 +1,15 @@
-class CommentNode {
+import {RegularNode} from './RegularNode.js';
+import {CONFIG, rgbToHex, commentTextStyle} from '../config.js';
+import {app, allNodes} from '../main.js';
+
+export default class CommentNode {
     constructor(node, x, y, texturesHandler) {
         this.x = parseInt(x);
         this.y = parseInt(y);
 
         this.affectedNodes = [];
+
+        this.texturesHandler = texturesHandler;
 
         this.body = new PIXI.Sprite.from(texturesHandler.commentNodeBody);
         this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
@@ -157,7 +163,7 @@ class CommentNode {
 
         this.container.addChild(this.body);
 
-        this.gloss = new PIXI.mesh.NineSlicePlane(texturesHandler.glossTexture, 7, 7, 7, 7);
+        this.gloss = new PIXI.mesh.NineSlicePlane(this.texturesHandler.glossTexture, 7, 7, 7, 7);
         this.gloss.blendMode = PIXI.BLEND_MODES.SCREEN;
 
         this.gloss.aplha = opacity;

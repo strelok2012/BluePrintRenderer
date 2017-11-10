@@ -134,3 +134,5 @@ Vector.lerp = function (a, b, fraction) {
 Vector.fromArray = function (a) {
 	return new Vector(a[0], a[1]);
 };
+
+export default Vector;

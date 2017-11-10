@@ -1,27 +1,27 @@
-var CONFIG = {
+export const CONFIG = {
     CELL_SIZE: 16
 }
 
-var defaultTextStyle = new PIXI.TextStyle({
+export const defaultTextStyle = new PIXI.TextStyle({
     fontFamily: 'Roboto',
     fontSize: 12,
     fill: ['#ffffff'], // gradient
 });
 
-var binaryOperatorTextStyle = new PIXI.TextStyle({
+export const binaryOperatorTextStyle = new PIXI.TextStyle({
     fontFamily: 'Roboto',
     fontSize: 36,
     fill: ['#626262'], // gradient
 });
 
-var customEventTextStyle = new PIXI.TextStyle({
+export const customEventTextStyle = new PIXI.TextStyle({
     fontFamily: 'Roboto',
     fontSize: 12,
     fontStyle: 'italic',
     fill: ['#a1825d'] // gradient
 });
 
-var commentTextStyle = new PIXI.TextStyle({
+export const commentTextStyle = new PIXI.TextStyle({
     fontFamily: 'Roboto',
     fontSize: 16,
     fill: ['#eeeeee'], // gradient
@@ -34,7 +34,7 @@ var commentTextStyle = new PIXI.TextStyle({
 });
 
 
-var VAR_COLORS = {
+export const VAR_COLORS = {
     bool: 0x8c0202,
     byte: 0x026960,
     int: 0x1ed6a4,
@@ -65,9 +65,9 @@ var VAR_COLORS = {
     switch_on: 0x8f9013
 };
 
-var HIDDEN_PIN_NAMES = ["Output_Get"]
+export const HIDDEN_PIN_NAMES = ["Output_Get"]
 
-var VAR_TYPES = {
+export const VAR_TYPES = {
     bool: {code: 0, name: "bool"},
     byte: {code: 1, name: "byte"},
     int: {code: 2, name: "int"},
@@ -90,7 +90,7 @@ var VAR_TYPES = {
     wildcard: {code: 19, name: "wildcard"}
 };
 
-var ICONS = {
+export const ICONS = {
     branch: "icon_Blueprint_Branch_16x.png",
     make_struct: "icon_Blueprint_MakeStruct_16x.png",
     break_struct: "icon_Blueprint_BreakStruct_16x.png",
@@ -116,7 +116,7 @@ var ICONS = {
     save: "LV_Save.png"
 }
 
-var FUNCTIONS_MAPPING = {
+export const FUNCTIONS_MAPPING = {
     K2Node_CallFunction: null,
     K2Node_SpawnActorFromClass: {
         text: "Spawn Actor"
@@ -197,7 +197,7 @@ var FUNCTIONS_MAPPING = {
     }
 }
 
-var NAME_MAPPING = {
+export const NAME_MAPPING = {
     "K2_Destroy Actor": "DestroyActor",
     "VSize": "VectorLength",
     "K2_Get Component Location": "GetWorldLocation",
@@ -217,11 +217,11 @@ var NAME_MAPPING = {
     "Conv_Text To String": "ToString(text)",
 }
 
-var FUNCTION_NAMES_MAPPING = {
+export const FUNCTION_NAMES_MAPPING = {
     Array_Set: "Set Array Elem"
 }
 
-var ARRAY_FUNCTION_NAMES_MAPPING = {
+export const ARRAY_FUNCTION_NAMES_MAPPING = {
     Array_Add: {
         text: "Add"
     },
@@ -292,24 +292,24 @@ String.prototype.fromCamelCase = function () {
     return newString.trim();
 }
 
-function isLetter(c) {
+export function isLetter(c) {
     return c.toLowerCase() !== c.toUpperCase();
 }
 
-function getIcon(iconName) {
+export function getIcon(iconName) {
     return 'assets/nodes_icons/' + ICONS[iconName];
 }
 
-function componentToHex(c) {
+export function componentToHex(c) {
     var hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
 }
 
-function rgbToHex(r, g, b) {
+export function rgbToHex(r, g, b) {
     return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
 }
 
-function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
+export function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
     var s = scale || 1;
     if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.selectableHeight * s < node1.y) {
         return false;

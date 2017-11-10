@@ -1,4 +1,19 @@
-function BPToNodes(objects, texturesHanlder) {
+import Vector from "../libs/vector.js";
+
+import CommentNode from '../Nodes/CommentNode.js';
+import EventNode from '../Nodes/EventNode.js';
+import FunctionNode from '../Nodes/FunctionNode.js';
+import MacroNode from '../Nodes/MacroNode.js';
+
+import GetterNode from '../Nodes/GetterNode.js';
+import SetterNode from '../Nodes/SetterNode.js';
+
+import BinaryOperatorNode from '../Nodes/BinaryOperatorNode.js';
+
+import {VAR_TYPES, FUNCTIONS_MAPPING} from '../config.js';
+
+
+export default function BPToNodes(objects, texturesHandler) {
     var origin = origin || new Vector(0, 0);
     var minX, minY;
     var newNodes = [];
@@ -45,9 +60,6 @@ function BPToNodes(objects, texturesHanlder) {
             maxX = parseInt(curObj.nodePosX) + parseInt(curObj.nodeWidth);
     }
 
-    console.log(maxX, maxY);
-
-
 
     var links = [];
     for (var i = 0; i < objects.length; i++) {
@@ -65,7 +77,7 @@ function BPToNodes(objects, texturesHanlder) {
             };
             if (curObj.commentColor)
                 newNode.commentColor = curObj.commentColor;
-            nN = new CommentNode(newNode, x, y,texturesHandler);
+            nN = new CommentNode(newNode, x, y, texturesHandler);
             newNodes.push(nN);
         }
 
@@ -209,9 +221,9 @@ function BPToNodes(objects, texturesHanlder) {
             if (newNode.name.indexOf("Conv_") !== -1 && newNode.name.indexOf("Int To Text") === -1 && newNode.name.indexOf("Float To Text") === -1) {
                 //nN = new ConverterNode(newNode, x, y);
             } else if (newNode.name.indexOf("_") !== -1 && newNode.name.indexOf("Get") === -1 && newNode.name.indexOf("Conv") === -1 && newNode.name.indexOf("Set") === -1 && newNode.name.indexOf("Add") === -1 && newNode.name.indexOf("K2") === -1 && newNode.name.indexOf("Montage") === -1 && newNode.name.indexOf("Greater_Vector") === -1 && newNode.name.indexOf("Less_Vector") === -1) {
-                nN = new BinaryOperatorNode(newNode, x, y, texturesHanlder);
+                nN = new BinaryOperatorNode(newNode, x, y, texturesHandler);
             } else {
-                nN = new FunctionNode(newNode, x, y, texturesHanlder);
+                nN = new FunctionNode(newNode, x, y, texturesHandler);
             }
 
         } else if (curObj.class.indexOf("K2Node_DynamicCast") !== -1) {
@@ -269,7 +281,7 @@ function BPToNodes(objects, texturesHanlder) {
                 outputs: outputs
             };
 
-            nN = new MacroNode(newNode, x, y,texturesHandler);
+            nN = new MacroNode(newNode, x, y, texturesHandler);
 
         } else if (curObj.class.indexOf("K2Node_Event") !== -1 || curObj.class.indexOf("K2Node_CustomEvent") !== -1 || curObj.class.indexOf("K2Node_ComponentBoundEvent") !== -1 || curObj.class.indexOf("K2Node_InputTouch") !== -1 || curObj.class.indexOf("K2Node_InputAction") !== -1 || curObj.class.indexOf("K2Node_InputAxisEvent") !== -1 || curObj.class.indexOf("K2Node_InputKey") !== -1) {
             if (curObj.class && curObj.class.indexOf("K2Node") !== -1)
@@ -346,7 +358,7 @@ function BPToNodes(objects, texturesHanlder) {
 
         if (nN) {
             newNodes.push(nN);
-            nn = null;
+            nN = null;
             newNode = null;
         }
     }

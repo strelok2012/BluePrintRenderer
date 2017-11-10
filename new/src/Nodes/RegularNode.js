@@ -1,4 +1,7 @@
-class RegularNode {
+import {CONFIG, VAR_COLORS, defaultTextStyle} from '../config.js';
+import {app} from '../main.js';
+
+export class RegularNode {
     constructor(node, x, y, texturesHandler) {
         this.x = parseInt(x);
         this.y = parseInt(y);
@@ -12,6 +15,7 @@ class RegularNode {
         this.minCellHeight = 3;
         this.inputOffset = this.cellSize * 0.2;
         this.pointOnNode = null;
+        this.texturesHandler = texturesHandler;
 
 
         if (!this.config) {
@@ -171,7 +175,7 @@ class RegularNode {
     initBody() {
         if (this.config.body) {
             if (!this.body) {
-                this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.bodyTexture, 14, 14, 14, 14);
+                this.body = new PIXI.mesh.NineSlicePlane(this.texturesHandler.bodyTexture, 14, 14, 14, 14);
             }
             this.body.width = this.width;
             this.body.height = this.height;
@@ -182,11 +186,11 @@ class RegularNode {
     initShadow() {
         if (this.config.shadow) {
             if (!this.shadow) {
-                this.shadow = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowTexture, 21, 21, 21, 21);
+                this.shadow = new PIXI.mesh.NineSlicePlane(this.texturesHandler.shadowTexture, 21, 21, 21, 21);
             }
 
             if (!this.shadowSelected) {
-                this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
+                this.shadowSelected = new PIXI.mesh.NineSlicePlane(this.texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
             }
 
 
@@ -210,7 +214,7 @@ class RegularNode {
     initGloss() {
         if (this.config.gloss) {
             if (!this.gloss) {
-                this.gloss = new PIXI.mesh.NineSlicePlane(texturesHandler.glossTexture, 7, 7, 7, 7);
+                this.gloss = new PIXI.mesh.NineSlicePlane(this.texturesHandler.glossTexture, 7, 7, 7, 7);
             }
             this.gloss.width = this.width;
             this.gloss.height = this.titleHeight;
@@ -222,7 +226,7 @@ class RegularNode {
     initTitleHighlight() {
         if (this.config.titleHighlight) {
             if (!this.titleHighlight) {
-                this.titleHighlight = new PIXI.mesh.NineSlicePlane(texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
+                this.titleHighlight = new PIXI.mesh.NineSlicePlane(this.texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
             }
             this.titleHighlight.width = this.width;
             this.titleHighlight.height = this.titleHeight;
@@ -234,7 +238,7 @@ class RegularNode {
     initColorSpill() {
         if (this.config.colorSpill) {
             if (!this.colorSpill) {
-                this.colorSpill = new PIXI.mesh.NineSlicePlane(texturesHandler.colorSpillTexture, 6, 6, 1, 1);
+                this.colorSpill = new PIXI.mesh.NineSlicePlane(this.texturesHandler.colorSpillTexture, 6, 6, 1, 1);
             }
             this.colorSpill.tint = this.colorTint;
             this.colorSpill.width = this.width;
@@ -427,7 +431,7 @@ class RegularNode {
 
         if (pin.name && (pin.name === "execute" || pin.name === "then" || pin.name === "Output_Get")) {
             drawText = false;
-        } else if (this instanceof BinaryOperatorNode && pin.name === "Return Value") {
+        } else if (this.constructor.name === 'BinaryOperatorNode' && pin.name === "Return Value") {
             drawText = false;
         }
 

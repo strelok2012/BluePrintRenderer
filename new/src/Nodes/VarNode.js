@@ -1,4 +1,7 @@
-class VarNode extends RegularNode {
+import {RegularNode} from './RegularNode.js';
+import {CONFIG} from '../config.js';
+
+export class VarNode extends RegularNode {
     constructor(node, x, y, texturesHandler) {
         super(node, x, y, texturesHandler);
         this.showPinText = true;

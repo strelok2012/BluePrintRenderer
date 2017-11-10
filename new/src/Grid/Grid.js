@@ -1,4 +1,6 @@
-class Grid {
+import {CONFIG} from '../config.js';
+
+export default class Grid {
     constructor(app, x, y) {
         var tmpContainer = new PIXI.Container;
         var background = new PIXI.Graphics();

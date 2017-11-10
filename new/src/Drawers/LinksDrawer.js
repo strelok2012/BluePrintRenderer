@@ -1,4 +1,7 @@
-class LinksDrawer {
+import {VAR_COLORS} from '../config.js';
+import Link from './Link.js';
+
+export default class LinksDrawer {
     constructor(container, nodes) {
         this.links = new PIXI.Container();
         this.nodes = nodes;

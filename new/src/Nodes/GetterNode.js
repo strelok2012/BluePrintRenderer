@@ -1,4 +1,7 @@
-class GetterNode extends VarNode {
+import {VarNode} from './VarNode.js';
+import {CONFIG, VAR_COLORS} from '../config.js';
+
+export default class GetterNode extends VarNode {
     constructor(node, x, y, texturesHanlder) {
         super(node, x, y, texturesHanlder);
         this.height = CONFIG.CELL_SIZE * 2;

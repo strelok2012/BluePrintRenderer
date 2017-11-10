@@ -1,4 +1,7 @@
-class MacroNode extends RegularNode {
+import {RegularNode} from './RegularNode.js';
+import {CONFIG, VAR_COLORS, defaultTextStyle, getIcon} from '../config.js';
+
+export default class MacroNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
         super(node, x, y, texturesHanlder);
         this.colorTint = VAR_COLORS["macro"];
