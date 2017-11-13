@@ -129,7 +129,7 @@ export default function prepare(document,file) {
             linksDrawer.links.x += event.data.originalEvent.movementX;
             linksDrawer.links.y += event.data.originalEvent.movementY;
 
-            // grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
+            grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
         } else if (draggingLeft) {
             if (dragLeftStartPoint && !app.bpConfig.draggingNode) {
                 selector.visible = true;
