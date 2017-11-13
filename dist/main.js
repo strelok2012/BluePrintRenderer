@@ -79,7 +79,7 @@ exports.componentToHex = componentToHex;
 exports.rgbToHex = rgbToHex;
 exports.intersectNodeSelectable = intersectNodeSelectable;
 
-var _resources = __webpack_require__(3);
+var _resources = __webpack_require__(1);
 
 var CONFIG = exports.CONFIG = {
     CELL_SIZE: 16
@@ -380,16 +380,266 @@ function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.ICONS = exports.TEXTURES = undefined;
+
+var _RegularNode_body = __webpack_require__(11);
+
+var _RegularNode_body2 = _interopRequireDefault(_RegularNode_body);
+
+var _RegularNode_title_gloss = __webpack_require__(12);
+
+var _RegularNode_title_gloss2 = _interopRequireDefault(_RegularNode_title_gloss);
+
+var _RegularNode_title_highlight = __webpack_require__(13);
+
+var _RegularNode_title_highlight2 = _interopRequireDefault(_RegularNode_title_highlight);
+
+var _RegularNode_shadow = __webpack_require__(14);
+
+var _RegularNode_shadow2 = _interopRequireDefault(_RegularNode_shadow);
+
+var _RegularNode_shadow_selected = __webpack_require__(15);
+
+var _RegularNode_shadow_selected2 = _interopRequireDefault(_RegularNode_shadow_selected);
+
+var _RegularNode_color_spill = __webpack_require__(16);
+
+var _RegularNode_color_spill2 = _interopRequireDefault(_RegularNode_color_spill);
+
+var _VarNode_body = __webpack_require__(17);
+
+var _VarNode_body2 = _interopRequireDefault(_VarNode_body);
+
+var _VarNode_gloss = __webpack_require__(18);
+
+var _VarNode_gloss2 = _interopRequireDefault(_VarNode_gloss);
+
+var _VarNode_shadow = __webpack_require__(19);
+
+var _VarNode_shadow2 = _interopRequireDefault(_VarNode_shadow);
+
+var _VarNode_shadow_selected = __webpack_require__(20);
+
+var _VarNode_shadow_selected2 = _interopRequireDefault(_VarNode_shadow_selected);
+
+var _VarNode_color_spill = __webpack_require__(21);
+
+var _VarNode_color_spill2 = _interopRequireDefault(_VarNode_color_spill);
+
+var _MathNode_body = __webpack_require__(22);
+
+var _MathNode_body2 = _interopRequireDefault(_MathNode_body);
+
+var _MathNode_shadow_selected = __webpack_require__(23);
+
+var _MathNode_shadow_selected2 = _interopRequireDefault(_MathNode_shadow_selected);
+
+var _Comment_Background = __webpack_require__(24);
+
+var _Comment_Background2 = _interopRequireDefault(_Comment_Background);
+
+var _Selector = __webpack_require__(25);
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _event = __webpack_require__(26);
+
+var _event2 = _interopRequireDefault(_event);
+
+var _event_custom = __webpack_require__(27);
+
+var _event_custom2 = _interopRequireDefault(_event_custom);
+
+var _icon_Blueprint_MouseEvent_16x = __webpack_require__(28);
+
+var _icon_Blueprint_MouseEvent_16x2 = _interopRequireDefault(_icon_Blueprint_MouseEvent_16x);
+
+var _icon_Blueprint_KeyboardEvent_16x = __webpack_require__(29);
+
+var _icon_Blueprint_KeyboardEvent_16x2 = _interopRequireDefault(_icon_Blueprint_KeyboardEvent_16x);
+
+var _DelegatePin_Connected = __webpack_require__(30);
+
+var _DelegatePin_Connected2 = _interopRequireDefault(_DelegatePin_Connected);
+
+var _DelegatePin_Disconnected = __webpack_require__(31);
+
+var _DelegatePin_Disconnected2 = _interopRequireDefault(_DelegatePin_Disconnected);
+
+var _ExecPin_Connected = __webpack_require__(32);
+
+var _ExecPin_Connected2 = _interopRequireDefault(_ExecPin_Connected);
+
+var _ExecPin_Disconnected = __webpack_require__(33);
+
+var _ExecPin_Disconnected2 = _interopRequireDefault(_ExecPin_Disconnected);
+
+var _Pin_connected_VarA = __webpack_require__(34);
+
+var _Pin_connected_VarA2 = _interopRequireDefault(_Pin_connected_VarA);
+
+var _Pin_disconnected_VarA = __webpack_require__(35);
+
+var _Pin_disconnected_VarA2 = _interopRequireDefault(_Pin_disconnected_VarA);
+
+var _icon_Blueprint_Branch_16x = __webpack_require__(36);
+
+var _icon_Blueprint_Branch_16x2 = _interopRequireDefault(_icon_Blueprint_Branch_16x);
+
+var _icon_Blueprint_MakeStruct_16x = __webpack_require__(37);
+
+var _icon_Blueprint_MakeStruct_16x2 = _interopRequireDefault(_icon_Blueprint_MakeStruct_16x);
+
+var _icon_Blueprint_BreakStruct_16x = __webpack_require__(38);
+
+var _icon_Blueprint_BreakStruct_16x2 = _interopRequireDefault(_icon_Blueprint_BreakStruct_16x);
+
+var _icon_Blueprint_Event_16x = __webpack_require__(39);
+
+var _icon_Blueprint_Event_16x2 = _interopRequireDefault(_icon_Blueprint_Event_16x);
+
+var _icon_Blueprint_ForEach_16x = __webpack_require__(40);
+
+var _icon_Blueprint_ForEach_16x2 = _interopRequireDefault(_icon_Blueprint_ForEach_16x);
+
+var _icon_Blueprint_Loop_16x = __webpack_require__(41);
+
+var _icon_Blueprint_Loop_16x2 = _interopRequireDefault(_icon_Blueprint_Loop_16x);
+
+var _icon_Blueprint_MakeArray_16x = __webpack_require__(42);
+
+var _icon_Blueprint_MakeArray_16x2 = _interopRequireDefault(_icon_Blueprint_MakeArray_16x);
+
+var _icon_Blueprint_FlipFlop_16x = __webpack_require__(43);
+
+var _icon_Blueprint_FlipFlop_16x2 = _interopRequireDefault(_icon_Blueprint_FlipFlop_16x);
+
+var _icon_Blueprint_Cast_16x = __webpack_require__(44);
+
+var _icon_Blueprint_Cast_16x2 = _interopRequireDefault(_icon_Blueprint_Cast_16x);
+
+var _icon_Blueprint_Timeline_16x = __webpack_require__(45);
+
+var _icon_Blueprint_Timeline_16x2 = _interopRequireDefault(_icon_Blueprint_Timeline_16x);
+
+var _icon_Blueprint_Node_16x = __webpack_require__(46);
+
+var _icon_Blueprint_Node_16x2 = _interopRequireDefault(_icon_Blueprint_Node_16x);
+
+var _MessageIcon = __webpack_require__(47);
+
+var _MessageIcon2 = _interopRequireDefault(_MessageIcon);
+
+var _LatentIcon = __webpack_require__(48);
+
+var _LatentIcon2 = _interopRequireDefault(_LatentIcon);
+
+var _icon_Blueprint_IsValid_16x = __webpack_require__(49);
+
+var _icon_Blueprint_IsValid_16x2 = _interopRequireDefault(_icon_Blueprint_IsValid_16x);
+
+var _icon_Blueprint_Select_16x = __webpack_require__(50);
+
+var _icon_Blueprint_Select_16x2 = _interopRequireDefault(_icon_Blueprint_Select_16x);
+
+var _icon_Blueprint_Sequence_16x = __webpack_require__(51);
+
+var _icon_Blueprint_Sequence_16x2 = _interopRequireDefault(_icon_Blueprint_Sequence_16x);
+
+var _icon_Blueprint_Macro_16x = __webpack_require__(52);
+
+var _icon_Blueprint_Macro_16x2 = _interopRequireDefault(_icon_Blueprint_Macro_16x);
+
+var _icon_Blueprint_Switch_16x = __webpack_require__(53);
+
+var _icon_Blueprint_Switch_16x2 = _interopRequireDefault(_icon_Blueprint_Switch_16x);
+
+var _LV_FullScreen = __webpack_require__(54);
+
+var _LV_FullScreen2 = _interopRequireDefault(_LV_FullScreen);
+
+var _LV_Save = __webpack_require__(55);
+
+var _LV_Save2 = _interopRequireDefault(_LV_Save);
+
+var _function = __webpack_require__(56);
+
+var _function2 = _interopRequireDefault(_function);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var TEXTURES = exports.TEXTURES = {
+    RegularNodeBody: _RegularNode_body2.default,
+    RegularNodeTitleGloss: _RegularNode_title_gloss2.default,
+    RegularNodeTitleHightlight: _RegularNode_title_highlight2.default,
+    RegularNodeShadow: _RegularNode_shadow2.default,
+    RegularNodeShadowSelected: _RegularNode_shadow_selected2.default,
+    RegularNodeColorSpill: _RegularNode_color_spill2.default,
+    VarNodeBody: _VarNode_body2.default,
+    VarNodeGloss: _VarNode_gloss2.default,
+    VarNodeShadow: _VarNode_shadow2.default,
+    VarNodeShadowSelected: _VarNode_shadow_selected2.default,
+    VarNodeColorSpill: _VarNode_color_spill2.default,
+    MathNodeBody: _MathNode_body2.default,
+    MathNodeShadowSelected: _MathNode_shadow_selected2.default,
+    CommentNodeBackground: _Comment_Background2.default,
+    Selector: _Selector2.default,
+    DelegatePinConnected: _DelegatePin_Connected2.default,
+    DelegatePinDisconnected: _DelegatePin_Disconnected2.default,
+    ExecPinConnected: _Pin_connected_VarA2.default,
+    ExecPinDisconnected: _Pin_disconnected_VarA2.default,
+    PinConnected: _Pin_connected_VarA2.default,
+    PinDisconnected: _Pin_disconnected_VarA2.default
+};
+
+var ICONS = exports.ICONS = {
+    EventNodeIcon: _event2.default,
+    EventNodeIconCustom: _event_custom2.default,
+    MouseEventIcon: _icon_Blueprint_MouseEvent_16x2.default,
+    KeyboardEventIcon: _icon_Blueprint_KeyboardEvent_16x2.default,
+    BranchIcon: _icon_Blueprint_Branch_16x2.default,
+    MakeStructIcon: _icon_Blueprint_MakeStruct_16x2.default,
+    BreakStructIcon: _icon_Blueprint_BreakStruct_16x2.default,
+    EventIcon: _icon_Blueprint_Event_16x2.default,
+    ForEachIcon: _icon_Blueprint_ForEach_16x2.default,
+    ForLoopIcon: _icon_Blueprint_Loop_16x2.default,
+    MakeArrayIcon: _icon_Blueprint_MakeArray_16x2.default,
+    FlipFlopIcon: _icon_Blueprint_FlipFlop_16x2.default,
+    DynamicCastIcon: _icon_Blueprint_Cast_16x2.default,
+    TimelineIcon: _icon_Blueprint_Timeline_16x2.default,
+    NodeIcon: _icon_Blueprint_Node_16x2.default,
+    MessageIcon: _MessageIcon2.default,
+    LatentIcon: _LatentIcon2.default,
+    ValidIcon: _icon_Blueprint_IsValid_16x2.default,
+    SelectIcon: _icon_Blueprint_Select_16x2.default,
+    SequenceIcon: _icon_Blueprint_Sequence_16x2.default,
+    MacroIcon: _icon_Blueprint_Macro_16x2.default,
+    SwitchOnIcon: _icon_Blueprint_Switch_16x2.default,
+    FullscreenIcon: _LV_FullScreen2.default,
+    SaveIcon: _LV_Save2.default,
+    FunctionIcon: _function2.default
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _config = __webpack_require__(0);
 
-var _resources = __webpack_require__(3);
+var _resources = __webpack_require__(1);
 
 var _main = __webpack_require__(4);
 
-var _Textures = __webpack_require__(2);
+var _Textures = __webpack_require__(3);
 
 var _Textures2 = _interopRequireDefault(_Textures);
 
@@ -913,7 +1163,7 @@ var RegularNode = function () {
 exports.default = RegularNode;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -923,7 +1173,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _resources = __webpack_require__(3);
+var _resources = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -964,256 +1214,6 @@ Object.freeze(instance);
 exports.default = instance;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.ICONS = exports.TEXTURES = undefined;
-
-var _RegularNode_body = __webpack_require__(11);
-
-var _RegularNode_body2 = _interopRequireDefault(_RegularNode_body);
-
-var _RegularNode_title_gloss = __webpack_require__(12);
-
-var _RegularNode_title_gloss2 = _interopRequireDefault(_RegularNode_title_gloss);
-
-var _RegularNode_title_highlight = __webpack_require__(13);
-
-var _RegularNode_title_highlight2 = _interopRequireDefault(_RegularNode_title_highlight);
-
-var _RegularNode_shadow = __webpack_require__(14);
-
-var _RegularNode_shadow2 = _interopRequireDefault(_RegularNode_shadow);
-
-var _RegularNode_shadow_selected = __webpack_require__(15);
-
-var _RegularNode_shadow_selected2 = _interopRequireDefault(_RegularNode_shadow_selected);
-
-var _RegularNode_color_spill = __webpack_require__(16);
-
-var _RegularNode_color_spill2 = _interopRequireDefault(_RegularNode_color_spill);
-
-var _VarNode_body = __webpack_require__(17);
-
-var _VarNode_body2 = _interopRequireDefault(_VarNode_body);
-
-var _VarNode_gloss = __webpack_require__(18);
-
-var _VarNode_gloss2 = _interopRequireDefault(_VarNode_gloss);
-
-var _VarNode_shadow = __webpack_require__(19);
-
-var _VarNode_shadow2 = _interopRequireDefault(_VarNode_shadow);
-
-var _VarNode_shadow_selected = __webpack_require__(20);
-
-var _VarNode_shadow_selected2 = _interopRequireDefault(_VarNode_shadow_selected);
-
-var _VarNode_color_spill = __webpack_require__(21);
-
-var _VarNode_color_spill2 = _interopRequireDefault(_VarNode_color_spill);
-
-var _MathNode_body = __webpack_require__(22);
-
-var _MathNode_body2 = _interopRequireDefault(_MathNode_body);
-
-var _MathNode_shadow_selected = __webpack_require__(23);
-
-var _MathNode_shadow_selected2 = _interopRequireDefault(_MathNode_shadow_selected);
-
-var _Comment_Background = __webpack_require__(24);
-
-var _Comment_Background2 = _interopRequireDefault(_Comment_Background);
-
-var _Selector = __webpack_require__(25);
-
-var _Selector2 = _interopRequireDefault(_Selector);
-
-var _event = __webpack_require__(26);
-
-var _event2 = _interopRequireDefault(_event);
-
-var _event_custom = __webpack_require__(27);
-
-var _event_custom2 = _interopRequireDefault(_event_custom);
-
-var _icon_Blueprint_MouseEvent_16x = __webpack_require__(28);
-
-var _icon_Blueprint_MouseEvent_16x2 = _interopRequireDefault(_icon_Blueprint_MouseEvent_16x);
-
-var _icon_Blueprint_KeyboardEvent_16x = __webpack_require__(29);
-
-var _icon_Blueprint_KeyboardEvent_16x2 = _interopRequireDefault(_icon_Blueprint_KeyboardEvent_16x);
-
-var _DelegatePin_Connected = __webpack_require__(30);
-
-var _DelegatePin_Connected2 = _interopRequireDefault(_DelegatePin_Connected);
-
-var _DelegatePin_Disconnected = __webpack_require__(31);
-
-var _DelegatePin_Disconnected2 = _interopRequireDefault(_DelegatePin_Disconnected);
-
-var _ExecPin_Connected = __webpack_require__(32);
-
-var _ExecPin_Connected2 = _interopRequireDefault(_ExecPin_Connected);
-
-var _ExecPin_Disconnected = __webpack_require__(33);
-
-var _ExecPin_Disconnected2 = _interopRequireDefault(_ExecPin_Disconnected);
-
-var _Pin_connected_VarA = __webpack_require__(34);
-
-var _Pin_connected_VarA2 = _interopRequireDefault(_Pin_connected_VarA);
-
-var _Pin_disconnected_VarA = __webpack_require__(35);
-
-var _Pin_disconnected_VarA2 = _interopRequireDefault(_Pin_disconnected_VarA);
-
-var _icon_Blueprint_Branch_16x = __webpack_require__(36);
-
-var _icon_Blueprint_Branch_16x2 = _interopRequireDefault(_icon_Blueprint_Branch_16x);
-
-var _icon_Blueprint_MakeStruct_16x = __webpack_require__(37);
-
-var _icon_Blueprint_MakeStruct_16x2 = _interopRequireDefault(_icon_Blueprint_MakeStruct_16x);
-
-var _icon_Blueprint_BreakStruct_16x = __webpack_require__(38);
-
-var _icon_Blueprint_BreakStruct_16x2 = _interopRequireDefault(_icon_Blueprint_BreakStruct_16x);
-
-var _icon_Blueprint_Event_16x = __webpack_require__(39);
-
-var _icon_Blueprint_Event_16x2 = _interopRequireDefault(_icon_Blueprint_Event_16x);
-
-var _icon_Blueprint_ForEach_16x = __webpack_require__(40);
-
-var _icon_Blueprint_ForEach_16x2 = _interopRequireDefault(_icon_Blueprint_ForEach_16x);
-
-var _icon_Blueprint_Loop_16x = __webpack_require__(41);
-
-var _icon_Blueprint_Loop_16x2 = _interopRequireDefault(_icon_Blueprint_Loop_16x);
-
-var _icon_Blueprint_MakeArray_16x = __webpack_require__(42);
-
-var _icon_Blueprint_MakeArray_16x2 = _interopRequireDefault(_icon_Blueprint_MakeArray_16x);
-
-var _icon_Blueprint_FlipFlop_16x = __webpack_require__(43);
-
-var _icon_Blueprint_FlipFlop_16x2 = _interopRequireDefault(_icon_Blueprint_FlipFlop_16x);
-
-var _icon_Blueprint_Cast_16x = __webpack_require__(44);
-
-var _icon_Blueprint_Cast_16x2 = _interopRequireDefault(_icon_Blueprint_Cast_16x);
-
-var _icon_Blueprint_Timeline_16x = __webpack_require__(45);
-
-var _icon_Blueprint_Timeline_16x2 = _interopRequireDefault(_icon_Blueprint_Timeline_16x);
-
-var _icon_Blueprint_Node_16x = __webpack_require__(46);
-
-var _icon_Blueprint_Node_16x2 = _interopRequireDefault(_icon_Blueprint_Node_16x);
-
-var _MessageIcon = __webpack_require__(47);
-
-var _MessageIcon2 = _interopRequireDefault(_MessageIcon);
-
-var _LatentIcon = __webpack_require__(48);
-
-var _LatentIcon2 = _interopRequireDefault(_LatentIcon);
-
-var _icon_Blueprint_IsValid_16x = __webpack_require__(49);
-
-var _icon_Blueprint_IsValid_16x2 = _interopRequireDefault(_icon_Blueprint_IsValid_16x);
-
-var _icon_Blueprint_Select_16x = __webpack_require__(50);
-
-var _icon_Blueprint_Select_16x2 = _interopRequireDefault(_icon_Blueprint_Select_16x);
-
-var _icon_Blueprint_Sequence_16x = __webpack_require__(51);
-
-var _icon_Blueprint_Sequence_16x2 = _interopRequireDefault(_icon_Blueprint_Sequence_16x);
-
-var _icon_Blueprint_Macro_16x = __webpack_require__(52);
-
-var _icon_Blueprint_Macro_16x2 = _interopRequireDefault(_icon_Blueprint_Macro_16x);
-
-var _icon_Blueprint_Switch_16x = __webpack_require__(53);
-
-var _icon_Blueprint_Switch_16x2 = _interopRequireDefault(_icon_Blueprint_Switch_16x);
-
-var _LV_FullScreen = __webpack_require__(54);
-
-var _LV_FullScreen2 = _interopRequireDefault(_LV_FullScreen);
-
-var _LV_Save = __webpack_require__(55);
-
-var _LV_Save2 = _interopRequireDefault(_LV_Save);
-
-var _function = __webpack_require__(69);
-
-var _function2 = _interopRequireDefault(_function);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var TEXTURES = exports.TEXTURES = {
-    RegularNodeBody: _RegularNode_body2.default,
-    RegularNodeTitleGloss: _RegularNode_title_gloss2.default,
-    RegularNodeTitleHightlight: _RegularNode_title_highlight2.default,
-    RegularNodeShadow: _RegularNode_shadow2.default,
-    RegularNodeShadowSelected: _RegularNode_shadow_selected2.default,
-    RegularNodeColorSpill: _RegularNode_color_spill2.default,
-    VarNodeBody: _VarNode_body2.default,
-    VarNodeGloss: _VarNode_gloss2.default,
-    VarNodeShadow: _VarNode_shadow2.default,
-    VarNodeShadowSelected: _VarNode_shadow_selected2.default,
-    VarNodeColorSpill: _VarNode_color_spill2.default,
-    MathNodeBody: _MathNode_body2.default,
-    MathNodeShadowSelected: _MathNode_shadow_selected2.default,
-    CommentNodeBackground: _Comment_Background2.default,
-    Selector: _Selector2.default,
-    DelegatePinConnected: _DelegatePin_Connected2.default,
-    DelegatePinDisconnected: _DelegatePin_Disconnected2.default,
-    ExecPinConnected: _Pin_connected_VarA2.default,
-    ExecPinDisconnected: _Pin_disconnected_VarA2.default,
-    PinConnected: _Pin_connected_VarA2.default,
-    PinDisconnected: _Pin_disconnected_VarA2.default
-};
-
-var ICONS = exports.ICONS = {
-    EventNodeIcon: _event2.default,
-    EventNodeIconCustom: _event_custom2.default,
-    MouseEventIcon: _icon_Blueprint_MouseEvent_16x2.default,
-    KeyboardEventIcon: _icon_Blueprint_KeyboardEvent_16x2.default,
-    BranchIcon: _icon_Blueprint_Branch_16x2.default,
-    MakeStructIcon: _icon_Blueprint_MakeStruct_16x2.default,
-    BreakStructIcon: _icon_Blueprint_BreakStruct_16x2.default,
-    EventIcon: _icon_Blueprint_Event_16x2.default,
-    ForEachIcon: _icon_Blueprint_ForEach_16x2.default,
-    ForLoopIcon: _icon_Blueprint_Loop_16x2.default,
-    MakeArrayIcon: _icon_Blueprint_MakeArray_16x2.default,
-    FlipFlopIcon: _icon_Blueprint_FlipFlop_16x2.default,
-    DynamicCastIcon: _icon_Blueprint_Cast_16x2.default,
-    TimelineIcon: _icon_Blueprint_Timeline_16x2.default,
-    NodeIcon: _icon_Blueprint_Node_16x2.default,
-    MessageIcon: _MessageIcon2.default,
-    LatentIcon: _LatentIcon2.default,
-    ValidIcon: _icon_Blueprint_IsValid_16x2.default,
-    SelectIcon: _icon_Blueprint_Select_16x2.default,
-    SequenceIcon: _icon_Blueprint_Sequence_16x2.default,
-    MacroIcon: _icon_Blueprint_Macro_16x2.default,
-    SwitchOnIcon: _icon_Blueprint_Switch_16x2.default,
-    FullscreenIcon: _LV_FullScreen2.default,
-    SaveIcon: _LV_Save2.default,
-    FunctionIcon: _function2.default
-};
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1230,19 +1230,19 @@ var _Grid = __webpack_require__(10);
 
 var _Grid2 = _interopRequireDefault(_Grid);
 
-var _Textures = __webpack_require__(2);
+var _Textures = __webpack_require__(3);
 
 var _Textures2 = _interopRequireDefault(_Textures);
 
-var _BlueprintRenderer = __webpack_require__(56);
+var _BlueprintRenderer = __webpack_require__(57);
 
 var _BlueprintRenderer2 = _interopRequireDefault(_BlueprintRenderer);
 
-var _BPToNodes = __webpack_require__(58);
+var _BPToNodes = __webpack_require__(59);
 
 var _BPToNodes2 = _interopRequireDefault(_BPToNodes);
 
-var _LinksDrawer = __webpack_require__(67);
+var _LinksDrawer = __webpack_require__(68);
 
 var _LinksDrawer2 = _interopRequireDefault(_LinksDrawer);
 
@@ -1411,13 +1411,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _RegularNode2 = __webpack_require__(1);
+var _RegularNode2 = __webpack_require__(2);
 
 var _RegularNode3 = _interopRequireDefault(_RegularNode2);
 
 var _config = __webpack_require__(0);
 
-var _Textures = __webpack_require__(2);
+var _Textures = __webpack_require__(3);
 
 var _Textures2 = _interopRequireDefault(_Textures);
 
@@ -2396,6 +2396,12 @@ module.exports = "data:image/png;base64,UklGRiwDAABXRUJQVlA4WAoAAAAQAAAAJwAAJwAA
 
 /***/ }),
 /* 56 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRhQBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSGsAAAABt6CwbSM1dXzPDBERIM3q3nO1Wr8ezp4tBAbDSJKU7LvgcLf5BwtLChH9nwCo87ntViZ3nKeQnAW1CIMGNdWTV1ba5bRNQXA2yJUetYUP9IP7j4dTi86iVVr4ah1YuOL7sZTdonC5PWfCOwBWUDggggAAALACAJ0BKhAAEAACADQlAE6A0i/+08gEF1xMHNBhAAD+2O3+ADzKgEhQ6YY6Qy9xqbF/rRf1o0O+MRZvcAm1T+mKHt+XdrysWCVClzValuNJx4m1zF2uH+f/Ax9ca+t4r/scR8dFgXHI2y8BOM0EBE+fnb3AHIPpPmSz5SqEtQEkAAA="
+
+/***/ }),
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2407,7 +2413,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _BPParser = __webpack_require__(57);
+var _BPParser = __webpack_require__(58);
 
 var _BPParser2 = _interopRequireDefault(_BPParser);
 
@@ -2453,7 +2459,7 @@ var BlueprintRenderer = function () {
 exports.default = BlueprintRenderer;
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2759,7 +2765,7 @@ var BPParser = function () {
 exports.default = BPParser;
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2770,35 +2776,35 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = BPToNodes;
 
-var _vector = __webpack_require__(59);
+var _vector = __webpack_require__(60);
 
 var _vector2 = _interopRequireDefault(_vector);
 
-var _CommentNode = __webpack_require__(60);
+var _CommentNode = __webpack_require__(61);
 
 var _CommentNode2 = _interopRequireDefault(_CommentNode);
 
-var _EventNode = __webpack_require__(61);
+var _EventNode = __webpack_require__(62);
 
 var _EventNode2 = _interopRequireDefault(_EventNode);
 
-var _FunctionNode = __webpack_require__(62);
+var _FunctionNode = __webpack_require__(63);
 
 var _FunctionNode2 = _interopRequireDefault(_FunctionNode);
 
-var _MacroNode = __webpack_require__(63);
+var _MacroNode = __webpack_require__(64);
 
 var _MacroNode2 = _interopRequireDefault(_MacroNode);
 
-var _GetterNode = __webpack_require__(64);
+var _GetterNode = __webpack_require__(65);
 
 var _GetterNode2 = _interopRequireDefault(_GetterNode);
 
-var _SetterNode = __webpack_require__(65);
+var _SetterNode = __webpack_require__(66);
 
 var _SetterNode2 = _interopRequireDefault(_SetterNode);
 
-var _BinaryOperatorNode = __webpack_require__(66);
+var _BinaryOperatorNode = __webpack_require__(67);
 
 var _BinaryOperatorNode2 = _interopRequireDefault(_BinaryOperatorNode);
 
@@ -3150,7 +3156,7 @@ function BPToNodes(objects) {
 }
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3283,7 +3289,7 @@ Vector.fromArray = function (a) {
 exports.default = Vector;
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3295,11 +3301,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _RegularNode = __webpack_require__(1);
+var _RegularNode = __webpack_require__(2);
 
 var _RegularNode2 = _interopRequireDefault(_RegularNode);
 
-var _Textures = __webpack_require__(2);
+var _Textures = __webpack_require__(3);
 
 var _Textures2 = _interopRequireDefault(_Textures);
 
@@ -3525,7 +3531,7 @@ var CommentNode = function () {
 exports.default = CommentNode;
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3539,13 +3545,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _RegularNode2 = __webpack_require__(1);
+var _RegularNode2 = __webpack_require__(2);
 
 var _RegularNode3 = _interopRequireDefault(_RegularNode2);
 
 var _config = __webpack_require__(0);
 
-var _resources = __webpack_require__(3);
+var _resources = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3661,7 +3667,7 @@ var EventNode = function (_RegularNode) {
 exports.default = EventNode;
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3675,13 +3681,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _RegularNode2 = __webpack_require__(1);
+var _RegularNode2 = __webpack_require__(2);
 
 var _RegularNode3 = _interopRequireDefault(_RegularNode2);
 
 var _config = __webpack_require__(0);
 
-var _resources = __webpack_require__(3);
+var _resources = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3790,7 +3796,7 @@ var FunctionNode = function (_RegularNode) {
 exports.default = FunctionNode;
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3804,13 +3810,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _RegularNode2 = __webpack_require__(1);
+var _RegularNode2 = __webpack_require__(2);
 
 var _RegularNode3 = _interopRequireDefault(_RegularNode2);
 
 var _config = __webpack_require__(0);
 
-var _resources = __webpack_require__(3);
+var _resources = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3899,7 +3905,7 @@ var MacroNode = function (_RegularNode) {
 exports.default = MacroNode;
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3956,7 +3962,7 @@ var GetterNode = function (_VarNode) {
 exports.default = GetterNode;
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4016,7 +4022,7 @@ var SetterNode = function (_VarNode) {
 exports.default = SetterNode;
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4030,13 +4036,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _RegularNode2 = __webpack_require__(1);
+var _RegularNode2 = __webpack_require__(2);
 
 var _RegularNode3 = _interopRequireDefault(_RegularNode2);
 
 var _config = __webpack_require__(0);
 
-var _Textures = __webpack_require__(2);
+var _Textures = __webpack_require__(3);
 
 var _Textures2 = _interopRequireDefault(_Textures);
 
@@ -4146,7 +4152,7 @@ var BinaryOperatorNode = function (_RegularNode) {
 exports.default = BinaryOperatorNode;
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4160,7 +4166,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _config = __webpack_require__(0);
 
-var _Link = __webpack_require__(68);
+var _Link = __webpack_require__(69);
 
 var _Link2 = _interopRequireDefault(_Link);
 
@@ -4237,7 +4243,7 @@ var LinksDrawer = function () {
 exports.default = LinksDrawer;
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4302,12 +4308,6 @@ var Link = function () {
 }();
 
 exports.default = Link;
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,UklGRhQBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSGsAAAABt6CwbSM1dXzPDBERIM3q3nO1Wr8ezp4tBAbDSJKU7LvgcLf5BwtLChH9nwCo87ntViZ3nKeQnAW1CIMGNdWTV1ba5bRNQXA2yJUetYUP9IP7j4dTi86iVVr4ah1YuOL7sZTdonC5PWfCOwBWUDggggAAALACAJ0BKhAAEAACADQlAE6A0i/+08gEF1xMHNBhAAD+2O3+ADzKgEhQ6YY6Qy9xqbF/rRf1o0O+MRZvcAm1T+mKHt+XdrysWCVClzValuNJx4m1zF2uH+f/Ax9ca+t4r/scR8dFgXHI2y8BOM0EBE+fnb3AHIPpPmSz5SqEtQEkAAA="
 
 /***/ })
 /******/ ]);
