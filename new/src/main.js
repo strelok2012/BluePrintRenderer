@@ -7,7 +7,7 @@ import LinksDrawer from './Drawers/LinksDrawer.js';
 export var app;
 export var allNodes = [];
 
-export default function prepare(document) {
+export default function prepare(document,file) {
     app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, {antialias: true});
     document.body.appendChild(app.view);
 
@@ -56,7 +56,7 @@ export default function prepare(document) {
     app.bpConfig = {draggingNode: false};
 
     var render = new BlueprintRenderer();
-    render.renderFromFile("/tests/file_big.txt", function (nodes) {
+    render.renderFromFile(file, function (nodes) {
         var nodesObjects = BPToNodes(nodes);
         for (var i = 0, l = nodesObjects.length; i < l; i++) {
             nodesObjects[i].draw(mainContainer);

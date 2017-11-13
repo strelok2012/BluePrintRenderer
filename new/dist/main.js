@@ -1246,7 +1246,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var app = exports.app = undefined;
 var allNodes = exports.allNodes = [];
 
-function prepare(document) {
+function prepare(document, file) {
     exports.app = app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, { antialias: true });
     document.body.appendChild(app.view);
 
@@ -1287,7 +1287,7 @@ function prepare(document) {
     app.bpConfig = { draggingNode: false };
 
     var render = new _BlueprintRenderer2.default();
-    render.renderFromFile("/tests/file_big.txt", function (nodes) {
+    render.renderFromFile(file, function (nodes) {
         var nodesObjects = (0, _BPToNodes2.default)(nodes);
         for (var i = 0, l = nodesObjects.length; i < l; i++) {
             nodesObjects[i].draw(mainContainer);
@@ -1492,9 +1492,7 @@ var _main2 = _interopRequireDefault(_main);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-document.addEventListener('DOMContentLoaded', function () {
-    (0, _main2.default)(document);
-});
+window.prepare = _main2.default;
 
 /***/ }),
 /* 7 */
