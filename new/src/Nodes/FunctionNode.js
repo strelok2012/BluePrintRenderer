@@ -29,13 +29,13 @@ export default class FunctionNode extends RegularNode {
             this.iconTint = VAR_COLORS["pureFunction"];
         }
 
-        this.icon = 'assets/icons/function.png';
+        this.icon = ICONS.FunctionIcon;
 
         if (this.functionName.indexOf("Make") !== -1 && this.functionName.indexOf("Array") === -1) {
             this.icon = ICONS.MakeStructIcon;
             this.iconTint = null;
         } else if (this.functionName.indexOf("Break") !== -1) {
-            this.icon =ICONS.BreakStructIcon;
+            this.icon = ICONS.BreakStructIcon;
             this.iconTint = null;
         } else if (this.functionName.indexOf("Make Array") !== -1) {
             this.icon = ICONS.MakeArrayIcon;

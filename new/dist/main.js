@@ -1155,6 +1155,10 @@ var _LV_Save = __webpack_require__(55);
 
 var _LV_Save2 = _interopRequireDefault(_LV_Save);
 
+var _function = __webpack_require__(69);
+
+var _function2 = _interopRequireDefault(_function);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var TEXTURES = exports.TEXTURES = {
@@ -1205,7 +1209,8 @@ var ICONS = exports.ICONS = {
     MacroIcon: _icon_Blueprint_Macro_16x2.default,
     SwitchOnIcon: _icon_Blueprint_Switch_16x2.default,
     FullscreenIcon: _LV_FullScreen2.default,
-    SaveIcon: _LV_Save2.default
+    SaveIcon: _LV_Save2.default,
+    FunctionIcon: _function2.default
 };
 
 /***/ }),
@@ -3717,7 +3722,7 @@ var FunctionNode = function (_RegularNode) {
             _this.iconTint = _config.VAR_COLORS["pureFunction"];
         }
 
-        _this.icon = 'assets/icons/function.png';
+        _this.icon = _resources.ICONS.FunctionIcon;
 
         if (_this.functionName.indexOf("Make") !== -1 && _this.functionName.indexOf("Array") === -1) {
             _this.icon = _resources.ICONS.MakeStructIcon;
@@ -4297,6 +4302,12 @@ var Link = function () {
 }();
 
 exports.default = Link;
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRhQBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSGsAAAABt6CwbSM1dXzPDBERIM3q3nO1Wr8ezp4tBAbDSJKU7LvgcLf5BwtLChH9nwCo87ntViZ3nKeQnAW1CIMGNdWTV1ba5bRNQXA2yJUetYUP9IP7j4dTi86iVVr4ah1YuOL7sZTdonC5PWfCOwBWUDggggAAALACAJ0BKhAAEAACADQlAE6A0i/+08gEF1xMHNBhAAD+2O3+ADzKgEhQ6YY6Qy9xqbF/rRf1o0O+MRZvcAm1T+mKHt+XdrysWCVClzValuNJx4m1zF2uH+f/Ax9ca+t4r/scR8dFgXHI2y8BOM0EBE+fnb3AHIPpPmSz5SqEtQEkAAA="
 
 /***/ })
 /******/ ]);

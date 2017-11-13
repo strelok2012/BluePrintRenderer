@@ -54,6 +54,7 @@ import MacroIcon from "./Assets/nodes_icons/icon_Blueprint_Macro_16x.png";
 import SwitchOnIcon from "./Assets/nodes_icons/icon_Blueprint_Switch_16x.png";
 import FullscreenIcon from "./Assets/nodes_icons/LV_FullScreen.png";
 import SaveIcon from "./Assets/nodes_icons/LV_Save.png";
+import FunctionIcon from "./Assets/icons/function.png";
 
 
 
@@ -105,5 +106,6 @@ export const ICONS = {
     MacroIcon: MacroIcon,
     SwitchOnIcon: SwitchOnIcon,
     FullscreenIcon: FullscreenIcon,
-    SaveIcon: SaveIcon
+    SaveIcon: SaveIcon,
+    FunctionIcon: FunctionIcon
 }
