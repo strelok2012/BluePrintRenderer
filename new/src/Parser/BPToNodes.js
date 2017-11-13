@@ -13,7 +13,7 @@ import BinaryOperatorNode from '../Nodes/BinaryOperatorNode.js';
 import {VAR_TYPES, FUNCTIONS_MAPPING} from '../config.js';
 
 
-export default function BPToNodes(objects, texturesHandler) {
+export default function BPToNodes(objects) {
     var origin = origin || new Vector(0, 0);
     var minX, minY;
     var newNodes = [];
@@ -77,7 +77,7 @@ export default function BPToNodes(objects, texturesHandler) {
             };
             if (curObj.commentColor)
                 newNode.commentColor = curObj.commentColor;
-            nN = new CommentNode(newNode, x, y, texturesHandler);
+            nN = new CommentNode(newNode, x, y);
             newNodes.push(nN);
         }
 
@@ -221,9 +221,9 @@ export default function BPToNodes(objects, texturesHandler) {
             if (newNode.name.indexOf("Conv_") !== -1 && newNode.name.indexOf("Int To Text") === -1 && newNode.name.indexOf("Float To Text") === -1) {
                 //nN = new ConverterNode(newNode, x, y);
             } else if (newNode.name.indexOf("_") !== -1 && newNode.name.indexOf("Get") === -1 && newNode.name.indexOf("Conv") === -1 && newNode.name.indexOf("Set") === -1 && newNode.name.indexOf("Add") === -1 && newNode.name.indexOf("K2") === -1 && newNode.name.indexOf("Montage") === -1 && newNode.name.indexOf("Greater_Vector") === -1 && newNode.name.indexOf("Less_Vector") === -1) {
-                nN = new BinaryOperatorNode(newNode, x, y, texturesHandler);
+                nN = new BinaryOperatorNode(newNode, x, y);
             } else {
-                nN = new FunctionNode(newNode, x, y, texturesHandler);
+                nN = new FunctionNode(newNode, x, y);
             }
 
         } else if (curObj.class.indexOf("K2Node_DynamicCast") !== -1) {
@@ -281,7 +281,7 @@ export default function BPToNodes(objects, texturesHandler) {
                 outputs: outputs
             };
 
-            nN = new MacroNode(newNode, x, y, texturesHandler);
+            nN = new MacroNode(newNode, x, y);
 
         } else if (curObj.class.indexOf("K2Node_Event") !== -1 || curObj.class.indexOf("K2Node_CustomEvent") !== -1 || curObj.class.indexOf("K2Node_ComponentBoundEvent") !== -1 || curObj.class.indexOf("K2Node_InputTouch") !== -1 || curObj.class.indexOf("K2Node_InputAction") !== -1 || curObj.class.indexOf("K2Node_InputAxisEvent") !== -1 || curObj.class.indexOf("K2Node_InputKey") !== -1) {
             if (curObj.class && curObj.class.indexOf("K2Node") !== -1)
@@ -299,7 +299,7 @@ export default function BPToNodes(objects, texturesHandler) {
                 newNode.inputKey = curObj.inputKey;
             }
 
-            nN = new EventNode(newNode, x, y, texturesHandler);
+            nN = new EventNode(newNode, x, y);
 
         } else if (curObj.class.indexOf("K2Node_VariableGet") !== -1 || curObj.class.indexOf("K2Node_Self") !== -1) {
             newNode = {
@@ -307,21 +307,21 @@ export default function BPToNodes(objects, texturesHandler) {
             };
 
 
-            nN = new GetterNode(newNode, x, y, texturesHandler);
+            nN = new GetterNode(newNode, x, y);
 
         } else if (curObj.class.indexOf("Set") !== -1) {
             newNode = {
                 outputs: outputs,
                 inputs: inputs
             };
-            nN = new SetterNode(newNode, x, y, texturesHandler);
+            nN = new SetterNode(newNode, x, y);
         } else if (curObj.class.indexOf("Operator") !== -1 || curObj.class.indexOf("K2Node_EnumEquality") !== -1) {
             newNode = {
                 name: curObj.nodeName && curObj.nodeName || curObj.class,
                 inputs: inputs,
                 outputs: outputs
             };
-            nN = new BinaryOperatorNode(newNode, x, y, texturesHandler);
+            nN = new BinaryOperatorNode(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Knot") !== -1) {
             //console.log('KNIT');
             newNode = {

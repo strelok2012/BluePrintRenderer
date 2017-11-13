@@ -1,4 +1,4 @@
-import {VarNode} from './VarNode.js';
+import VarNode from './VarNode.js';
 import {CONFIG, VAR_COLORS, defaultTextStyle} from '../config.js';
 
 export default class SetterNode extends VarNode {

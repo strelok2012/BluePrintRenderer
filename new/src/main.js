@@ -9,12 +9,9 @@ export var allNodes = [];
 
 export default function prepare(document) {
     app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, {antialias: true});
-    app.stage.displayList = new PIXI.DisplayList();
     document.body.appendChild(app.view);
 
     var grid = new Grid(app, 0, 0);
-
-    var texturesHandler = new TexturesHandler();
 
     var dragging = false;
 
@@ -49,7 +46,7 @@ export default function prepare(document) {
 
     app.stage.addChild(mainContainer);
 
-    var selector = new PIXI.mesh.NineSlicePlane(texturesHandler.selector, 2, 2, 2, 2);
+    var selector = new PIXI.mesh.NineSlicePlane(TexturesHandler.selector, 2, 2, 2, 2);
 
     selector.width = 100;
     selector.height = 100;
@@ -60,7 +57,7 @@ export default function prepare(document) {
 
     var render = new BlueprintRenderer();
     render.renderFromFile("/tests/file_big.txt", function (nodes) {
-        var nodesObjects = BPToNodes(nodes, texturesHandler);
+        var nodesObjects = BPToNodes(nodes);
         for (var i = 0, l = nodesObjects.length; i < l; i++) {
             nodesObjects[i].draw(mainContainer);
             allNodes.push(nodesObjects[i]);

@@ -1,5 +1,6 @@
-import {RegularNode} from './RegularNode.js';
+import RegularNode from './RegularNode.js';
 import {CONFIG, VAR_COLORS, defaultTextStyle, customEventTextStyle} from '../config.js';
+import {ICONS, TEXTURES} from '../resources.js';
 
 export default class EventNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
@@ -8,27 +9,27 @@ export default class EventNode extends RegularNode {
         this.colorTint = VAR_COLORS["event"];
         this.functionName = node.name;
 
-        this.icon = 'assets/icons/event.png';
+        this.icon = ICONS.EventNodeIcon;
 
         if (this.node.isCustom === true) {
             this.custom = true;
-            this.icon = 'assets/icons/event_custom.png';
+            this.icon = ICONS.EventNodeIconCustom;
             this.titleHeight = CONFIG.CELL_SIZE * 2.5;
             this.height += CONFIG.CELL_SIZE;
         }
 
         if (this.node.inputKey) {
             if (this.node.inputKey.indexOf("Mouse") !== -1)
-                this.icon = 'assets/nodes_icons/icon_Blueprint_MouseEvent_16x.png';
+                this.icon = ICONS.MouseEventIcon;
             else
-                this.icon = 'assets/nodes_icons/icon_Blueprint_KeyboardEvent_16x.png';
+                this.icon = ICONS.KeyboardEventIcon;
             this.functionName = this.node.inputKey;
         }
 
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
     }
     init() {
-        this.headerText = new PIXI.Text(this.functionName/* + "(" + this.x + "," + this.y + ")"*/, defaultTextStyle);
+        this.headerText = new PIXI.Text(this.functionName, defaultTextStyle);
         this.fIcon = PIXI.Sprite.fromImage(this.icon);
         this.calculateWidth();
         super.init();
@@ -76,7 +77,7 @@ export default class EventNode extends RegularNode {
         this.container.addChild(this.fIcon);
 
         if (this.node.outputs && this.node.outputs[0].name === "Output Delegate") {
-            var delegateIcon = this.node.outputs[0].linked ? 'assets/nodes/DelegatePin_Connected.png' : 'assets/nodes/DelegatePin_Disconnected.png';
+            var delegateIcon = this.node.outputs[0].linked ? TEXTURES.DelegatePinConnected : TEXTURES.DelegatePinDisconnected;
             var delegate = PIXI.Sprite.fromImage(delegateIcon);
             delegate.tint = VAR_COLORS["delegate"];
             delegate.x = this.body.width / 2 - CONFIG.CELL_SIZE * (5 / 8);

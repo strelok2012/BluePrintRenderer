@@ -1,5 +1,6 @@
-import {RegularNode} from './RegularNode.js';
+import RegularNode from './RegularNode.js';
 import {CONFIG, VAR_COLORS, defaultTextStyle} from '../config.js';
+import {ICONS} from '../resources.js';
 
 export default class FunctionNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
@@ -31,13 +32,13 @@ export default class FunctionNode extends RegularNode {
         this.icon = 'assets/icons/function.png';
 
         if (this.functionName.indexOf("Make") !== -1 && this.functionName.indexOf("Array") === -1) {
-            this.icon = "assets/nodes_icons/icon_Blueprint_MakeStruct_16x.png";
+            this.icon = ICONS.MakeStructIcon;
             this.iconTint = null;
         } else if (this.functionName.indexOf("Break") !== -1) {
-            this.icon = "assets/nodes_icons/icon_Blueprint_BreakStruct_16x.png";
+            this.icon =ICONS.BreakStructIcon;
             this.iconTint = null;
         } else if (this.functionName.indexOf("Make Array") !== -1) {
-            this.icon = "assets/nodes_icons/icon_Blueprint_MakeArray_16x.png";
+            this.icon = ICONS.MakeArrayIcon;
             this.iconTint = null;
         }
 

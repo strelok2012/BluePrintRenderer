@@ -1,5 +1,6 @@
-import {RegularNode} from './RegularNode.js';
-import {CONFIG, VAR_COLORS, defaultTextStyle, getIcon} from '../config.js';
+import RegularNode from './RegularNode.js';
+import {CONFIG, VAR_COLORS, defaultTextStyle} from '../config.js';
+import {ICONS} from '../resources.js';
 
 export default class MacroNode extends RegularNode {
     constructor(node, x, y, texturesHanlder) {
@@ -11,19 +12,19 @@ export default class MacroNode extends RegularNode {
         this.headerTextOffset = CONFIG.CELL_SIZE * 2;
 
         if (this.functionName === "Branch") {
-            this.icon = getIcon("branch");
+            this.icon = ICONS.BranchIcon;
         } else if (this.functionName.indexOf("For Each") !== -1) {
-            this.icon = getIcon("for_each");
+            this.icon = ICONS.ForEachIcon;
         } else if (this.functionName.indexOf("Flip") !== -1) {
-            this.icon = getIcon("flip_flop");
+            this.icon = ICONS.FlipFlopIcon;
         } else if (this.functionName.indexOf("Valid") !== -1) {
-            this.icon = getIcon("valid");
+            this.icon = ICONS.ValidIcon;
         } else if (this.functionName.indexOf("Sequence") !== -1) {
-            this.icon = getIcon("sequence");
+            this.icon = ICONS.SequenceIcon;
         } else if (this.functionName.indexOf("For Loop") !== -1) {
-            this.icon = getIcon("for_loop");
+            this.icon = ICONS.ForLoopIcon;
         } else {
-            this.icon = getIcon("macro");
+            this.icon = ICONS.MacroIcon;
         }
     }
     draw(app) {

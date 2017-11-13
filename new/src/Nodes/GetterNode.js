@@ -1,4 +1,4 @@
-import {VarNode} from './VarNode.js';
+import VarNode from './VarNode.js';
 import {CONFIG, VAR_COLORS} from '../config.js';
 
 export default class GetterNode extends VarNode {

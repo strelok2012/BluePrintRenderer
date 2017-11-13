@@ -1,3 +1,5 @@
+import {ICONS} from './resources.js';
+
 export const CONFIG = {
     CELL_SIZE: 16
 }
@@ -90,32 +92,6 @@ export const VAR_TYPES = {
     wildcard: {code: 19, name: "wildcard"}
 };
 
-export const ICONS = {
-    branch: "icon_Blueprint_Branch_16x.png",
-    make_struct: "icon_Blueprint_MakeStruct_16x.png",
-    break_struct: "icon_Blueprint_BreakStruct_16x.png",
-    event_custom: "icon_Blueprint_CustomEvent_16x.png",
-    event: "icon_Blueprint_Event_16x.png",
-    for_each: "icon_Blueprint_ForEach_16x.png",
-    for_loop: "icon_Blueprint_Loop_16x.png",
-    make_array: "icon_Blueprint_MakeArray_16x.png",
-    flip_flop: "icon_Blueprint_FlipFlop_16x.png",
-    dynamic_cast: "icon_Blueprint_Cast_16x.png",
-    timeline: "icon_Blueprint_Timeline_16x.png",
-    node: "icon_Blueprint_Node_16x.png",
-    message: "MessageIcon.png",
-    latent: "LatentIcon.png",
-    valid: "icon_Blueprint_IsValid_16x.png",
-    select: "icon_Blueprint_Select_16x.png",
-    sequence: "icon_Blueprint_Sequence_16x.png",
-    macro: "icon_Blueprint_Macro_16x.png",
-    keyboard: "icon_Blueprint_KeyboardEvent_16x.png",
-    switch_on: "icon_Blueprint_Switch_16x.png",
-    mouse: "icon_Blueprint_MouseEvent_16x.png",
-    fullscreen: "LV_FullScreen.png",
-    save: "LV_Save.png"
-}
-
 export const FUNCTIONS_MAPPING = {
     K2Node_CallFunction: null,
     K2Node_SpawnActorFromClass: {
@@ -146,7 +122,7 @@ export const FUNCTIONS_MAPPING = {
     },
     K2Node_SwitchInteger: {
         text: "Switch on Int",
-        icon: ICONS["switch_on"],
+        icon: ICONS.SwitchOnIcon,
         morpher: function (obj) {
             obj.color = VAR_COLORS["switch_on"];
             return obj;
@@ -154,7 +130,7 @@ export const FUNCTIONS_MAPPING = {
     },
     K2Node_SwitchEnum: {
         text: "Switch on Enum",
-        icon: ICONS["switch_on"],
+        icon: ICONS.SwitchOnIcon,
         morpher: function (obj) {
             obj.color = VAR_COLORS["switch_on"];
             return obj;
@@ -162,7 +138,7 @@ export const FUNCTIONS_MAPPING = {
     },
     K2Node_SwitchString: {
         text: "Switch on String",
-        icon: ICONS["switch_on"],
+        icon: ICONS.SwitchOnIcon,
         morpher: function (obj) {
             obj.color = VAR_COLORS["switch_on"];
             return obj;
@@ -178,14 +154,14 @@ export const FUNCTIONS_MAPPING = {
     K2Node_AddComponent: null,
     K2Node_FormatText: {
         text: "Format Text",
-        icon: ICONS["node"],
+        icon: ICONS.NodeIcon,
         morpher: function (obj) {
             obj.isPure = true;
             return obj;
         }
     },
     K2Node_GetInputVectorAxisValue: {
-        icon: ICONS["keyboard"],
+        icon: ICONS.KeyboardEventIcon,
         morpher: function (obj, node) {
             obj.isPure = true;
             obj.name = "Get " + node.inputAxisKey;
@@ -296,13 +272,9 @@ export function isLetter(c) {
     return c.toLowerCase() !== c.toUpperCase();
 }
 
-export function getIcon(iconName) {
-    return 'assets/nodes_icons/' + ICONS[iconName];
-}
-
 export function componentToHex(c) {
     var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
+    return hex.length === 1 ? "0" + hex : hex;
 }
 
 export function rgbToHex(r, g, b) {

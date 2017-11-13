@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,18 +73,332 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RegularNode = undefined;
+exports.ARRAY_FUNCTION_NAMES_MAPPING = exports.FUNCTION_NAMES_MAPPING = exports.NAME_MAPPING = exports.FUNCTIONS_MAPPING = exports.VAR_TYPES = exports.HIDDEN_PIN_NAMES = exports.VAR_COLORS = exports.commentTextStyle = exports.customEventTextStyle = exports.binaryOperatorTextStyle = exports.defaultTextStyle = exports.CONFIG = undefined;
+exports.isLetter = isLetter;
+exports.componentToHex = componentToHex;
+exports.rgbToHex = rgbToHex;
+exports.intersectNodeSelectable = intersectNodeSelectable;
+
+var _resources = __webpack_require__(3);
+
+var CONFIG = exports.CONFIG = {
+    CELL_SIZE: 16
+};
+
+var defaultTextStyle = exports.defaultTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    fill: ['#ffffff'] // gradient
+});
+
+var binaryOperatorTextStyle = exports.binaryOperatorTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 36,
+    fill: ['#626262'] // gradient
+});
+
+var customEventTextStyle = exports.customEventTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    fontStyle: 'italic',
+    fill: ['#a1825d'] // gradient
+});
+
+var commentTextStyle = exports.commentTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    fill: ['#eeeeee'], // gradient
+    dropShadow: true,
+    dropShadowColor: '#000000',
+    dropShadowBlur: 2,
+    dropShadowAngle: Math.PI / 6,
+    dropShadowDistance: 2,
+    fontWeight: 'bold'
+});
+
+var VAR_COLORS = exports.VAR_COLORS = {
+    bool: 0x8c0202,
+    byte: 0x026960,
+    int: 0x1ed6a4,
+    float: 0x97ef42,
+    name: 0xc07bef,
+    string: 0xef02c8,
+    text: 0xd975a0,
+    vector: 0xefbd22,
+    rotator: 0x97a9ef,
+    transform: 0xeb6b02,
+    actor: 0x02a2e9,
+    execFunction: 0x5b8fb1,
+    execFunctionF: 0x79c9ff,
+    pureFunction: 0x83b47c,
+    pureFunctionF: 0xaaeea0,
+    event: 0x8d1313,
+    delegate: 0xff3838,
+    object: 0x0481b7,
+    class: 0x5501b3,
+    struct: 0x024bab,
+    exec: 0xffffff,
+    interface: 0xc9d58f,
+    macro: 0xb7b4aa,
+    wildcard: 0x7f7979,
+    dynamicCast: 0x258489,
+    timeline: 0x9d7e24,
+    parent: 0x854613,
+    switch_on: 0x8f9013
+};
+
+var HIDDEN_PIN_NAMES = exports.HIDDEN_PIN_NAMES = ["Output_Get"];
+
+var VAR_TYPES = exports.VAR_TYPES = {
+    bool: { code: 0, name: "bool" },
+    byte: { code: 1, name: "byte" },
+    int: { code: 2, name: "int" },
+    float: { code: 3, name: "float" },
+    name: { code: 4, name: "name" },
+    string: { code: 5, name: "string" },
+    text: { code: 6, name: "text" },
+    vector: { code: 7, name: "vector" },
+    rotator: { code: 8, name: "rotator" },
+    transform: { code: 9, name: "transform" },
+    actor: { code: 10, name: "actor" },
+    event: { code: 11, name: "delegateOut" },
+    object: { code: 12, name: "object" },
+    class: { code: 13, name: "class" },
+    struct: { code: 14, name: "struct" },
+    exec: { code: 15, name: "exec" },
+    interface: { code: 16, name: "interface" },
+    macro: { code: 17, name: "macro" },
+    delegate: { code: 18, name: "delegate" },
+    wildcard: { code: 19, name: "wildcard" }
+};
+
+var FUNCTIONS_MAPPING = exports.FUNCTIONS_MAPPING = {
+    K2Node_CallFunction: null,
+    K2Node_SpawnActorFromClass: {
+        text: "Spawn Actor"
+    },
+    K2Node_GetInputAxisValue: null,
+    K2Node_MakeArray: {
+        text: "Make Array"
+    },
+    K2Node_CreateWidget: {
+        text: "Construct"
+    },
+    K2Node_MakeStruct: {
+        text: "Make Struct"
+    },
+    K2Node_BreakStruct: {
+        text: "Break Struct"
+    },
+    K2Node_LatentOnlineCall: {
+        async: true
+    },
+    K2Node_AsyncAction: {
+        async: true
+    },
+    K2Node_LeaderboardQuery: {
+        text: "Read Leaderboard Integer",
+        async: true
+    },
+    K2Node_SwitchInteger: {
+        text: "Switch on Int",
+        icon: _resources.ICONS.SwitchOnIcon,
+        morpher: function morpher(obj) {
+            obj.color = VAR_COLORS["switch_on"];
+            return obj;
+        }
+    },
+    K2Node_SwitchEnum: {
+        text: "Switch on Enum",
+        icon: _resources.ICONS.SwitchOnIcon,
+        morpher: function morpher(obj) {
+            obj.color = VAR_COLORS["switch_on"];
+            return obj;
+        }
+    },
+    K2Node_SwitchString: {
+        text: "Switch on String",
+        icon: _resources.ICONS.SwitchOnIcon,
+        morpher: function morpher(obj) {
+            obj.color = VAR_COLORS["switch_on"];
+            return obj;
+        }
+    },
+    K2Node_CallParentFunction: {
+        morpher: function morpher(obj) {
+            obj.name = "Parent: " + obj.name;
+            obj.isParent = true;
+            return obj;
+        }
+    },
+    K2Node_AddComponent: null,
+    K2Node_FormatText: {
+        text: "Format Text",
+        icon: _resources.ICONS.NodeIcon,
+        morpher: function morpher(obj) {
+            obj.isPure = true;
+            return obj;
+        }
+    },
+    K2Node_GetInputVectorAxisValue: {
+        icon: _resources.ICONS.KeyboardEventIcon,
+        morpher: function morpher(obj, node) {
+            obj.isPure = true;
+            obj.name = "Get " + node.inputAxisKey;
+            return obj;
+        }
+    },
+    K2Node_GetDataTableRow: {
+        text: "Get Data Table Row"
+    }
+};
+
+var NAME_MAPPING = exports.NAME_MAPPING = {
+    "K2_Destroy Actor": "DestroyActor",
+    "VSize": "VectorLength",
+    "K2_Get Component Location": "GetWorldLocation",
+    "K2_Set Actor Relative Location": "SetActorRelativeLocation",
+    "K2_Set Relative Location": "SetRelativeLocation",
+    "K2_Set Actor Location": "SetActorLocation",
+    "K2_Set Actor Relative Rotation": "SetActorRelativeRotation",
+    "K2_Set Relative Rotation": "SetRelativeRotation",
+    "K2_Set Actor Rotation": "SetActorRotation",
+    "K2_Set Timer": "Set Timer by Function Name",
+    "K2_Get Actor Location": "GetActorLocation",
+    "K2_Get Actor Rotation": "GetActorRotation",
+    "RLerp": "Lerp (Rotator)",
+    "FTrunc": "Truncate",
+    "Conv_Int To Text": "ToText(int)",
+    "Conv_Float To Text": "ToText(float)",
+    "Conv_Text To String": "ToString(text)"
+};
+
+var FUNCTION_NAMES_MAPPING = exports.FUNCTION_NAMES_MAPPING = {
+    Array_Set: "Set Array Elem"
+};
+
+var ARRAY_FUNCTION_NAMES_MAPPING = exports.ARRAY_FUNCTION_NAMES_MAPPING = {
+    Array_Add: {
+        text: "Add"
+    },
+    "Array_Add Unique": {
+        text: "AddUnique"
+    },
+    Array_Append: {
+        text: "Append"
+    },
+    Array_Clear: {
+        text: "Clear"
+    },
+    Array_Contains: {
+        text: "Contains"
+    },
+    Array_Find: {
+        text: "Find"
+    },
+    Array_Get: {
+        text: "Get"
+    },
+    Array_Insert: {
+        text: "Insert"
+    },
+    "Array_Last Index": {
+        text: "Last Index"
+    },
+    Array_Length: {
+        text: "Length"
+    },
+    Array_Remove: {
+        text: "Remove Index"
+    },
+    "Array_Remove Item": {
+        text: "Remove"
+    },
+    Array_Resize: {
+        text: "Resize"
+    },
+    Array_Set: {
+        text: "Set Array Elem",
+        showHeader: true
+    },
+    Array_Shuffle: {
+        text: "Shuffle"
+    }
+};
+
+String.prototype.format = function () {
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};
+
+String.prototype.fromCamelCase = function () {
+    var newString = '';
+    for (var i = 0; i < this.length; i++) {
+        newString += this[i];
+        if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
+            if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
+                newString += " ";
+            }
+        }
+    }
+    return newString.trim();
+};
+
+function isLetter(c) {
+    return c.toLowerCase() !== c.toUpperCase();
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+}
+
+function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
+    var s = scale || 1;
+    if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.selectableHeight * s < node1.y) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(22);
+var _config = __webpack_require__(0);
 
-var _main = __webpack_require__(20);
+var _resources = __webpack_require__(3);
+
+var _main = __webpack_require__(4);
+
+var _Textures = __webpack_require__(2);
+
+var _Textures2 = _interopRequireDefault(_Textures);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var RegularNode = exports.RegularNode = function () {
-    function RegularNode(node, x, y, texturesHandler) {
+var RegularNode = function () {
+    function RegularNode(node, x, y) {
         _classCallCheck(this, RegularNode);
 
         this.x = parseInt(x);
@@ -99,7 +413,6 @@ var RegularNode = exports.RegularNode = function () {
         this.minCellHeight = 3;
         this.inputOffset = this.cellSize * 0.2;
         this.pointOnNode = null;
-        this.texturesHandler = texturesHandler;
 
         if (!this.config) {
             this.config = {
@@ -272,7 +585,7 @@ var RegularNode = exports.RegularNode = function () {
         value: function initBody() {
             if (this.config.body) {
                 if (!this.body) {
-                    this.body = new PIXI.mesh.NineSlicePlane(this.texturesHandler.bodyTexture, 14, 14, 14, 14);
+                    this.body = new PIXI.mesh.NineSlicePlane(_Textures2.default.bodyTexture, 14, 14, 14, 14);
                 }
                 this.body.width = this.width;
                 this.body.height = this.height;
@@ -285,11 +598,11 @@ var RegularNode = exports.RegularNode = function () {
         value: function initShadow() {
             if (this.config.shadow) {
                 if (!this.shadow) {
-                    this.shadow = new PIXI.mesh.NineSlicePlane(this.texturesHandler.shadowTexture, 21, 21, 21, 21);
+                    this.shadow = new PIXI.mesh.NineSlicePlane(_Textures2.default.shadowTexture, 21, 21, 21, 21);
                 }
 
                 if (!this.shadowSelected) {
-                    this.shadowSelected = new PIXI.mesh.NineSlicePlane(this.texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
+                    this.shadowSelected = new PIXI.mesh.NineSlicePlane(_Textures2.default.shadowSelectedTexture, 21, 21, 21, 21);
                 }
 
                 this.shadow.width = this.body.width + 26;
@@ -312,7 +625,7 @@ var RegularNode = exports.RegularNode = function () {
         value: function initGloss() {
             if (this.config.gloss) {
                 if (!this.gloss) {
-                    this.gloss = new PIXI.mesh.NineSlicePlane(this.texturesHandler.glossTexture, 7, 7, 7, 7);
+                    this.gloss = new PIXI.mesh.NineSlicePlane(_Textures2.default.glossTexture, 7, 7, 7, 7);
                 }
                 this.gloss.width = this.width;
                 this.gloss.height = this.titleHeight;
@@ -325,7 +638,7 @@ var RegularNode = exports.RegularNode = function () {
         value: function initTitleHighlight() {
             if (this.config.titleHighlight) {
                 if (!this.titleHighlight) {
-                    this.titleHighlight = new PIXI.mesh.NineSlicePlane(this.texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
+                    this.titleHighlight = new PIXI.mesh.NineSlicePlane(_Textures2.default.titleHighlightTexture, 7, 7, 7, 7);
                 }
                 this.titleHighlight.width = this.width;
                 this.titleHighlight.height = this.titleHeight;
@@ -339,7 +652,7 @@ var RegularNode = exports.RegularNode = function () {
         value: function initColorSpill() {
             if (this.config.colorSpill) {
                 if (!this.colorSpill) {
-                    this.colorSpill = new PIXI.mesh.NineSlicePlane(this.texturesHandler.colorSpillTexture, 6, 6, 1, 1);
+                    this.colorSpill = new PIXI.mesh.NineSlicePlane(_Textures2.default.colorSpillTexture, 6, 6, 1, 1);
                 }
                 this.colorSpill.tint = this.colorTint;
                 this.colorSpill.width = this.width;
@@ -572,9 +885,9 @@ var RegularNode = exports.RegularNode = function () {
         key: 'getPinSprite',
         value: function getPinSprite(pin) {
             if (pin.type.name === "exec") {
-                return pin.linked ? 'assets/nodes/ExecPin_Connected.png' : 'assets/nodes/ExecPin_Disconnected.png';
+                return pin.linked ? _resources.TEXTURES.ExecPinDisconnected : _resources.TEXTURES.ExecPinDisconnected;
             }
-            return pin.linked ? 'assets/nodes/Pin_connected_VarA.png' : 'assets/nodes/Pin_disconnected_VarA.png';
+            return pin.linked ? _resources.TEXTURES.PinConnected : _resources.TEXTURES.PinDisconnected;
         }
     }, {
         key: 'nearestCellWidth',
@@ -597,8 +910,10 @@ var RegularNode = exports.RegularNode = function () {
     return RegularNode;
 }();
 
+exports.default = RegularNode;
+
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -607,15 +922,501 @@ var RegularNode = exports.RegularNode = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.VarNode = undefined;
+
+var _resources = __webpack_require__(3);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TexturesHandler = function TexturesHandler() {
+    _classCallCheck(this, TexturesHandler);
+
+    if (!this.instance) {
+        this.bodyTexture = PIXI.Texture.fromImage(_resources.TEXTURES.RegularNodeBody);
+        this.glossTexture = PIXI.Texture.fromImage(_resources.TEXTURES.RegularNodeTitleGloss);
+        this.titleHighlightTexture = PIXI.Texture.fromImage(_resources.TEXTURES.RegularNodeTitleHightlight);
+        this.shadowTexture = PIXI.Texture.fromImage(_resources.TEXTURES.RegularNodeShadow);
+        this.shadowSelectedTexture = PIXI.Texture.fromImage(_resources.TEXTURES.RegularNodeShadowSelected);
+        this.colorSpillTexture = PIXI.Texture.fromImage(_resources.TEXTURES.RegularNodeColorSpill);
+
+        this.varNodeBodyTexture = PIXI.Texture.fromImage(_resources.TEXTURES.VarNodeBody);
+        this.varNodeGlossTexture = PIXI.Texture.fromImage(_resources.TEXTURES.VarNodeGloss);
+        this.varNodeShadowTexture = PIXI.Texture.fromImage(_resources.TEXTURES.VarNodeShadow);
+        this.varNodeShadowSelectedTexture = PIXI.Texture.fromImage(_resources.TEXTURES.VarNodeShadowSelected);
+        this.varNodeColorSpillTexture = PIXI.Texture.fromImage(_resources.TEXTURES.VarNodeColorSpill);
+
+        this.mathNodeBodyTexture = PIXI.Texture.fromImage(_resources.TEXTURES.MathNodeBody);
+        this.mathNodeShadowSelectedTexture = PIXI.Texture.fromImage(_resources.TEXTURES.MathNodeShadowSelected);
+
+        this.commentNodeBody = PIXI.Texture.fromImage(_resources.TEXTURES.CommentNodeBackground);
+
+        this.selector = PIXI.Texture.fromImage(_resources.TEXTURES.Selector);
+
+        this.instance = this;
+    }
+
+    return this.instance;
+};
+
+var instance = new TexturesHandler();
+
+Object.freeze(instance);
+
+exports.default = instance;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ICONS = exports.TEXTURES = undefined;
+
+var _RegularNode_body = __webpack_require__(11);
+
+var _RegularNode_body2 = _interopRequireDefault(_RegularNode_body);
+
+var _RegularNode_title_gloss = __webpack_require__(12);
+
+var _RegularNode_title_gloss2 = _interopRequireDefault(_RegularNode_title_gloss);
+
+var _RegularNode_title_highlight = __webpack_require__(13);
+
+var _RegularNode_title_highlight2 = _interopRequireDefault(_RegularNode_title_highlight);
+
+var _RegularNode_shadow = __webpack_require__(14);
+
+var _RegularNode_shadow2 = _interopRequireDefault(_RegularNode_shadow);
+
+var _RegularNode_shadow_selected = __webpack_require__(15);
+
+var _RegularNode_shadow_selected2 = _interopRequireDefault(_RegularNode_shadow_selected);
+
+var _RegularNode_color_spill = __webpack_require__(16);
+
+var _RegularNode_color_spill2 = _interopRequireDefault(_RegularNode_color_spill);
+
+var _VarNode_body = __webpack_require__(17);
+
+var _VarNode_body2 = _interopRequireDefault(_VarNode_body);
+
+var _VarNode_gloss = __webpack_require__(18);
+
+var _VarNode_gloss2 = _interopRequireDefault(_VarNode_gloss);
+
+var _VarNode_shadow = __webpack_require__(19);
+
+var _VarNode_shadow2 = _interopRequireDefault(_VarNode_shadow);
+
+var _VarNode_shadow_selected = __webpack_require__(20);
+
+var _VarNode_shadow_selected2 = _interopRequireDefault(_VarNode_shadow_selected);
+
+var _VarNode_color_spill = __webpack_require__(21);
+
+var _VarNode_color_spill2 = _interopRequireDefault(_VarNode_color_spill);
+
+var _MathNode_body = __webpack_require__(22);
+
+var _MathNode_body2 = _interopRequireDefault(_MathNode_body);
+
+var _MathNode_shadow_selected = __webpack_require__(23);
+
+var _MathNode_shadow_selected2 = _interopRequireDefault(_MathNode_shadow_selected);
+
+var _Comment_Background = __webpack_require__(24);
+
+var _Comment_Background2 = _interopRequireDefault(_Comment_Background);
+
+var _Selector = __webpack_require__(25);
+
+var _Selector2 = _interopRequireDefault(_Selector);
+
+var _event = __webpack_require__(26);
+
+var _event2 = _interopRequireDefault(_event);
+
+var _event_custom = __webpack_require__(27);
+
+var _event_custom2 = _interopRequireDefault(_event_custom);
+
+var _icon_Blueprint_MouseEvent_16x = __webpack_require__(28);
+
+var _icon_Blueprint_MouseEvent_16x2 = _interopRequireDefault(_icon_Blueprint_MouseEvent_16x);
+
+var _icon_Blueprint_KeyboardEvent_16x = __webpack_require__(29);
+
+var _icon_Blueprint_KeyboardEvent_16x2 = _interopRequireDefault(_icon_Blueprint_KeyboardEvent_16x);
+
+var _DelegatePin_Connected = __webpack_require__(30);
+
+var _DelegatePin_Connected2 = _interopRequireDefault(_DelegatePin_Connected);
+
+var _DelegatePin_Disconnected = __webpack_require__(31);
+
+var _DelegatePin_Disconnected2 = _interopRequireDefault(_DelegatePin_Disconnected);
+
+var _ExecPin_Connected = __webpack_require__(32);
+
+var _ExecPin_Connected2 = _interopRequireDefault(_ExecPin_Connected);
+
+var _ExecPin_Disconnected = __webpack_require__(33);
+
+var _ExecPin_Disconnected2 = _interopRequireDefault(_ExecPin_Disconnected);
+
+var _Pin_connected_VarA = __webpack_require__(34);
+
+var _Pin_connected_VarA2 = _interopRequireDefault(_Pin_connected_VarA);
+
+var _Pin_disconnected_VarA = __webpack_require__(35);
+
+var _Pin_disconnected_VarA2 = _interopRequireDefault(_Pin_disconnected_VarA);
+
+var _icon_Blueprint_Branch_16x = __webpack_require__(36);
+
+var _icon_Blueprint_Branch_16x2 = _interopRequireDefault(_icon_Blueprint_Branch_16x);
+
+var _icon_Blueprint_MakeStruct_16x = __webpack_require__(37);
+
+var _icon_Blueprint_MakeStruct_16x2 = _interopRequireDefault(_icon_Blueprint_MakeStruct_16x);
+
+var _icon_Blueprint_BreakStruct_16x = __webpack_require__(38);
+
+var _icon_Blueprint_BreakStruct_16x2 = _interopRequireDefault(_icon_Blueprint_BreakStruct_16x);
+
+var _icon_Blueprint_Event_16x = __webpack_require__(39);
+
+var _icon_Blueprint_Event_16x2 = _interopRequireDefault(_icon_Blueprint_Event_16x);
+
+var _icon_Blueprint_ForEach_16x = __webpack_require__(40);
+
+var _icon_Blueprint_ForEach_16x2 = _interopRequireDefault(_icon_Blueprint_ForEach_16x);
+
+var _icon_Blueprint_Loop_16x = __webpack_require__(41);
+
+var _icon_Blueprint_Loop_16x2 = _interopRequireDefault(_icon_Blueprint_Loop_16x);
+
+var _icon_Blueprint_MakeArray_16x = __webpack_require__(42);
+
+var _icon_Blueprint_MakeArray_16x2 = _interopRequireDefault(_icon_Blueprint_MakeArray_16x);
+
+var _icon_Blueprint_FlipFlop_16x = __webpack_require__(43);
+
+var _icon_Blueprint_FlipFlop_16x2 = _interopRequireDefault(_icon_Blueprint_FlipFlop_16x);
+
+var _icon_Blueprint_Cast_16x = __webpack_require__(44);
+
+var _icon_Blueprint_Cast_16x2 = _interopRequireDefault(_icon_Blueprint_Cast_16x);
+
+var _icon_Blueprint_Timeline_16x = __webpack_require__(45);
+
+var _icon_Blueprint_Timeline_16x2 = _interopRequireDefault(_icon_Blueprint_Timeline_16x);
+
+var _icon_Blueprint_Node_16x = __webpack_require__(46);
+
+var _icon_Blueprint_Node_16x2 = _interopRequireDefault(_icon_Blueprint_Node_16x);
+
+var _MessageIcon = __webpack_require__(47);
+
+var _MessageIcon2 = _interopRequireDefault(_MessageIcon);
+
+var _LatentIcon = __webpack_require__(48);
+
+var _LatentIcon2 = _interopRequireDefault(_LatentIcon);
+
+var _icon_Blueprint_IsValid_16x = __webpack_require__(49);
+
+var _icon_Blueprint_IsValid_16x2 = _interopRequireDefault(_icon_Blueprint_IsValid_16x);
+
+var _icon_Blueprint_Select_16x = __webpack_require__(50);
+
+var _icon_Blueprint_Select_16x2 = _interopRequireDefault(_icon_Blueprint_Select_16x);
+
+var _icon_Blueprint_Sequence_16x = __webpack_require__(51);
+
+var _icon_Blueprint_Sequence_16x2 = _interopRequireDefault(_icon_Blueprint_Sequence_16x);
+
+var _icon_Blueprint_Macro_16x = __webpack_require__(52);
+
+var _icon_Blueprint_Macro_16x2 = _interopRequireDefault(_icon_Blueprint_Macro_16x);
+
+var _icon_Blueprint_Switch_16x = __webpack_require__(53);
+
+var _icon_Blueprint_Switch_16x2 = _interopRequireDefault(_icon_Blueprint_Switch_16x);
+
+var _LV_FullScreen = __webpack_require__(54);
+
+var _LV_FullScreen2 = _interopRequireDefault(_LV_FullScreen);
+
+var _LV_Save = __webpack_require__(55);
+
+var _LV_Save2 = _interopRequireDefault(_LV_Save);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var TEXTURES = exports.TEXTURES = {
+    RegularNodeBody: _RegularNode_body2.default,
+    RegularNodeTitleGloss: _RegularNode_title_gloss2.default,
+    RegularNodeTitleHightlight: _RegularNode_title_highlight2.default,
+    RegularNodeShadow: _RegularNode_shadow2.default,
+    RegularNodeShadowSelected: _RegularNode_shadow_selected2.default,
+    RegularNodeColorSpill: _RegularNode_color_spill2.default,
+    VarNodeBody: _VarNode_body2.default,
+    VarNodeGloss: _VarNode_gloss2.default,
+    VarNodeShadow: _VarNode_shadow2.default,
+    VarNodeShadowSelected: _VarNode_shadow_selected2.default,
+    VarNodeColorSpill: _VarNode_color_spill2.default,
+    MathNodeBody: _MathNode_body2.default,
+    MathNodeShadowSelected: _MathNode_shadow_selected2.default,
+    CommentNodeBackground: _Comment_Background2.default,
+    Selector: _Selector2.default,
+    DelegatePinConnected: _DelegatePin_Connected2.default,
+    DelegatePinDisconnected: _DelegatePin_Disconnected2.default,
+    ExecPinConnected: _Pin_connected_VarA2.default,
+    ExecPinDisconnected: _Pin_disconnected_VarA2.default,
+    PinConnected: _Pin_connected_VarA2.default,
+    PinDisconnected: _Pin_disconnected_VarA2.default
+};
+
+var ICONS = exports.ICONS = {
+    EventNodeIcon: _event2.default,
+    EventNodeIconCustom: _event_custom2.default,
+    MouseEventIcon: _icon_Blueprint_MouseEvent_16x2.default,
+    KeyboardEventIcon: _icon_Blueprint_KeyboardEvent_16x2.default,
+    BranchIcon: _icon_Blueprint_Branch_16x2.default,
+    MakeStructIcon: _icon_Blueprint_MakeStruct_16x2.default,
+    BreakStructIcon: _icon_Blueprint_BreakStruct_16x2.default,
+    EventIcon: _icon_Blueprint_Event_16x2.default,
+    ForEachIcon: _icon_Blueprint_ForEach_16x2.default,
+    ForLoopIcon: _icon_Blueprint_Loop_16x2.default,
+    MakeArrayIcon: _icon_Blueprint_MakeArray_16x2.default,
+    FlipFlopIcon: _icon_Blueprint_FlipFlop_16x2.default,
+    DynamicCastIcon: _icon_Blueprint_Cast_16x2.default,
+    TimelineIcon: _icon_Blueprint_Timeline_16x2.default,
+    NodeIcon: _icon_Blueprint_Node_16x2.default,
+    MessageIcon: _MessageIcon2.default,
+    LatentIcon: _LatentIcon2.default,
+    ValidIcon: _icon_Blueprint_IsValid_16x2.default,
+    SelectIcon: _icon_Blueprint_Select_16x2.default,
+    SequenceIcon: _icon_Blueprint_Sequence_16x2.default,
+    MacroIcon: _icon_Blueprint_Macro_16x2.default,
+    SwitchOnIcon: _icon_Blueprint_Switch_16x2.default,
+    FullscreenIcon: _LV_FullScreen2.default,
+    SaveIcon: _LV_Save2.default
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.allNodes = exports.app = undefined;
+exports.default = prepare;
+
+var _Grid = __webpack_require__(10);
+
+var _Grid2 = _interopRequireDefault(_Grid);
+
+var _Textures = __webpack_require__(2);
+
+var _Textures2 = _interopRequireDefault(_Textures);
+
+var _BlueprintRenderer = __webpack_require__(56);
+
+var _BlueprintRenderer2 = _interopRequireDefault(_BlueprintRenderer);
+
+var _BPToNodes = __webpack_require__(58);
+
+var _BPToNodes2 = _interopRequireDefault(_BPToNodes);
+
+var _LinksDrawer = __webpack_require__(67);
+
+var _LinksDrawer2 = _interopRequireDefault(_LinksDrawer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var app = exports.app = undefined;
+var allNodes = exports.allNodes = [];
+
+function prepare(document) {
+    exports.app = app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, { antialias: true });
+    document.body.appendChild(app.view);
+
+    var grid = new _Grid2.default(app, 0, 0);
+
+    var dragging = false;
+
+    var draggingLeft = false;
+    var dragLeftStartPoint = null;
+
+    var eventData = null;
+
+    var mainContainer = new PIXI.Container();
+
+    exports.allNodes = allNodes = [];
+
+    var selectedNodes = [];
+
+    var linksDrawer;
+
+    var nodesLayer = new PIXI.DisplayGroup(1, true);
+    var linksLayer = new PIXI.DisplayGroup(0, true);
+
+    var linksContainer = new PIXI.Container();
+    app.stage.addChild(linksContainer);
+
+    app.renderer.plugins.interaction.on('pointerdown', onDragStart).on('pointerup', onDragEnd).on('pointerupoutside', onDragEnd).on('pointermove', onDragMove);
+
+    app.stage.addChild(mainContainer);
+
+    var selector = new PIXI.mesh.NineSlicePlane(_Textures2.default.selector, 2, 2, 2, 2);
+
+    selector.width = 100;
+    selector.height = 100;
+    selector.visible = false;
+
+    app.stage.addChild(selector);
+    app.bpConfig = { draggingNode: false };
+
+    var render = new _BlueprintRenderer2.default();
+    render.renderFromFile("/tests/file_big.txt", function (nodes) {
+        var nodesObjects = (0, _BPToNodes2.default)(nodes);
+        for (var i = 0, l = nodesObjects.length; i < l; i++) {
+            nodesObjects[i].draw(mainContainer);
+            allNodes.push(nodesObjects[i]);
+        }
+        linksDrawer = new _LinksDrawer2.default(linksContainer, allNodes);
+        var canvas = document.body.querySelector("canvas");
+        disableContextMenu(canvas);
+    });
+
+    function isRightClick(e) {
+        return e.which === 3;
+    }
+
+    function isLeftClick(e) {
+        return e.which === 1;
+    }
+
+    function disableContextMenu(canvas) {
+        canvas.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+    }
+
+    function dropNodesSelection(e) {
+        for (var i = 0, l = allNodes.length; i < l; i++) {
+            if (allNodes[i].selected) {
+                if (!allNodes[i].inNode(e.data.global)) {
+                    allNodes[i].dropSelection();
+                }
+            }
+        }
+    }
+
+    function onDragStart(event) {
+        if (isRightClick(event.data.originalEvent)) {
+            dragging = true;
+            eventData = event.data;
+        } else if (isLeftClick(event.data.originalEvent)) {
+            dropNodesSelection(event);
+            draggingLeft = true;
+            dragLeftStartPoint = {
+                x: event.data.global.x,
+                y: event.data.global.y
+            };
+        }
+    }
+
+    function onDragEnd(event) {
+        if (isRightClick(event.data.originalEvent)) {
+            dragging = false;
+            eventData = null;
+        } else if (isLeftClick(event.data.originalEvent)) {
+            draggingLeft = false;
+            dragLeftStartPoint = null;
+            selector.visible = false;
+        }
+    }
+
+    function onDragMove(event) {
+        if (dragging) {
+            mainContainer.x += event.data.originalEvent.movementX;
+            mainContainer.y += event.data.originalEvent.movementY;
+
+            linksDrawer.links.x += event.data.originalEvent.movementX;
+            linksDrawer.links.y += event.data.originalEvent.movementY;
+
+            // grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
+        } else if (draggingLeft) {
+            if (dragLeftStartPoint && !app.bpConfig.draggingNode) {
+                selector.visible = true;
+                selector.x = dragLeftStartPoint.x;
+                selector.y = dragLeftStartPoint.y;
+
+                selector.width = event.data.global.x - dragLeftStartPoint.x;
+                selector.height = event.data.global.y - dragLeftStartPoint.y;
+
+                var selectorBounds = selector.getBounds();
+
+                for (var i = 0; i < allNodes.length; i++) {
+                    if (!allNodes[i].constructor.name === 'CommentNode') {
+                        var bounds = allNodes[i].container.getBounds();
+                        if (intersectNodeSelectable(bounds, selectorBounds)) {
+                            allNodes[i].select();
+                        } else {
+                            allNodes[i].dropSelection();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /*setTimeout(function () {
+        let renderTexture = PIXI.RenderTexture.create(7552, 4272);
+        app.renderer.render(app.stage, renderTexture, false);
+        //grid.show();
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = app.renderer.extract.base64(renderTexture);
+        hiddenElement.click();
+    }, 3000);*/
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _RegularNode2 = __webpack_require__(0);
+var _RegularNode2 = __webpack_require__(1);
 
-var _config = __webpack_require__(22);
+var _RegularNode3 = _interopRequireDefault(_RegularNode2);
+
+var _config = __webpack_require__(0);
+
+var _Textures = __webpack_require__(2);
+
+var _Textures2 = _interopRequireDefault(_Textures);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -623,13 +1424,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var VarNode = exports.VarNode = function (_RegularNode) {
+var VarNode = function (_RegularNode) {
     _inherits(VarNode, _RegularNode);
 
-    function VarNode(node, x, y, texturesHandler) {
+    function VarNode(node, x, y) {
         _classCallCheck(this, VarNode);
 
-        var _this = _possibleConstructorReturn(this, (VarNode.__proto__ || Object.getPrototypeOf(VarNode)).call(this, node, x, y, texturesHandler));
+        var _this = _possibleConstructorReturn(this, (VarNode.__proto__ || Object.getPrototypeOf(VarNode)).call(this, node, x, y));
 
         _this.showPinText = true;
         _this.inputOffset = _this.cellSize * 0.2;
@@ -640,11 +1441,11 @@ var VarNode = exports.VarNode = function (_RegularNode) {
 
         _this.node = node;
 
-        _this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.varNodeBodyTexture, 11, 11, 11, 11);
-        _this.gloss = new PIXI.mesh.NineSlicePlane(texturesHandler.varNodeGlossTexture, 11, 11, 11, 11);
-        _this.shadow = new PIXI.mesh.NineSlicePlane(texturesHandler.varNodeShadowTexture, 25, 25, 25, 25);
-        _this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.varNodeShadowSelectedTexture, 21, 21, 21, 21);
-        _this.colorSpill = new PIXI.Sprite.from(texturesHandler.varNodeColorSpillTexture);
+        _this.body = new PIXI.mesh.NineSlicePlane(_Textures2.default.varNodeBodyTexture, 11, 11, 11, 11);
+        _this.gloss = new PIXI.mesh.NineSlicePlane(_Textures2.default.varNodeGlossTexture, 11, 11, 11, 11);
+        _this.shadow = new PIXI.mesh.NineSlicePlane(_Textures2.default.varNodeShadowTexture, 25, 25, 25, 25);
+        _this.shadowSelected = new PIXI.mesh.NineSlicePlane(_Textures2.default.varNodeShadowSelectedTexture, 21, 21, 21, 21);
+        _this.colorSpill = new PIXI.Sprite.from(_Textures2.default.varNodeColorSpillTexture);
         _this.config = {
             body: true,
             gloss: true,
@@ -670,20 +1471,22 @@ var VarNode = exports.VarNode = function (_RegularNode) {
     }]);
 
     return VarNode;
-}(_RegularNode2.RegularNode);
+}(_RegularNode3.default);
+
+exports.default = VarNode;
 
 /***/ }),
-/* 2 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(3);
+__webpack_require__(7);
 
-__webpack_require__(5);
+__webpack_require__(9);
 
-var _main = __webpack_require__(20);
+var _main = __webpack_require__(4);
 
 var _main2 = _interopRequireDefault(_main);
 
@@ -694,7 +1497,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /***/ }),
-/* 3 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;/*!
@@ -720,10 +1523,10 @@ if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't be
 this.limiter=new p.default(d.settings.UPLOADS_PER_FRAME),this.renderer=e,this.uploadHookHelper=null,this.queue=[],this.addHooks=[],this.uploadHooks=[],this.completes=[],this.ticking=!1,this.delayedTick=function(){r.queue&&r.prepareItems()},this.registerFindHook(h),this.registerFindHook(l),this.registerFindHook(i),this.registerFindHook(o),this.registerFindHook(s),this.registerUploadHook(a),this.registerUploadHook(u)}return t.prototype.upload=function(t,e){"function"==typeof t&&(e=t,t=null),t&&this.add(t),this.queue.length?(e&&this.completes.push(e),this.ticking||(this.ticking=!0,v.addOnce(this.tick,this,d.UPDATE_PRIORITY.UTILITY))):e&&e()},t.prototype.tick=function(){setTimeout(this.delayedTick,0)},t.prototype.prepareItems=function(){for(this.limiter.beginFrame();this.queue.length&&this.limiter.allowedToUpload();){var t=this.queue[0],e=!1;if(t&&!t._destroyed)for(var r=0,n=this.uploadHooks.length;r<n;r++)if(this.uploadHooks[r](this.uploadHookHelper,t)){this.queue.shift(),e=!0;break}e||this.queue.shift()}if(this.queue.length)v.addOnce(this.tick,this,d.UPDATE_PRIORITY.UTILITY);else{this.ticking=!1;var i=this.completes.slice(0);this.completes.length=0;for(var o=0,s=i.length;o<s;o++)i[o]()}},t.prototype.registerFindHook=function(t){return t&&this.addHooks.push(t),this},t.prototype.registerUploadHook=function(t){return t&&this.uploadHooks.push(t),this},t.prototype.add=function(t){for(var e=0,r=this.addHooks.length;e<r&&!this.addHooks[e](t,this.queue);e++);if(t instanceof d.Container)for(var n=t.children.length-1;n>=0;n--)this.add(t.children[n]);return this},t.prototype.destroy=function(){this.ticking&&v.remove(this.tick,this),this.ticking=!1,this.addHooks=null,this.uploadHooks=null,this.renderer=null,this.completes=null,this.queue=null,this.limiter=null,this.uploadHookHelper=null},t}();r.default=y},{"../core":65,"./limiters/CountLimiter":185}],183:[function(t,e,r){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function i(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function o(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){if(e instanceof u.BaseTexture){var r=e.source,n=0===r.width?t.canvas.width:Math.min(t.canvas.width,r.width),i=0===r.height?t.canvas.height:Math.min(t.canvas.height,r.height);return t.ctx.drawImage(r,0,0,n,i,0,0,t.canvas.width,t.canvas.height),!0}return!1}r.__esModule=!0;var a=t("../../core"),u=function(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e.default=t,e}(a),h=t("../BasePrepare"),l=function(t){return t&&t.__esModule?t:{default:t}}(h),c=16,d=function(t){function e(r){n(this,e);var o=i(this,t.call(this,r));return o.uploadHookHelper=o,o.canvas=document.createElement("canvas"),o.canvas.width=c,o.canvas.height=c,o.ctx=o.canvas.getContext("2d"),o.registerUploadHook(s),o}return o(e,t),e.prototype.destroy=function(){t.prototype.destroy.call(this),this.ctx=null,this.canvas=null},e}(l.default);r.default=d,u.CanvasRenderer.registerPlugin("prepare",d)},{"../../core":65,"../BasePrepare":182}],184:[function(t,e,r){"use strict";function n(t){return t&&t.__esModule?t:{default:t}}r.__esModule=!0;var i=t("./webgl/WebGLPrepare");Object.defineProperty(r,"webgl",{enumerable:!0,get:function(){return n(i).default}});var o=t("./canvas/CanvasPrepare");Object.defineProperty(r,"canvas",{enumerable:!0,get:function(){return n(o).default}});var s=t("./BasePrepare");Object.defineProperty(r,"BasePrepare",{enumerable:!0,get:function(){return n(s).default}});var a=t("./limiters/CountLimiter");Object.defineProperty(r,"CountLimiter",{enumerable:!0,get:function(){return n(a).default}});var u=t("./limiters/TimeLimiter");Object.defineProperty(r,"TimeLimiter",{enumerable:!0,get:function(){return n(u).default}})},{"./BasePrepare":182,"./canvas/CanvasPrepare":183,"./limiters/CountLimiter":185,"./limiters/TimeLimiter":186,"./webgl/WebGLPrepare":187}],185:[function(t,e,r){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}r.__esModule=!0;var i=function(){function t(e){n(this,t),this.maxItemsPerFrame=e,this.itemsLeft=0}return t.prototype.beginFrame=function(){this.itemsLeft=this.maxItemsPerFrame},t.prototype.allowedToUpload=function(){return this.itemsLeft-- >0},t}();r.default=i},{}],186:[function(t,e,r){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}r.__esModule=!0;var i=function(){function t(e){n(this,t),this.maxMilliseconds=e,this.frameStart=0}return t.prototype.beginFrame=function(){this.frameStart=Date.now()},t.prototype.allowedToUpload=function(){return Date.now()-this.frameStart<this.maxMilliseconds},t}();r.default=i},{}],187:[function(t,e,r){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function i(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function o(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){return e instanceof l.BaseTexture&&(e._glTextures[t.CONTEXT_UID]||t.textureManager.updateTexture(e),!0)}function a(t,e){return e instanceof l.Graphics&&((e.dirty||e.clearDirty||!e._webGL[t.plugins.graphics.CONTEXT_UID])&&t.plugins.graphics.updateGraphics(e),!0)}function u(t,e){return t instanceof l.Graphics&&(e.push(t),!0)}r.__esModule=!0;var h=t("../../core"),l=function(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e.default=t,e}(h),c=t("../BasePrepare"),d=function(t){return t&&t.__esModule?t:{default:t}}(c),f=function(t){function e(r){n(this,e);var o=i(this,t.call(this,r));return o.uploadHookHelper=o.renderer,o.registerFindHook(u),o.registerUploadHook(s),o.registerUploadHook(a),o}return o(e,t),e}(d.default);r.default=f,l.WebGLRenderer.registerPlugin("prepare",f)},{"../../core":65,"../BasePrepare":182}],188:[function(t,e,r){(function(e){"use strict";function n(t){if(t&&t.__esModule)return t;var e={};if(null!=t)for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r]);return e.default=t,e}r.__esModule=!0,r.loader=r.prepare=r.particles=r.mesh=r.loaders=r.interaction=r.filters=r.extras=r.extract=r.accessibility=void 0;var i=t("./polyfill");Object.keys(i).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(r,t,{enumerable:!0,get:function(){return i[t]}})});var o=t("./core");Object.keys(o).forEach(function(t){"default"!==t&&"__esModule"!==t&&Object.defineProperty(r,t,{enumerable:!0,get:function(){return o[t]}})});var s=t("./deprecation"),a=function(t){return t&&t.__esModule?t:{default:t}}(s),u=t("./accessibility"),h=n(u),l=t("./extract"),c=n(l),d=t("./extras"),f=n(d),p=t("./filters"),v=n(p),y=t("./interaction"),g=n(y),m=t("./loaders"),_=n(m),b=t("./mesh"),x=n(b),T=t("./particles"),w=n(T),E=t("./prepare"),S=n(E);o.utils.mixins.performMixins();var O=_.shared||null;r.accessibility=h,r.extract=c,r.extras=f,r.filters=v,r.interaction=g,r.loaders=_,r.mesh=x,r.particles=w,r.prepare=S,r.loader=O,"function"==typeof a.default&&(0,a.default)(r),e.PIXI=r}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./accessibility":42,"./core":65,"./deprecation":131,"./extract":133,"./extras":141,"./filters":153,"./interaction":159,"./loaders":162,"./mesh":171,"./particles":174,"./polyfill":180,"./prepare":184}]},{},[188])(188)});
 //# sourceMappingURL=pixi.min.js.map
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
-/* 4 */
+/* 8 */
 /***/ (function(module, exports) {
 
 var g;
@@ -750,7 +1553,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 5 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1208,7 +2011,7 @@ Object.assign(PIXI, {
 //# sourceMappingURL=pixi-display.js.map
 
 /***/ }),
-/* 6 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1220,7 +2023,388 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _BPParser = __webpack_require__(7);
+var _config = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Grid = function () {
+    function Grid(app, x, y) {
+        _classCallCheck(this, Grid);
+
+        var tmpContainer = new PIXI.Container();
+        var background = new PIXI.Graphics();
+        background.beginFill(0x2a2a2a);
+        var fullCellSize = 8 * _config.CONFIG.CELL_SIZE;
+        background.drawRect(0, 0, fullCellSize, fullCellSize);
+        tmpContainer.addChild(background);
+
+        this.grid = new PIXI.Graphics();
+        this.gridThickness = 1;
+        tmpContainer.addChild(this.grid);
+        this.drawQuad();
+
+        var renderTexture = PIXI.RenderTexture.create(fullCellSize + 1, fullCellSize + 1);
+        app.renderer.render(tmpContainer, renderTexture, false);
+
+        var newSprite = new PIXI.extras.TilingSprite(renderTexture, 7552, 4272);
+        app.stage.addChild(newSprite);
+    }
+
+    _createClass(Grid, [{
+        key: 'drawQuad',
+        value: function drawQuad() {
+            var gridThickness = this.gridThickness;
+            var fullCellSize = 8 * _config.CONFIG.CELL_SIZE;
+            for (var i = 0; i < fullCellSize; i += _config.CONFIG.CELL_SIZE) {
+                this.grid.lineStyle(gridThickness, 0x353535).moveTo(i, 0).lineTo(i, fullCellSize);
+            }
+
+            for (var i = 0; i < fullCellSize; i += _config.CONFIG.CELL_SIZE) {
+                this.grid.lineStyle(gridThickness, 0x353535).moveTo(0, i).lineTo(fullCellSize, i);
+            }
+
+            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, 0).lineTo(0, fullCellSize + 1);
+
+            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(fullCellSize + 1, 0).lineTo(fullCellSize + 1, fullCellSize + 1);
+
+            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, 0).lineTo(fullCellSize + 1, 0);
+
+            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, fullCellSize + 1).lineTo(fullCellSize + 1, fullCellSize + 1);
+        }
+    }, {
+        key: 'draw',
+        value: function draw() {
+            var gridThickness = this.gridThickness;
+            this.grid.clear();
+
+            var fullCellSize = fullCellSize;
+
+            for (var i = -fullCellSize; i < window.innerWidth + fullCellSize; i += _config.CONFIG.CELL_SIZE) {
+                this.grid.lineStyle(gridThickness, 0x353535).moveTo(i - this.origin.x, 0).lineTo(i - this.origin.x, window.innerHeight);
+            }
+
+            for (var i = -fullCellSize; i < window.innerHeight + fullCellSize; i += _config.CONFIG.CELL_SIZE) {
+                this.grid.lineStyle(gridThickness, 0x353535).moveTo(0, i - this.origin.y).lineTo(window.innerWidth, i - this.origin.y);
+            }
+
+            for (var i = -fullCellSize; i < window.innerWidth + fullCellSize; i += fullCellSize) {
+                this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(i - this.origin.x, 0).lineTo(i - this.origin.x, window.innerHeight);
+            }
+
+            for (var i = -fullCellSize; i < window.innerHeight + fullCellSize; i += fullCellSize) {
+                this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, i - this.origin.y).lineTo(window.innerWidth, i - this.origin.y);
+            }
+        }
+    }, {
+        key: 'redraw',
+        value: function redraw(x, y) {
+            this.origin.x -= x;
+            this.origin.y -= y;
+
+            if (this.origin.x > fullCellSize) {
+                this.origin.x = this.origin.x - fullCellSize;
+            } else if (this.origin.x < -fullCellSize) {
+                this.origin.x = this.origin.x + fullCellSize;
+            }
+
+            if (this.origin.y > fullCellSize) {
+                this.origin.y = this.origin.y - fullCellSize;
+            } else if (this.origin.y < -fullCellSize) {
+                this.origin.y = this.origin.y + fullCellSize;
+            }
+            this.draw();
+        }
+    }]);
+
+    return Grid;
+}();
+
+exports.default = Grid;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRvQAAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSFEAAAABJ6CQbQQ4lZ3ScXwRETwWGDSyFecRDJwGCAb+/2Cgh39dXQFNIvo/AdJ8wSbJN9pVNpyMyk71oNbGD/X8H2w8qHVRw6hcqCRnuqT5vJ+fJgEAVlA4IHwAAADwBgCdASpAAEAAPpFImkqlpKIhpBgLaLASCWkAAAy5iWCqHs++2P2yfHJ+RK1pS8/vtDzjTJOTWPaOCB+5j2WAAP77kz3hlHVRZEE7sdtMfTZgtwLzYSDsCghflV1l6XgBbm5FN95tvp6/hTCM5y+X/+S+cLgvbF84AAAA"
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRgABAABXRUJQVlA4WAoAAAAQAAAAPwAAGAAAQUxQSDsAAAABH6AgbQMWdipuRAS+wDaSrTYf76EEWqUESiCmOrn8Z3qjSGlE/yeAvn/4dSdikAYi5wbtQiJ2MNj+HwBWUDggngAAADAGAJ0BKkAAGQA+kUCWR6WkIiEwGAoAsBIJZwDTRKvIx/5gDG7nzywpRCV7xlJjlsz9K1LXeUYWDwAA/rn7uf0LbtrdBDh+wvSsEnZnBqT98Ld5rckGqHP7g1g3+9+S8hb06E5ea7m7U1sq/AD4Vlj6V9fFFZTpVXQtfP1HDvJ7aL8fMlxesuFcQv6aMsrxhH45atBvNEoBl8ATYAAA"
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRvwAAABXRUJQVlA4WAoAAAAQAAAAPwAAFQAAQUxQSEkAAAABN6CmbSM42am9OwQ3/RERYHxUglFsW20uYOBLoO5TDUQC8RD/Hnovu4j+TwAXKP2weatGObJ5lwBJ7JiBQu9hDRTsakD20fy/AFZQOCCMAAAA0AQAnQEqQAAWAD6RQJlIJaQioTAYCACwEglnAC7/xageYAFyP4LuDxpdsXdKRAAA/rn/eiuZIcNnMZTvZX/qYn/6mErdD36957/kBMRMy3CIizkwmchsrBIod/uULUDFYElhZIc3Nl0+2Pj3Kn0XpLiaFdL915M0NTgJ3SS/hZRD/UABUIAD3fwAAAA="
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRkQDAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSHEBAAABh6CwbSM1dIzPHxEBJMoROipm/P8+IEmyW7cBQQLgX7n/cUU4eURllWwi+u/AbSRFqlT1wDHOzBfob5oEEnVbvuTc9Hom51xAcs6XE8nN8NUrS+wmEp73fq/f3fTerTMaYbqGxRlOoQAK6nSiTAGwvkbEXESMIkgmUpjBtlII1TeARC1KpgKI+bSNQmhVkeEZW+0UQq8mJQMStRalZiqYahsUwmgVUOISrcLpZ1ntUerVYE0KYf5rK1EAfCehAORKo4UsOwOW1jaWBLQL+98mzk7z3rKmWzfgdWuuPYwusLHXhNctf8Fa+3m+YJ5nrzXQdZPLx3DvB+08b/bHuDCD+4b+2nUw9l5v+se+Ady3NOe1QZaLawERcxax4zHnAplznJhIZiZCmuPaeh9jTIAxRu+tnrgW3DeeG9TWWodo7fTUxQm1mlUYM/0uoHORM6EGoWdGSvYB7TpFLiiux+mXnBsuJu4IO/18nJR+fBa/EgIAVlA4IKwBAADwCgCdASpAAEAAPnEwkUekoyGhPfqoAJAOCWMAwxmyeBZQRqwJzRPtPogEiiTLzd7J7YDuSOVFJkYpHDoI1hiynaEtiJ8ZIr8fUsiHyW+bc64VoEomhVxSsXyzCKaRgAAA/ilVSlS475IgwhOsAXiu3/Bltqox64ubIOqh4F2QRDmHmZdw7F98+/99iqdM9v3+Pz/i7uwzGHzTIDZNvJTPYL6ANaAszzJ2252bKLu/pUrUfBvhTl2x7Kty/+Yjq5Hj5SaiCUKr6CHshRAZh3g0cTivm+epPjgTN0uQUnZRcOzVjQ2GQCy10ogkUTJwgYFrtRqs09LZJ077Jp/Qx9KUxxcliA6xrBkQvLaV0OXHWOwWx1azxn3UFDgqg/KOCQBnhJDIMdfQAAttpZqwRxhqPsvn+DwdTp3G+/Qdok2l3efAr1NR7/Fajrl4HclJRvuOccw1RHFFsHONr+Rc1eb1pcwKM0GZvbZjWlOUHWnKEDFAXrFvs0xGoM4ySlATCnnjiVNziRI8XD/bXWKVWm6ysKIgG73N3zdG48I3WzTwC0kqjTYDPwP3kUnAAA=="
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRhgEAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSHEBAAABH6G4bSQ1ect7zK/TRUQEIBIRdmWKEC3CurWC5QeEDh9BImTZtt22De4rfKBZ1LushvmPUvDCA9LLR0T/JyD8bUrL7SlVPG2XVGmbGtzW6E+pyVPv1j9To8/eBzilZk+AA7BNDW8Bhz413ZcByy/OY6g4nr9YAmX73AWhKs65vQN95sZQecx9UgnAKfsM1Z+ZxECJtWZF1B79rDzqPby4Pf5fyavey01umdTX6lP2Jg6H3BV1cM0dPNa5dB1rjNeUX5eRfHzR6IdQme5a2qmL3dq5mQdLt7i3cl90wh5qi1sbt4WpA0i0i8OxheMQOxVCGYtaHObN8VbjdtzMQzQVLgogYlGLwzDN88p9nqdhiKbCRAglIBZRi3EYpmmaXadpGoYYTUWY4EEsop3FGAf3GKN1KsLkEAAiZlHtzCw6m1mnKsxEQHAAEbGIqGrnrKoiwkQEjwAARMQsVZmJCACCK97pnZ3pHe/BH6Uhi9LwnQUAVlA4IIACAAAwEQCdASpAAEAAPo02mEelIqKhKhZvQKARiWwAvzVofx3WjTT9J+QHNE7B9vvxs41+s+cB///MA/QDrAeYD+AZD3vEn7gfrh7NzldO1zU9M9rMg/W5L0SgLczy3rVMKMpAmxoWs0wVucelni6KLePeKblb98FZRERi6i93Bx8odsJt2ciWYAmWVjowtif70ntCAAD+4qWNPVVxCHHCAeXSBPp/17dQ+/n0YrBqO9W9VGbe85ckf8IU4EN0X2nvyahzmwZLSLW4UHnLQwjNoF0Bnn3KeMqp0QIn9zqh4c9XvhDGDHrk219rcmTvFgJ/+I9PARDv3jMtvPZFGTNlHe/6oV/A/qUpoEB0TUgw0iIojza6qgSeGa6MPvt6jfmVmGWMBAXoQO/2UBmsvWd8khJmI1ZMQYLp0LqPhx1f4Q5lTWsDEthldnH2yVx7y0W0oi8HxUUlrbVF3Ez9kwjNfcuNAWzLub252G3r6iZN6deAoQm5AvERkRd7dYa32famgj/wmyWDJNbCBJ6TH/GiKBhypPY2ianif1boTV9ftXJ0wuH+/nP4/8jWX+Tqj8nU0TOS1Hpk3yZFRyvS2YK21Xj1toGwju29hg+DWyaO+EtBhuU58T+W2xWdyyb3F97aaAkZjIdXIj5aTo4dLzOTBxnUIdrmzlgyV4vtA7KooBL2uhJJjjq0OeWsDcdciGc1QkGpjJNBnhDBSEIkeSJJ3JHMdtk1i4tsX5GDjsJu8R8ai2GvJIFZ/eCUHJecYVsmNyO0ggBEl0AGoIXccsCfUdHAjuzUpoOgVx0+L3cDAavwgRiQWc9iWXf9GgmUbhi9IU0Vp4Gd9WaigmJ6Btz6wAAA"
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRlIEAABXRUJQVlA4WAoAAAAQAAAAPwAAHwAAQUxQSE8DAAABmS5E9D84ExARoeRIkhtJispCt+1rFTjOZDgJ7kv1l2MIGlUwW6B7iAQRE6DAbRvldmM6/ATESLbbNsdMOfRfZmIC8P8HZoQPhQ4igoHbRopurpulLh08wmICh6eA8XK4p7gMhldvh1/e+QSAubmeg5UUusIBnHCAHoQU0bClGODw6r9PAAMDwS3oppVkhkK/PRFAiKA44LdPYIzA3MF2G8kQuV1uI40qIQkK/PSNMWJgZFqm2S0PR7soyhIxtx4FIDkmtwz3w0AjYiC3mGDH18jATFqrwdU5QsIcXrlJEiNyy+QAoNnvtPtj+fyZNpzHlQGLF2/oxBQo4HCrgEEHWfrvHQbMlqOtg5gAZQEMdFI4MXLf27OJc+GbrbFoj3pzBsVqNXCAOBT3TPMvhzGY0QtM4plE1VihmXDhXOGMu2MYtu6fkr7PJY4qUQEpRB7ECmYiRTEZjwt0ABYYmeZ/BmNc/9aQBRjPJBl1EjETrmR6AUeYAOQ8s14jk+ysW7pt4L8AUEVZAQYOgmEVEXMjMaEM41Uo3K6v3QAuwKo7u0MFnAjEFcY5KW5wAEXVdzZNa1gDUzeAMAk7EaQmTaT5rAUikGMrFjInAEoXCIBCJpKGrKC8F4IA8PhBZqQ6cvG0ByvsdstCkiS7NUgAsAEKjyOSoIjvYQAhASk0XQhFU5iEdHSYFUBCJHDFcHE2K0pRamIKuVqhSwEJIaTGNSLH5yQXoHi5ia4zQvIPQhtWSKkLITRNNQobcxRcTYpXuC7HIwCI+NEyQNV1qSnGdKMD4ABgl7EhUFu5q6Ero64M1apIKbiwcW6Bwhm4/ZiO5wICsVRXf5yO6QHNsRoYmiJUrgEKzMNMPpi7F6EQquJBSo60I28W6MZ0jXEOTq6OPv7ZlPcPu7HxS2z/N6AK6ojNxZs5yMZJY1zlAIEBZDOrJ8DGBgdBkeAowoMIzgw5SYCTSmDc7j432OHdM/2yEYTTjSyV1lwI6IJJwYg0RmCkmgoZXAHAFTg44WJUIXBCEqqzLQNA1yVJwUDmrL10hgDsMP8D4XKSlJ59rsEB6AZJZhgAQTMt7WoKHnbgUKouYoTw6KWDgjA3SAFGUieAAa6mnOlwD2eO9GcVYM2HaU4AAFZQOCDcAAAA8AcAnQEqQAAgAD6RQJtKJaOiIaQMkLASCWkAA6wrfAP1ALu//fYVtMCCOsXAyw+e6UOrULHraVS4I1Oyy4NyBM59eEQ987nAAP799lxyK3MwgdhAufQHoE5averKEgug2nSnwHDfkZgCSD7T8yvLKDk5L3DpiSHupTjPWtQQ9WhhUKmzfoU/fgYAlBj8LeIiW769tRklG6tEI3DyFY+67c7brXSEfOdb6jEvp/AqSSvzSQxZSDn9J/hzGLXn9myCDGtMH0z7h8rVF6SP+pfn9sNvDR1dQ/sVMAAAAA=="
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRrABAABXRUJQVlA4WAoAAAAQAAAAPwAAGwAAQUxQSMoAAAABZ6C2bRs25T29T4mIwA1/k2iWOODa1nY8emJUKY061V/GSZlB+/tvx7Vt1rZtT23dFb/nDiL6PwEAEBg5+BK4WLHhZ+m+U5EF1s1NO34I3Kmy4NZu27dhTRY+mgYg9cjEVwcwqDJag8CcTO2EZHJuHAMqp9V7IZMjMyy9kzXXwrq1WM+8FtZtJ2tultW0yUqtq5xWf9ng7DgxwZkAHlVGax4odzPunACeNHGjtQAg7auiWqcc31B+6FRFtM4tOfFzcubjS+CxbgcAVlA4IMAAAACQBgCdASpAABwAPpE8mEelo6KhMAgAsBIJZwDQVYr64SMzzT+yTROr4I5K7AefsBud4HKUrePFzkUh8rmAAP65/zFH1ddGOj/wJKrQsKnE7oz3LNMcmRNeymksZJgyubr9b+Pq3CfHcdgeZEZ4NM+Z9k+DKGtVzZ69KLu+5fguOCxs35WUd/qYDVqZUqe5KxQuTqjpCLxC8V+jacLTbuaAAOvgINPGR6YSG+wZqViPwt7gWlxgAAcmx3RX4MyAAAA="
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRgwCAABXRUJQVlA4WAoAAAAQAAAAPwAAGwAAQUxQSN8AAAAB/6CwkaQ0xrvhEBHRUISBzBNh6QeAK8AYZfAGvwuHbSQpUvfM3ew97R8z5B/n884HENH/CcD/zKtuHOcUx6GrTvlnp24/jnVsYoJVt6zrcM0/qPZjjEk3Qzy9w2Zfqph6E698FfcpOuzj9cVlm6LL/n55ktVLdNqX2cNtg9eyvAHIytkN2jIDzi38luUZuM2OgBIoe3e1N4VrA5Se6E4MEPGkClDphyYAVPyoAYAovdDkAar0QTM8pSk9UAOfgaZMjxaI1zQTpkUNRrwtIaiQaZBiIQg+FguhSDQEE/xPAFZQOCAGAQAA8AYAnQEqQAAcAD6RPJdHpaOiITAIALASCWMAypltIJzdUDnSorTZ7QRKE8m8pob2/tEM+UQEhutv4TQK/sWAAAD+uUvznp7uJ//dw31pAKQFQsT/cFl127UsCSR1hWwP90CmlCJsr9CEhrYYtu5Dvsrgwlsr/z/xQWbMAAK3BUerhuQ7PizWdrKzw2Vfj23COLxojs2ukLnele5qHoRYOskOl6SFVn1K6ssa/Dvc+WeYjdMTbsWl3fG46TPYxzrHnZ2gpvQNhpbHkJaQpep9rHqoLtTFTTLuERTwIMIkQvI7CLmjdNkc1Y+75xuGeg+f1VoQJrmHr/dvTPYEuKH8UffpbSgAAA=="
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRkAEAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSNkBAAABh6CwkaTk3XDov1qaiAiCSZpqOwZIzON/zt7vfpAl205cV2CL1ggy/+FejrCk5LVfEf1n4LZtHDuB3TS7zzeE/9qMgt+zvuuVnqvDufuVOOXmcD9PO4O74mOEU+1eFMbD0V5exYvQWJMoGvaLyBYRqhRMJCiqA9N6YjEMSumwhPrYEoHoE2pG0UfcmUGNkndEtebgwIyiVQoOJK1szeUODrxL3qLUegUHXlWIBqXF4MDYCkA1rj24sFfVEMaO2KJBaV5oRY8nuPBRI3sivyNipxewMf6eEIMDow0+z50NKTgw2VCDA6sNLo2PhO6+ZYcXFzHct+rnZjjIMx7Lc9cHm5sTj65Hrh/wbVwzf1CzCqKRJ5vu3ciTRecropzgybfFT4YZ9XsXZU311yfPBar8cFy40j54rqXbKPFaE7rFWC0QX/PJx8VzfuYX5EG1381yCAVlwjxAJ6VBzLXWW2VNyFaEKj/ch+AJhQPnnHxMgD5qB8PzSAbXK+RW/X8TRNtmDJYcY2zXRMJalAIhTH+O7MJhxqCPPUkp51Jra60LttZqLTmnw3+jLbbZhVKqYCm7kogc/3x3IeUD064I5/bfTq/87Irvn/91v/I6O6fCkZqK1+oEw09mAABWUDggQAIAABAOAJ0BKkAAQAA+kTyZSaWjIiEoGAyosBIJQBdmfIImIGen28jZIo5l9mfgDKCcA0QOLfvvDCWaAiO9gDQQW//mtgmGnGh/0SLmFleLTOzb6+TlFyyL1uRSTbevFjVfYHMmxjnP6zuDTCVF+rBt8IO+Lypigj192gAA/u7d4KKYXUGEX7X5+UPXJguOV9T7rKfXm+XpfVmfEfIGhJu/yxtM7SYC5EsVn5DyvXNEVoYQasodnapoQQeejA/StZTQPOx7S89tHM0J0QeOq33yZzmotoW87fbepsrYXU3IOBJFkiIdQ61zx+dNRDu4piKDhoP9UgjfDhi6l/7l2yg/tX1ENDxcYu3g05nN0Cr08uxPux1JdQLV+0yeolrFWVKKU0OQXRQAYqkSJRdq7eCCgmpJk4jyRJnGu92q6XDmLPPkgbGVCKdg8jACihSnKJpF6njGWgJyVl/pMIrr+eOsMHVhmZbZ17Oly7OlxozfwhPZ54xMOK1zN2xWeSuo/44qWdukBE2OTVdgJCw/2DirXxMEC57ieLbenajCDtwC1NKA21ATQFNLT5HllZl00XvikKxt2HLk4msiez7uyholkr39CnL1n2Y/j+ZJdhXldGxJNFSPKl0ohKIyOHVorq7ZXevZtJhFmkQd4FMuG8xkzOkfgp69uo36vu3q5Z75E4l+0edz9ncW/UEy5uxgS74uq+5D75SGJgDh6BNmNPWWxX/nbGdLkYFhSR+Yk/c7hvlhSSpHg07dgCgTSFUicN/AAA=="
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRjQGAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSHECAAABZ8G4bSPHydXkzXf3vIiIBqaKq4aEWCY+bUXE1Dl/QqeRvJTBB9m2bTWRBaLQlBGtnHP0/z+w2cCBm+9TRP8ZOJLa5g5cADuX/gf2n4pi2Fyvo4fX62YQLCHnx5HE45wl4vAYyXwMLAEnngpiwSRh9McE+eC5U5uu4x45Xbfx3MWBp/B9zQis9/HGJ5h9dIzIzpE14VTnuNtJMTLVCTfjnOgDuoh6nE9OiNPwgKvyxaL4hdpI4HwO5+RZQV4A4uYU49kZDsSiCcc5Z2FwruCMahbNGuQpzsM9VJ9ZAp6hOCNgY/WsWAKurL4NAeLsqU5SfBYh8Ey8rR5n58iNrb63yHgQo2WSj5sjMAiBclgSIkQQeWrkPx+K1Ch+NmRCpoYU2W8IyZ5bMj5p35sPBRerx7AENFbfhYKt1bNmCbi2+rYUzOB8WALC9ZkFwUVRpv1ulpTnXsEJ7Vg0d3B5FAG5Wo5OcYLqcalyCnTK/5amQEiN3SXuv3nBXksRRCYKVV7QYv7bjrBSFSILI1favEDXg7zAPEDWy2iVIwIJqcvFiNzVpKPuHFGLUstccM4IU11BDVybtfGmarOGVVBUaWcenkpVVovnGMnnoiqVzCnAdNlMb2MUb9OmxHwQ7BuisNZuIoLPTWu9ENhTOgnWb4gFt00PLrGnmECrWtNPN4f73Vd7vx820960FbqzC6VzrGlN308D7HvTNo47PdUKBYOmbU3voWnbBkaq8DjVMKjLsqqa71Lgt4CqKkuNUcephkGpIOAjRJTEKHqE2QEElNIOlYKIHTkeP4BUIR0WkPOOIgcYCNKJOKMkKdwO6chgPyUZAFZQOCCcAwAAkBUAnQEqQABAAD6RPJdIJaOiITAWCwCwEglsDqADYAMDJQX8B0LUcO2/lfy1nDPgbaEOA/Vf8T0p/MA/Tv/C9SDzAfsB1APQA/0P9j9Xf/d+xX6AHmcf6j9mPgh/b79zvaDilTqTs3lNcAKmy/Aftv7IH6VuGqoqdhMyNglr+gT6vG6sXY0yr+w40DeIYrCIhgkmtg1swKgoCkr16WCifH6GpoFFq3Eb6If6yWhYJmqcM/8UiAD+718S34/LYqx//3/7U6Lbfiy0HUz3/ZfSUNLBTeDCuDMngroiue16EO4QiwtBZbzaIqNHpHH3BiDGZ8K3Hp7OnTIUybiG9skYTi+p2cvmmag/xpenPxEugb8q/GllHTEQ70tzEaSlzj6h0N8a4S8oT7BW5tURTkRsLeZdpsvZT2oEac1gm3Y6OcFjzH/5NjVeCwNkHplxEMWJYZXud7GQUPwbZd+Tzh1/Sucu+YL+P2MZT8qshc/OV34xRar9c+S/Ybf0NfX5KNfXOehLIASafwTjEYnHyfOLXFmoDLVIR7neF0rz83rKDbQk5GtjltQND+BT5g7yNpV7yXvB3HtSOO8tROx7iXzL032jZze9rerewiBexD5chnJ7Ygb/uSD+4p5s48oK/XP9RhVuv0YBZfdXN+EG02KVFPHkzD5/7VeEB09qBVuXOnVVzhneoopWPKntwZNTI2xWnVJBKj3SfqfouOE9WqwDd22WxKDfwRn0ZIaDZ8kTVe8BANM2mTAM1nVjiozAvGLpWL/mc+5q2JryVGNpX5KrOwp5VA3glaJRFdbMk00+WObIadin3rI9LSFcnyFctRm0xP/+OHHEkAw9KWMQVRcEwp46VYPTXTs7keENXZlf1ij2fjDGkYjVyKdsHpoYzPKODMXcUPnBmrmG0QVuDyRR7jzn0EPGH1Fd6zx3JTBJeixj1ciSAsWjjuUYgfVWJNIEXXe5eqWsK7NkGglMIIQv/+CpGPjiiwGnc9HTNwK69LjDJhDR3mNWiz1DRZEKCri7tZwJhU9nNpRYM2m8WJ8QRkcZolO0hTsJXQe6uQJmrP9OOl3tzmsOXxbyML3PKeSd/VGVE0U+yH3EbL5Rnj/qBm/E5MG0QiOEy8djeeQT7kTHFrxzeg86ED8reO4z2HApcNf3DFf9TTw8tt3b4B4r95jJ1/ONC3Yqvmu+dUW3pboJrdHqAbOThMnvzIE5HRYpViwNTjAiNG8mwAAA"
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRlADAABXRUJQVlA4WAoAAAAQAAAAgwAAGwAAQUxQSDACAAABn6Cwbds2lb2TNiICEIXVVCWy96bf/3DYtpEjXdpwOXz/ze557Jn7BiL670AA0rgBUWLSzF2f6FwcXBw/4uBh9w3hjU1TSinnUus8z8uyruu2bXvjcRzneV6N98vHyxvYhmszHo1t4K2xjb8s8zzXWkrJOafGqZF+Uv2rHj/cCVSallfv5NTxzu/5CT4/tnVBA2O3YY2MAb8tAFMuxAtZB3teghEHSKw8srAWg10AbHX4JyoR9pSyxW3tDqIQrP5eNPGy0+K1ZLvvYQknG6pd+MLdNrzZxqkeAVArCsAmW6DlfDLw4P3cyslqS/UWAbiIbwpz3ZzPrQiTncwRbyUuZwXQW6RsWuQUvwa28Dr4EOwncd12npM6IuvcLYUJwGJZ+WscJ/Ly0kx1cEeOQYcUgcEs4SIDR5A/JjQIrzdfeBMZ5jgcsPcAfCkADKAjHPS7bRWwhW5MIYiwiJvjpNi/Rtd18AA8SjgRvnNmZGmfTC4+wkRtLsNkOWna9zUA+5cd0GJwIzOWAOlwycSUJm2MQ/QujEMUBbODdiAiUiI1ACn4AJOKWHEkhpFrEGudhCOknUDkQos1jp6NEJzKygdIwy5F+4M0aEjHz9ZSOUsVDbH9iUQSIntSNUBiDB0xOsRBd4RSpDOT7PgicnFcIAAKYGSYROVudlIcN9PaEqx8IVJKpOg6+6LOfJM7Au6E/MU2nKkGk6MmIgwCIvdBfaaUSKPOvoPaS2f1B/Zhdn9jB1ZQOCD6AAAAMAgAnQEqhAAcAD6FOpVHpSOiITcWKACgEIlpANWc+jgAMxYzfPQe/ND0TpfCpOVzfEYIraMHWjys/hEAsKUeugOKFVh0yE6w8AAA/lZrthlGqUtOxClrWcY94+jiKuFJ1iuvVB6DOHS3MwAN173gJEolTOH8MBHVfTtihilZ6/u7BPy/qshGfdRrpyNYtTssClkow4DZ18zMkWyRgUDLMk8L4Zjm/pf2PPkMwfvBvGjH7oA+M8eYurXw9S4OdYULKCA1xTQRhfEP1fwf+Ye8YaoyQL2bLwoe7umivEfVi1QL+1ta1Og3HRjlueP4y7nUaS/BuL1foSMgAA=="
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRrwAAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSB0AAAABD/Bp/4gIoahtI6bMy3zcAnC/iP5PAE555Z/hBABWUDggeAAAABAGAJ0BKkAAQAA+kUCcSqWjoqGkGAtosBIJaQAAC/0Ww8gZLAObGhMmEQXV0yeuJmTNrVUg2dbkIAD++gfqIcpuQUuaYpk3xeYOYTcrGOQ61kz7CrU9yCR0EGp86haY/fTwMxtesdQUeAb4BIGCltV61FinhwAAAA=="
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRrwCAABXRUJQVlA4WAoAAAAQAAAAPwAAPwAAQUxQSOcAAAABp6CwkaQ09244NEtEBKCakKD4qIh6/yI3wJJtt22D92AIBim573+zjSDSy0dE/ydAfo9u51vh85ZxvpU+J+xuxXdflbNSJlPPSXhCmc4nyJKC7xTeAkaWasu7w3p8py4VLln7avv/Kq4Vrl8cn+ezjo7JfkxbHhRePh2ohyGeap2YsJ0qnbYhAahqHq31dT2kr2tvLdxUCcgYVc0jWuu9r6m999Yi3FSZAlLV3COipUeEu6mSGBMApKqZu0e6u5upkgAkAyRV1cw82cxUlSRSBPckqVNJEveSioecjIeSj1F5iFF5ZwEAVlA4IK4BAADQDACdASpAAEAAPok0mEelIqKhN/Fd+KARCWoAzjBpAX/HfiB+KvIs9gPxA6GAI0e+ep+50lQDo8FsiTNRMEDYgz2JREhmOXAAaQS++z6/CA0jf7/kf4H4Wc7pMGucMq/L6Dfmk7DJeonoVJgtQoAA/il357paJ9tsD0C0QspVfHWTAuqurhWv1kEE7uwH8PNmd5YAF8pbZhNtUnXbGX84QNwE/Eh4OldKLv/96vX/9FnrzFQTjEEw/cMdwH+HNAt1QJ+tHB63JzE3+Hp0sL9EG/xvzSynYn6aHGVwXycSMAA0M/stA5/we+YhZhXg3mEXyFgEwD6+iOORd2gwCoFD5ylNz+TzG0NprnNOtitC57777Kf3YACX5zNlt0X7GaO6Ir8gM+TEMq4tGHo0Hwn00E2Bjmj3RYnSEcrVLOuRXqBqh7sRbPGd0poovqGsIOgjMJZpEqIq53HaVPh7lS58j6BxItW5z7fxAWOww3hrxfLYtybcNEQxxuBVxeaxP6te227EsOjnqYpK1+n5TzghTh6Yt59yKjU8n74MUNiyJjwspdK8OATjk1q8FgAA"
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRoQAAABXRUJQVlA4WAoAAAAQAAAAYwAAQwAAQUxQSCYAAAABFyAWTEMAO/MoIuLAQNo2KuZsMzFnu9IaOET0fwIcWju6j4VDC1ZQOCA4AAAAkAQAnQEqZABEAD6RSKFMpaQjIiDoALASCWkAAAd2VXy9xp7yb6dOnTp06dHAAP74TQAAAAAAAAA="
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRugAAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSBwAAAABDzD/ERGCIICkIfOZZ9IRIvpPMElTbccoDf9tVlA4IKYAAADQBACdASoQABAAAgA0JQBOgrwEcAcID1APyX/gfoB6AtQD9MPQA6gD9AB/5XPaAAD2rN6ejeRVbiKQGdudn5jWsmQNgxn5jWsmQPKh0blgcF6NkoUA/A6oAoIFm/O4HtQkoEma2iKvaScKNHDc+uy2gSa81wIfdMXk+ii5MhNBVyp7SwQ4NQjjs5IdHBux6N7WF0cpB2Cbk3jJBeWgk6qRAXviWAAA"
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRloBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSIUAAAABl6CokSQ1uAzHION+FxEBokSv7mt67q/TS4WCNpKUeWb0r5YtRPRfYdu2TfZO2jM4UFureKGMvQf5YBFHjiWIi3Uc02Jr0Jfd5wJcPUwZR6vVgFgkUXFMD3CSsn3egEjdmvYD6fvHQfpPCQj/GQTKH/9QggI4zeSKF9wofWtBwouMObMAAFZQOCCuAAAAEAQAnQEqEAAQAAIANCWUAnR/CP/iAyeIL8Y3gHoAfowfePdYLyX9WQAA/q0+wBf68NwcBmYWb59t535B/DPJr5ylrOZ52EaWgzexsdO7F3xT7hpvQPtHOjbjii1+YPaDxPbCu56Iil160FLuQ3jIgSVOzYh9NE00d68nJoKC8zGTp+HoFtZx888wFpr6FCjwsjA3Z4weEsTz6P3nmueL/DXjorygenJBYt6mlAAA"
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRm4BAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSJ4AAAABt6CgjSQ1dgzPpOQjIoBZX6lVvQ23c39Y81LhsG0jR/KON93N7P9tmv57vVBDRP8nAI+shfjKtpbxg7T9b5fJC9v2Go5ufJC23CvCMUwAsO3Ze42R5zCCbbsFqmoK5zCW5a5IhiCQ3ypl3rIC4YG2XMGmmsI5jBDds/cjJZ7dCEB0uVeEo5vgTt1eUS8jnkXX77xM8C46pxFfmTPxCFZQOCCqAAAAsAMAnQEqEAAQAAIANCWcAUwBiiGYJNJ6gHoAfoAfePdl7KEBsHAA/q0+vr4InrW+DkC1Y59vXJ6iNYdJ1HUWktDh0e2uTyOmt5K05CzPd/f3N6+aFcMzkL7cQBZ/q83ZM/AUUzmB1yyz3f81n8ohiEMNNq1jVfU/mY6PsfOdsFjHyhedNFT6ZW1ojuOxZ17CklCcK1l4EuVCMkLcxQJHXvZ0S5WDArCcAAA="
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRkgBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSIoAAAABZ8GwbSTFuRvae2aIiGjVOYYxt0TTpKOSTRew/ihBo0NhBkzAYRtJitTHfPd89Mww+Sc43R9DRP8nAD4fT/MmhK6eZmZzJKKr0UGsTBbsoLYkfak9qUxfAtf+8Qxd88eNZB91hA/OaiDYqXXggu7NHsuY1BP5Tm3kELf93X73vk3Ag6RedGUSAABWUDggmAAAAPACAJ0BKhAAEAACADQljAJ0BpzuZ19J/WYolvrQF2wAAP7anLhT5fPxoblftHqhAG3XH+HGRv/i5zufi2Q67FWxxzzJ/+HP1vPFXEq4i31ZIMhIzyYpSJVIG+yaFlJ4/+r+A5/I9jgSbvi/wvHx6sWElwA62zI2zzelDF4x837N/PvxkGxrjesvZBGhOuiwjb3EAE5hAAAA"
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRrYBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSOoAAAABh8KgkSRF1zMLz+xf7YuIiByOpDrQYhHMhhSh+iCXU8ZbUFVYli0Qko0QguIXgEFwGNu26dzYtm3zK7az+28nPz1E9H8CxKMYSkmZtUr9blZExA8ocD9By+QL0y/3NTR/POOl0d6sl+P9pvwjEjtuV73ttmO3msXho8Bc/kbhocLExBqO5saK0l5ser5AKGR3AeP396A+v6sLJF1PUL4cNVhdIel+g/rhqn7Qz5CwxtPFWn2026zXG6Mcd4jYvJnCAG5nqNgslmChWMgP4XqCQcZpcXq9Hmfj/tpsXq+q0yam3kwmEkmlPCJWUDggpgAAABADAJ0BKhAAEAACADQllAJ0E8n/Y1zuZ0G/IPgEFkJX4AD+8pEye6BaFk43Yj1nHSTR99iOtHAiIandPdxz10z+vmWV0u+Z9TX64J4ET7J2JWZcd4o91sg9LjJ4cAs2M4ivVbj8mFd0sHAgduJB3NpGgKnayfIBIj+T6jsI7tyFsCmT6fL8P76/r9FY4mcE6uV9sBcfphgJn98Mtnf0nRvBy9TgAAA="
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRmQAAABXRUJQVlA4WAoAAAAQAAAACgAACgAAQUxQSCUAAAABHyAgIbLVeDPciIg4gaI2UqBZzi8ikIB/fUiI6H8WK4afmOYAAFZQOCAYAAAAMAEAnQEqCwALAAIANCWkAANwAP77lAAA"
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRqIAAABXRUJQVlA4WAoAAAAQAAAACgAACgAAQUxQSCUAAAABHyAgSUPg74qIyKAashUKIIQgQsjf6N35DSGi/xHIYeCfwxIFAFZQOCBWAAAA8AEAnQEqCwALAAIANCWkAALc91ndN2BAAP74RpiOKP8ij0ns0Xe1XJktPrrUvf+hl7AyIDTaro1XlX/dZLU/r9v3vFmx3ctLTM/bvybYkZZAsoEPgAA="
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRsAAAABXRUJQVlA4WAoAAAAQAAAACwAADwAAQUxQSDAAAAABHyAQIHR71WIjIoITito2kiLNe+AMlOwB/AS0HCL6n0Av5kNDU0uX39LS1JiPXgBWUDggagAAADACAJ0BKgwAEAACADQllAAPhO89dd24rMRAAP7wrV2KDeg91tSfepxH9KgNd3+v8EKvkwVWEH8YrD6l+RFw3Cz6c/UK+Am/ltw9h7HH2QftPkjeiQ43N8JWef+h8mobK+u3rJV8LMA7AAA="
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRhIBAABXRUJQVlA4WAoAAAAQAAAACwAADwAAQUxQSFMAAAABN0AmgvEZVHH6NzLb1IiI4F0sMGojyVF/BsBe+kcAEcBITWBml8EefxIbMET0fwJQPcMqQGaKgJKLFMkKLlIkKzj3JCtmUTIZlJwFmX8EvnAJmgBWUDggmAAAAPADAJ0BKgwAEAACADQllAAdIBNxvFfmif5vrAfrN7AB8axza++6FGAA4n/8GqX7F9xJprhtWOjMWiUfBiRX2b6NucXRRxtyC32G0gRwREI3/GbcdeR9mP/Z0iSMc9de1bLcicfNvCZW7UCaufRfPX7BRzsBbm7P/LzxBm33+EX/J+0MiOODzhvj0F1K0rehry/W3U84AAAA"
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRggBAABXRUJQVlA4WAoAAAAQAAAADgAACgAAQUxQSHEAAAABd6CokSQ1urx7X0YDl4uIAMt3lPT5TnomcJNt25U8HDtAEEYSMIOawgDHAGZgdHJ2cmZ6fwNw/a8J8C9hiYj+B6/tXQO36HQHFv++YcxZnZIPLfE/zHxshz5VinYY5myVQzw0LJLUZRwlnQAe27MGAABWUDggcAAAABADAJ0BKg8ACwACADQlAF2P4BHXfEEmAfoAfeVpVnmAAAD+/ENBGAHCnUREVfiEFjKeX/89P0/PPzXDAmw45LX5+/9M35Z/rH3x1rUdNeE0NhS3+OfblMs3GnPCG96LFM/4oiZB2gIfYx22x4M5wAA="
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRiYBAABXRUJQVlA4WAoAAAAQAAAADgAACgAAQUxQSHAAAAABr6CgjSQ1ePDMIID/IyJAinzGZ1SdK6OSQkp3oaCNJGWfmf/8i32UENF/hW3bNtk7ac8AbJ40s8WOfrSSSht+YztqcNqFOqwSQG5BLwwtq84xi9vAlakoMkp6x0SSSF2FpMju4cjubZJ9vBcw198AVlA4IJAAAADQAgCdASoPAAsAAgA0JQBdj+AQR+6rOEMBdVYcvDcAAP7wQh+O/yr38m3k1Phj/Wtxy+PDKfo+a45t4nX6BV7zcTwxXzkfNrmf6f4zHqfyix8ZyGt5c69GcEKI0+ijvH3s+lqhndIui8CBEs0xx+cI+WwyhAAJt/8hH55PR3a3HXzHa3JSiRG1dZd7uMRgAAA="
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRmwBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSJoAAAABR6GgbSM39rf3HYKPiHikCaVpigTjAIscEsrogC4KN/QdRMEwkmRT975t23/zT/ExhIj+K2zbtsneSXsGqbDzVDmvHhe8jS1a1ggROybwibMIincNBKYBA2+VM85/kwqjqEalhA9AYgCmjqKEuXGaZVObuuKgq03DMC9T3yay/PJR/wNz0+PQ/BP5bT8fO94ttKUBvGTb2tQFVlA4IKwAAAAQAwCdASoQABAAAgA0JYwCdH8CPQH3g5r+Up8DFeTsRHAA/tlfpTQddUqBXTkNce0pWL7LMXJa9Yr1UAAXhSvOq50PgYcK/ugzD1THk0gyOZph0iJPd48b7nm4Lbsif61N2vRHgPVa5Lt16xeF8CLzy+PLSlVovveqUVl/3cg929WH5+f5sG1+58Wc+yJyXx+xflIOmzOjqQZxaAkQfbmNcwIHvttXMKL6IAAA"
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRmgBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSJ0AAAABh8GwbSTFwZsd2HvGiIjB7j7yL02aIFFM6ZKpNUZjYcDlIOjaS3AY2bbSXNzdHaI4r//2PnlpIaL/EwC/xZ815ZbFkgeilCXVRBFLzoeXxQKQzvOyruv21m4c+r1JwsggRYgZhySgOs9z3/f9qwOQguZRhJnneZ5rq4CUEvV5eW8CiOiakiRJwjC0VcCgT/s0wVS7Jgt1DlRTgcQAAFZQOCCkAAAAcAIAnQEqEAAQAAIANCWwAnQGKtW0qq5Cm73g2AD+2Hywpu6PemdN8/m3lUOJhm9VtKzvMmrPIluMUAQZa/YUZShcxDgfEKBVwDL92PtQOH+KPv/hUKhyHlzVgjnVcNWr9/Lmz/5q+KeIr32d4af5Evj3cqfZnIel0YOXOvg4StidQW/K3VpYri3q11j48NfBX5htsJsd2kp1Z7TL5VmoWfPgAAA="
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRm4BAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSJcAAAABn6GwbSM19YWjp4iIld4i5fBjb/SDNnIEJ/bHjmPNJsUEFLQAh5Fkm9Y+2/5+Nv6/+Ud37z8xRPR/AkBUvaI2QHV2xmjKwJhOkRtWvQwK6icgAUjHceZbC3zI/s+CD4EJEsJuujaA+/W91nVd+yzPQwBQ/IivMhsy55f847f5sUTJ379zEkATJhdbFIE46I7dJilReTMBAFZQOCCwAAAAMAIAnQEqEAAQAAIANCWwAnQGLLbUnx7tFSAA/tjtwHyB887MrPJu6hUc3H/sWptKqi1pknT5XU+IYD+K+T/z1fFdj69LU4o8GWDxlZEiVRe5HY+EwjA/Vt+4siP9DC+1nb1/kdM6Lv0pMspnIF6RRHSIi/gpzVXzM3b6hxW6fRHwfvjYw/tsP/tBvc51IqevrlcKpgsrLvdtNImcyCGlluxRdfF2I8WP12gY3Z1yzAA="
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRloBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSIUAAAABl6CokSQ1uAzHION+FxEBokSv7mt67q/TS4WCNpKUeWb0r5YtRPRfYdu2TfZO2jM4UFureKGMvQf5YBFHjiWIi3Uc02Jr0Jfd5wJcPUwZR6vVgFgkUXFMD3CSsn3egEjdmvYD6fvHQfpPCQj/GQTKH/9QggI4zeSKF9wofWtBwouMObMAAFZQOCCuAAAAEAQAnQEqEAAQAAIANCWUAnR/CP/iAyeIL8Y3gHoAfowfePdYLyX9WQAA/q0+wBf68NwcBmYWb59t535B/DPJr5ylrOZ52EaWgzexsdO7F3xT7hpvQPtHOjbjii1+YPaDxPbCu56Iil160FLuQ3jIgSVOzYh9NE00d68nJoKC8zGTp+HoFtZx888wFpr6FCjwsjA3Z4weEsTz6P3nmueL/DXjorygenJBYt6mlAAA"
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRqgBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSKwAAAABJ6Gwbds2lb2TNiICSpqcKbWC1O5YKbPkJ3ZZuBebw2FkW6nz+O7uBoTTf5HxpIKI/itM2oBJ5y3yUGp0KW8UZdmCK4MsenqbA8A1zm2RBBrczYKpDehgxtZRtGESL6ots6YTyc49kbs6tCWXN8qxf8EPk7qvQhX6dy6OvmVgJGn7g2uFWflVnSgpZ1hHDfLSoMdhnE6Jn9qe0zgk/VC/VFUPfSIqKeSli0QJVlA4INYAAAAQBQCdASoQABAAAgA0JZwCdAfwL8z1QH+A8gXzj7Af6f/7HgOf0lPvKjVW39qWF5OAAP7ubc/IQTTFWkDXR1+xJ/O+eFT2IeNBdfNMI7OYsS8s6kuX+nxrIl/r9D2Vh51/H8Mr3b8rdmDxSVbfGsv3GP3TkOwwl8sjneAAq6/dFSP/12c8SMHD4Pdf8BoMfx7jJmo1H81WgEVr1BhVIWmU/7SFTdPmxMrW2yCyd/Hqgy146b4bxYsUbjXxGDs/Hr2kziDai2zuk3wWhMJQQiyO4dW2UAAA"
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRnoBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSKcAAAABX6GwbSM19Mf4HBExMMhUkWtCrEIRDPxECIFgTqcphYUIxOAgkiRFmt1jZmacu23/Cp9fQUT/J4D+09k3/x3bdQco33DtB2tSeFSpUpNFxgaoi4E9PIDNqMGhZY84HM0KGfWGjMidZ4eIKMPG8IkEPffBKxp6s8GaAV0ct20RB3EHZPqCtxc9r/r15Pu+mc+1r/KkjExdl1Lqum5GZSK9JH8z8SR9DABWUDggrAAAAHADAJ0BKhAAEAACADQllAJ0fwCPAeIL5z9gA19LqsO0W/NahAD+rT6/xzGTRr6+ciXinYW5zfzYj1cYqKx/bb48aUc5/zpT9+/yef+3Yf30Y4INRb8Eh+mht/IWTPJRe057F4QYv9ldkK0CsrNt2UJQlnrb79l7bB3fmK/x6nyKU0vIwL/ZMGoGZsv0Gif7HthGgFz39e+2ncNnPMpdK2/IKbd3B+in4p2RwAA="
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRmQBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSHMAAAAB16CgjSQ1dgzPpOQjIkBKPS9iGpqLPykVcbHJFzBoJEnRHjM+j3+lz/8KIvqvMG0bxkmHX7GNHlKQjLmFDUC4pwD+Fp6GxRBwsUuAfLZrcz7ZhV+FhTpdJAO0A/R78djGW1FY26zpJmKs0Um6rebEbj4CAFZQOCDKAAAA8AMAnQEqEAAQAAIANCWMAnSA2Y7d4gvlX2AP1X3UA9r9kVngifqiAAD+9BCfmPwap7BjVue7esRqjL7les6ifmfMBXA+uAxzokv+lDX7v0vs/91Bb+Wn/z/3xaXe9rd/25eXxYuT/9R6PNqe/aQdSpc8mEpPrHfZ/wLv9Uekv9bfuwaUtOtv7ooVh+j+n/ccfR7nlJr/jdq6N01/Djel7i2u38B9sCyn9qZS89oW2j/3F/fMfTChSUnUNqh30eHUrRyKx//bgjUWAA=="
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRowBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSJoAAAAB96CwbSM1dMz3EBEBXnxG10+kSPKiYWV8WfxPBw4jSXKawft3eP61+ecJSAohov8TwH83mYda/pYn7Q9e9c1IKm/x5H7GXQPQydxqeaMF2FJ+86pLRcjTxj2eEFVj1N06GVhkiJH7noBOeyt/K7UU1vUpLaobV2HU2rEPl3Q2oYIY7ZRhD2kOFbQ6RqBY9QkVkE1jBtA4V/FXVlA4IMwAAACwAwCdASoQABAAAgA0JZQCdH8CPAN8BNZPEFqAfqaXvFh3T3cZ8AD+2V/4f77236TzSnpXT4/1DNur/u/aqogfGv+fT7pNguId02rI0LpLnGPlOnCfiVoNGhOu3vND0st4yB4TzYPlkXt+f73tMV85ORCev/zyNf8EJfvB+juWjfbEpk65Ewc+LugIV50w/8pS7i+vj2o5jdC/wFCP8NW6RRnQizWcIMQjeniW+g+pLfnMVXr/oBf24liQ+EkTTStuAhYVZDbozdMAAAA="
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRugAAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSDUAAAABFyAQSFKffI2ICAdFka02fzjiBEGQooxjejGaiYSI/ic+CgqcnCPHmyWqznizOEcucAIK3gBWUDggjAAAANACAJ0BKhAAEAACADQlAE6A0mLNExADswlLloqVfAAA/tjC0bLVp/aw+37u0myyLhscr53fsRxE1+bTmvbtLKTUKXzp6Hp78gJybX4fV2M1Hp/+FOf4fGqJdpX+tW9N09vi47pA4bC+TRT4U5OSz+mXRnBzWm7uG0iXZXcDQK1ddFmzets5hQ6wMAAA"
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRkYBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSIcAAAABh6C2jSQ1dxDhM8YXEQEqv+CfkzMZS1wwbCSpzZLheR/0365xKCGi/wrbtm2y012dwR8NaWhvjRQOj83XZebLWwRC0+wlpdKnWoDks0bMiHV6grF6BAliXwN0FU4hu2BbALQlS7afYnqK/G7g0TyWwGPJ4yB4HHRyyCHkg8ODkz84/eH4qQAAVlA4IJgAAACwAwCdASoQABAAAgA0JZwAMxKuJvNAmWdAB7AH6AHagVIBniyXPAD+uEn3j+9V4YrCDN47du+5yECKWwneQd8LFbo3+/g1/cj5qJD8Ar79274LvV7K/AFJCG+Y4wiTP40nok2XVTlTF+egZVWqeMxK+Y5B8+PFU6O1uDSZkqdWzOnRwupH7lgUCs9ZhekAskPB9BvFRYsgAA=="
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRvgAAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSHwAAAABT8GwbSTFQQ0c891/RIRG1ScTberEPzuXSDgwvARECyRksoNhJMmmnvFt2z//ELUpRPR/Aqr9ua7rOs/zPLrTDYYN4ldQibgiSdM0e+Z5nkfUtn3ft23b913btgUNblB4wMWQgznAaSywSQ0MXCCU1uvfJaaEK6XMp+IEVlA4IFYAAACwAQCdASoQABAAAgA0JQBdgCHXT/oIAP7884/b02U9D2cRyCL4DwBvuTefupQ5OBopkX8tO7EnKVOXv+r//0xxjNTCJPWhPCFC8CaEs+2mHlS5HHIAAA=="
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRkYCAABXRUJQVlA4WAoAAAAQAAAAHwAAHwAAQUxQSP0AAAAB58GwbSTFucvk6BkjIkrta9/RcYy6Xj1TaVVqfoUJNKkQzJpgajqBHbiSJNm0Dq+ebdv27H9jR3OeviP6PwHkv87srte2wKMNUC8prHAFxjpDyVzAchW4sRbYX3Mu8QqcW9yq+ALEXcokuoBcZBq6APSKbovX1BAPdd0Gr+b2AoDX62Wq65YWzhXdzNsCr041Y7yRpMoQb5/nSh/vVOWEMjbAO1cl4YJ7iYkIgom3cq83Pd7vD/WpfTzu9/vttq/GhHEZxenGcqvuLQ+H3W63bsSEMiGjdLXT6ff7k8lkMp/P1+Z5VeFcREk6k8lks9lsPp8vFAqFkraQkcQ/AFZQOCAiAQAAsAYAnQEqIAAgAD6ROJZHpaMiITAIALASCUATpme4oDnmpgH7ALe176HnIfJloEeVE2KBahkPC9Q+r1/L0QAA/u50qwyVV+iJvuSSJMDcAtZuEmaXibCrmHz/xsH9V6B/OYWobjvcH6Lq/Tf4Ho+euNrOVZ1PJUsZK55+5+cHDY5x06Mp7AB22YKu+YBDt3hQaD/D9+jvgLnCfLHOiFHfNSYJGU/n+vx4TGy56PmYchpKEKdZdAXbp2ukheKuGn0UowACUJ8pQHOsUvGlhxSudX17N1l7Gl9w4sj17Zm4tblTK0AwG69q2kGRaCDBgivosqw1kW638jNcdwNFJqlcGbLoKx1LFYW74BcvUszOpmB86oJqBsnCbQzx6uOogCjQAAA="
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRtgCAABXRUJQVlA4WAoAAAAQAAAAHwAAHwAAQUxQSPcAAAABx6CwbSM1dXzPDBERwBZMKcTzW39j5lyzp0oMiLXttm0+QOCL6l3i/quqIWWAiP5PAH61qKrEqfHeLUmEkVXbT/PUd5k0/SLOPB7l/hhrenqnZH+Wt+dQMb1Rz1P5umTakxqn8n3NTHfJ2JfImdSLOuszpLR0AWDOqcRuFRMAZz6CSkMHhOxK9EDqZQxbyASQc9h241zCyo1xDttvEsewhVRAvA8bSQFg9RnV0QFAfQk6Mu0Ca4N6Um6UU8hW0XDveQs4aro8KOv909nQBc+Jefmw1TTB20R2+4ujr5jwUZ25HddSyjp12Q2Bau5Okm6KaBFVFfyzAFZQOCC6AQAAsAgAnQEqIAAgAD6RQpxKJaOioagIALASCWMAvfAaCAKRTqnNIGkCmFfrN5o/offifsZ7F6VhrxUTG1YFNIkdMOlskRldAfjNAWpxRKAAAP7o0H7kM48Ededs+vHFwOmvW+k2rOjfdta/byao7yEdrfHT+KWRf8OkHEe+Z9/i5+XWvI8R/jFtIUeM0lKmb9OB2Uv/91tCe/N7xx/9Hae//Tin4e0cbqvFzvm7o/NqWdclPzS/vu6PQbAokggliNt31DX32llomhJiZ57ypGDV7/8THlTScB3ym6l7Sfex0YKi8jEaeKsZh5uA1Niuvn2T+PToNyx5X6C3/+h1/9pB/u1nFKNOl0+cn+ppjomv5Ff8kvsPCsVo/s/cMvlEU0413THQ3ipkrldddYAYevf5z3Rb/Wljnld4V0NLWrpBAisynglb7DhD48hEykdmLXpl/K3m6Pu339Tmkz/6PkB0MKZCecaNPXw13h/7ybaFzFj9B0NHu120FPAG/fVHh2COgdfHwuN0tpKt4/dfOECiblXfGiVsSeOFNofQQxh4J1NCfhTawK0TD4+Uk1QIrtzY5NkqosCJkoAAAA=="
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRjoBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSGwAAAABt6CwbSM1dnz3zB8RATI6ttaw8EjBo/561l5g0EiSoj1meGr/Yp8VRPRfYds2SGG8R+Qf+g22eGcAyFfsbFomx8UW3OlcbnkKd9QrxFusHPd24O/8/KPCGKW0kW5QwfRl3DdLMHJH05u8owBWUDggqAAAANACAJ0BKhAAEAACADQlAE6AxTGZkacW7X1h76b/NAAA/tlfxAX4D7OUkddjF7z+MsaEN8XGXx/2a8pIq5SZEUX4/7noS4B89MYP5v3kpy+xOfrflU3ilP17907z/sR2J8IIR/c/EY948Vo6M2CP7Rdp1hRH3SOW1qC/hMvd7TXLWQP+Subl/L7K+nR/nlFVXVeEDaRWhkRnnW7mMu3ndeAnBtwgcwAAAA=="
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRnQBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSIEAAAAB56CmjSQ3+3v5rvouP52PiGg+lJQJFGyB/r5sKmMjIsBh20aO5Ms53210/43OzOK/g4j+TwD+337yLVh9TIksUH/lns3KIjFsaO9MkhmfIxnQeWouKiozAGS6waBw1wRrn2uoXaasYPZBuHmugQpAsyyzrPfjOI8OQK3O47Hscw0AVlA4IMwAAAAQBACdASoQABAAAgA0JbACdH8GJ/2Qz+syuQOdPzSvMZfHkkX+A6VcgAD8//FHZDWIzWnSAL9ks7hn+DzPUXdGQByAp9XdedxLmgfjNezj9193OS/GIH3O0JLtu07u39NVEwLXmKvmYvp7fydhtoqbucXYQF0SCV+bq8X15eP5Kb/R58jEYnl/7+3V3eqFXtC/dqfRbT4/z//95/eIrQeF1lv2YBx58O1/2hkHv+/fL2i1vGYSH8+G6vcFb7HVnxPCY0b/oVo0UEyKAAA="
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRpgBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSJ4AAAABL6GwbSM19Mf4HBExGAQhEl1jZW+6b39NIRFQcEYgIYPDNpIUqY5hd4/5/uePJv8knyOI6P8E8If+sB3bRi0i9zuAHl3XUW7Xto3P+FDlrSgKdfN9/9Ugonq/32mPY26gHUe91v3BdJ5nb3NAt9SAB14Qx2D0rApnUmutAbxYT5skBEmWZx6A6i4zIrxcb7fbxL5kLzDOOWeMSV+8D1ZQOCDUAAAAMAQAnQEqEAAQAAIANCWMAnR/ApAB5mvMNzLPMfsAfqVvoB1ceBerMJgAAPa/kySiAXBcGKDv9H4Fi2CmnNN6dt7bvYSRzd+3DO6XuL89jgGylxTt+/wCdC3+kVMQ3F9a+ztT2uvM4BJfOxirBu4Sl+l9E72/O/4Pm02KE+fv1t7+Mf/JP3/4NfkfykaXvjFEUH1w5O5z98lfcbnIPLamui2xfYhsN6pVG5p//NBayZ/4oAeCsKTf/9/fyYRdT/uajSxuUdkcEGhWZvklvMC8rn14UAA="
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRroBAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSNcAAAABR+KwbRtJTq5kJ/veRUQcpnvy+t5zic2D2pEQfs2uJ3uj/xIySyBUC4gSgMNIsk1rH79t27atyT+mVz+GiP5PgDxbh31Zf3cgLYVND1+mUoZJMknPkiKzJ6c03kXJbsM7FEqPgZYjqcuXuGQ0+aWkzvBBs5mSZCyZWs4LiMqQpBrf/Xr9hJQ888Dd7z8yMMPVatBo8dgtZHehFyiUSrU7I7/rD8+BYTJWO/PJWWahz7+XRsGyR9dW9wjb3o1NOCA3W8+WVtAo9VdZU5Llyhpf7gnLH3QNAQBWUDggvAAAAFADAJ0BKhAAEAACADQlmAJ0Bim0zzqk/rMeHXmzSV3x7OUgAP6sXbBYSg4U5xpUsQIxB7gr5Xx71n9nRZ+525eUII8c+9ZG0EmvaZBDf06UshKQ6nUv73OTeua0lRLvq3FkpA+H3AhfmcO9qC68B/L/7p1bmgF3XlasQsPkdmWMQ7bvR5nYuX9d7aSHqf/iioxE1rd7dtlmLfU/6H5z6VHX+K7CxVuC+P/X6BfN2tdti+npjtIxfUl0KfAA"
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRoABAABXRUJQVlA4WAoAAAAQAAAADwAADwAAQUxQSKIAAAABR6G4jaQ2x+V88Cci4lgQAQWosokT+ML3feOC7ZZqyAQAAAeRJClSHTPzPc7uw/i3eGQhov8TwOn3s+KC2gqY5mWZZ2++qaoFRF+v5z2+PVVVACvsG32ngNiD1y0FeB9th/fbqogM3t64Y8zqAw5bsSRlUWdR3bYJYCRooyB03ajMQwg/n77vusZl3zH6//9N4hywmN/3+0g4GeZ5XkRnzgNWUDgguAAAAHADAJ0BKhAAEAACADQljAJ0fwDCSceDzRagH6XmXjxSrdKAAAD+T4FeoNfq05qTwP6tXUdIlMfzp4PwClF8V7AHKS0Xv3b23XtgryZMXTjkAYk2F034yTyC7AXf1ECZcvajVefaUzzrQGPzcy92iAr/+//grp75HruN+NiUBjpCkT5jc3P1BZllwkBc3TG21p7tlowyIEVWnIA/950ktnH329P7UrXE+Bhq9Xbkwf645VeVz68KAAA="
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRkwDAABXRUJQVlA4WAoAAAAQAAAAJwAAJwAAQUxQSOAAAAAB36Gwbds2VtnuXhERJZlz/9bd1TImjqqRU+1kGAQNLDNwbYRJVlvAuW3bxvLZzK7PyK77vf+bXZ7wO6L/EyDB9ZMkybIsxSZJkmVZVpZlWWObpiljzKMTf8bcwJw6JOyA2XXiv1UFoMFs/pgcs/gi66+zxEzBjADMwCzBzDDxFxkDCwAMwPQxHhUCwzvCuGBsAMHHIEEmBX+PAvFDNHonfm4ZmiLJTm+yao/31xtxe26HlioRZVXTDSfozYv2cn8xXENdlvgqqm44wWRV7C/3F3o6siRWVnXDCXqTUJFAA1ZQOCBGAgAAEAsAnQEqKAAoAD6ROphIpaMiISq6rACwEglAFOj7UTD3LCgZrRhqSLWj6GfEXplZlvkQHQYr/FhOsqpvQjse2byiiGT9Ta8iFViDMzY57rahK0W6ypaID5fFRs1lVq0ZgAD5PN9dn+86BevlsjHUS2x2uL38n3WYFlEiMOwzqsMJ7pFCjH3tCHdKCwBmkFBiDPenQLMn+OIzwvLKyr29XpaJhOpZOsgKq5z0dl6XldxNghRiHeevb/ko7NAcO+7R6zYbaZY8eiGr3LvVI5RAg8/A14560J5qXfv4xbtJpgmEgNxR3gOow7sFTrGy7rK39JvUWFrdPOkA7EC4oyjjVfRijPo+5J/4k0t0Je7jFM+9/T3DoKax7JOH2xmPsyqPDbEgKCjArSMoe3kYiiFRJJrv0r1R7V5UNRnGlyKArUE6C7zDLGIDSBp4YBJKSFe1ze/9uSxtxjA8SkfNlxIGYziwvwXqDUiYXo2Xr4Yn6+25c6JHxux9BdrBVeWTWWHHfdQnGSg5+0fYkYnQRHfx200JTwTqpYJ16egvTxLr9tuCW0ootD2gwiCpiOTkCs//vIrVnvxqJ2gaB8CWPgXiGFYnRg83vX7PbdsSyXSd+qTrH8rW1e4bP3ToDShpWU9uIIMLoh4qN3OFNpoVrCuTJppGicA7SKr/GuTu+Oc3p7tR4pC+xUA9gOM2T5jXIq+F0uWX2HnuMZjs2/tHdfbTqjWxuAgdQDUhVRDFYAXxw+fx+HpqzcFvQf8OvGRUczRefVLXa0AA"
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,UklGRiwDAABXRUJQVlA4WAoAAAAQAAAAJwAAJwAAQUxQSE0BAAABp8KwbdvIsZOUfhcR8bUOp9vz7FmrN6t/NhPTKRTUUjg6GSBhqAWbBFRDwLJtO20jyQ4zG8PMzMyMmv9kYrl9Wu1/RP8nAP3rznQ6FU8kctlSrlgt1ZrVZqvdbg56w9F4sN7tZJZGgTss5VYB+EQbDVbs4AM4E9lEhN4B6PmTZ4Uo/QBQmuBGYwW58UHFWH6oCMtHgUMsz1/hZzmhPCwXlIvl5MYG5TTxALLxcufmKrKEG8zJhAi0N7OHWREWgcK8TJGJKTcLmLYJDDTxed0OwsNcUvWw5QsVYIaSKjnwF/FuX4fL9g4QEJCBTy/Ek/H6YLbcHq/P94/UiB0ZYrsvHJFUPZ7MZAqFcrne6g5mm/32cHlRSvuSlxh9YyJYHW5fIByR9Hg8mcwYFrrDeS5gRb+KiWC1O9y+QDgiqboej0ccCBwLFrvb7SBw5gEAVlA4ILgBAACQCQCdASooACgAPn00lUekoyIhONksAJAPiWQAtSHA2F5th+aoHPdKYvZhd2NAbNabVzilsi43WTWOLozgbDVEdutCmWqnODz80qDcqdHcIvxs3pAAAP7ZU/29t4j7F1aJAL66jl/BDznNh5QJ2/+HUjxNxD7BFktmlwXdOpGwyjDhBof/Y2I4DCEX8WAeMM7oaOm6wfe7b6JelC9IGE5QmB+QIuefTrqyeBb2B3d+LQgrns4ls9A1Edb+elj6uwckPBamaKhp+rb5qiGQosVpHFR+hz6DTdnYSTqZWgEiinTkcnoPI0YfL8VCYej9rOVfdJUa9cBZWVOq8LliGyNWA6xoECsUW+iHS6lJ1rOulpOxFR9neF1hcdSzWroJwTl3lgV5CAg0c913W32ijdTD4R7PDoBFIUV6Nx7JAHDJbOHlGGHeRlakE2YNooTal23RrUFIg//vCZp4OeaW7RglvUeX+qH4ud+K3GSBPAmw4N+r/XmkO5QbLib4HA5hWc+wL2ssrqR8oXw82zWvxj6z5+NyDKUJVc+E3JMCEHTmfVzsTWFEoOnOOIEOTUtTNwUzhO+IonAAAA=="
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _BPParser = __webpack_require__(57);
 
 var _BPParser2 = _interopRequireDefault(_BPParser);
 
@@ -1266,7 +2450,7 @@ var BlueprintRenderer = function () {
 exports.default = BlueprintRenderer;
 
 /***/ }),
-/* 7 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1572,7 +2756,7 @@ var BPParser = function () {
 exports.default = BPParser;
 
 /***/ }),
-/* 8 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1583,43 +2767,43 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = BPToNodes;
 
-var _vector = __webpack_require__(19);
+var _vector = __webpack_require__(59);
 
 var _vector2 = _interopRequireDefault(_vector);
 
-var _CommentNode = __webpack_require__(18);
+var _CommentNode = __webpack_require__(60);
 
 var _CommentNode2 = _interopRequireDefault(_CommentNode);
 
-var _EventNode = __webpack_require__(12);
+var _EventNode = __webpack_require__(61);
 
 var _EventNode2 = _interopRequireDefault(_EventNode);
 
-var _FunctionNode = __webpack_require__(11);
+var _FunctionNode = __webpack_require__(62);
 
 var _FunctionNode2 = _interopRequireDefault(_FunctionNode);
 
-var _MacroNode = __webpack_require__(17);
+var _MacroNode = __webpack_require__(63);
 
 var _MacroNode2 = _interopRequireDefault(_MacroNode);
 
-var _GetterNode = __webpack_require__(15);
+var _GetterNode = __webpack_require__(64);
 
 var _GetterNode2 = _interopRequireDefault(_GetterNode);
 
-var _SetterNode = __webpack_require__(14);
+var _SetterNode = __webpack_require__(65);
 
 var _SetterNode2 = _interopRequireDefault(_SetterNode);
 
-var _BinaryOperatorNode = __webpack_require__(16);
+var _BinaryOperatorNode = __webpack_require__(66);
 
 var _BinaryOperatorNode2 = _interopRequireDefault(_BinaryOperatorNode);
 
-var _config = __webpack_require__(22);
+var _config = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function BPToNodes(objects, texturesHandler) {
+function BPToNodes(objects) {
     var origin = origin || new _vector2.default(0, 0);
     var minX, minY;
     var newNodes = [];
@@ -1674,7 +2858,7 @@ function BPToNodes(objects, texturesHandler) {
                 height: curObj.nodeHeight
             };
             if (curObj.commentColor) newNode.commentColor = curObj.commentColor;
-            nN = new _CommentNode2.default(newNode, x, y, texturesHandler);
+            nN = new _CommentNode2.default(newNode, x, y);
             newNodes.push(nN);
         }
     }
@@ -1800,9 +2984,9 @@ function BPToNodes(objects, texturesHandler) {
             if (newNode.name.indexOf("Conv_") !== -1 && newNode.name.indexOf("Int To Text") === -1 && newNode.name.indexOf("Float To Text") === -1) {
                 //nN = new ConverterNode(newNode, x, y);
             } else if (newNode.name.indexOf("_") !== -1 && newNode.name.indexOf("Get") === -1 && newNode.name.indexOf("Conv") === -1 && newNode.name.indexOf("Set") === -1 && newNode.name.indexOf("Add") === -1 && newNode.name.indexOf("K2") === -1 && newNode.name.indexOf("Montage") === -1 && newNode.name.indexOf("Greater_Vector") === -1 && newNode.name.indexOf("Less_Vector") === -1) {
-                nN = new _BinaryOperatorNode2.default(newNode, x, y, texturesHandler);
+                nN = new _BinaryOperatorNode2.default(newNode, x, y);
             } else {
-                nN = new _FunctionNode2.default(newNode, x, y, texturesHandler);
+                nN = new _FunctionNode2.default(newNode, x, y);
             }
         } else if (curObj.class.indexOf("K2Node_DynamicCast") !== -1) {
             var tmpArr = curObj.targetType.split(".");
@@ -1853,7 +3037,7 @@ function BPToNodes(objects, texturesHandler) {
                 outputs: outputs
             };
 
-            nN = new _MacroNode2.default(newNode, x, y, texturesHandler);
+            nN = new _MacroNode2.default(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Event") !== -1 || curObj.class.indexOf("K2Node_CustomEvent") !== -1 || curObj.class.indexOf("K2Node_ComponentBoundEvent") !== -1 || curObj.class.indexOf("K2Node_InputTouch") !== -1 || curObj.class.indexOf("K2Node_InputAction") !== -1 || curObj.class.indexOf("K2Node_InputAxisEvent") !== -1 || curObj.class.indexOf("K2Node_InputKey") !== -1) {
             if (curObj.class && curObj.class.indexOf("K2Node") !== -1) curObj.class = curObj.class.replace("K2Node_", "");
             curObj.class = curObj.class.fromCamelCase();
@@ -1869,26 +3053,26 @@ function BPToNodes(objects, texturesHandler) {
                 newNode.inputKey = curObj.inputKey;
             }
 
-            nN = new _EventNode2.default(newNode, x, y, texturesHandler);
+            nN = new _EventNode2.default(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_VariableGet") !== -1 || curObj.class.indexOf("K2Node_Self") !== -1) {
             newNode = {
                 outputs: outputs
             };
 
-            nN = new _GetterNode2.default(newNode, x, y, texturesHandler);
+            nN = new _GetterNode2.default(newNode, x, y);
         } else if (curObj.class.indexOf("Set") !== -1) {
             newNode = {
                 outputs: outputs,
                 inputs: inputs
             };
-            nN = new _SetterNode2.default(newNode, x, y, texturesHandler);
+            nN = new _SetterNode2.default(newNode, x, y);
         } else if (curObj.class.indexOf("Operator") !== -1 || curObj.class.indexOf("K2Node_EnumEquality") !== -1) {
             newNode = {
                 name: curObj.nodeName && curObj.nodeName || curObj.class,
                 inputs: inputs,
                 outputs: outputs
             };
-            nN = new _BinaryOperatorNode2.default(newNode, x, y, texturesHandler);
+            nN = new _BinaryOperatorNode2.default(newNode, x, y);
         } else if (curObj.class.indexOf("K2Node_Knot") !== -1) {
             //console.log('KNIT');
             newNode = {
@@ -1963,7 +3147,140 @@ function BPToNodes(objects, texturesHandler) {
 }
 
 /***/ }),
-/* 9 */
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+function Vector(x, y) {
+	this.x = x || 0;
+	this.y = y || 0;
+}
+
+Vector.prototype = {
+	negative: function negative() {
+		return new Vector(-this.x, -this.y);
+	},
+	add: function add(v) {
+		if (v instanceof Vector) return new Vector(this.x + v.x, this.y + v.y);else return new Vector(this.x + v, this.y + v);
+	},
+	subtract: function subtract(v) {
+		if (v instanceof Vector) return new Vector(this.x - v.x, this.y - v.y);else return new Vector(this.x - v, this.y - v);
+	},
+	multiply: function multiply(v) {
+		if (v instanceof Vector) return new Vector(this.x * v.x, this.y * v.y);else return new Vector(this.x * v, this.y * v);
+	},
+	divide: function divide(v) {
+		if (v instanceof Vector) return new Vector(this.x / v.x, this.y / v.y);else return new Vector(this.x / v, this.y / v);
+	},
+	equals: function equals(v) {
+		return this.x == v.x && this.y == v.y;
+	},
+	dot: function dot(v) {
+		return this.x * v.x + this.y * v.y;
+	},
+	length: function length() {
+		return Math.sqrt(this.dot(this));
+	},
+	unit: function unit() {
+		return this.divide(this.length());
+	},
+	min: function min() {
+		return Math.min(this.x, this.y);
+	},
+	max: function max() {
+		return Math.max(this.x, this.y);
+	},
+	angleTo: function angleTo(a) {
+		return Math.acos(this.dot(a) / (this.length() * a.length()));
+	},
+	toArray: function toArray(n) {
+		return [this.x, this.y].slice(0, n || 2);
+	},
+	clone: function clone() {
+		return new Vector(this.x, this.y);
+	},
+	init: function init(x, y, z) {
+		this.x = x;
+		this.y = y;
+		return this;
+	}
+};
+
+Vector.negative = function (a, b) {
+	b.x = -a.x;
+	b.y = -a.y;
+	return b;
+};
+Vector.add = function (a, b, c) {
+	if (b instanceof Vector) {
+		c.x = a.x + b.x;
+		c.y = a.y + b.y;
+	} else {
+		c.x = a.x + b;
+		c.y = a.y + b;
+	}
+	return c;
+};
+Vector.subtract = function (a, b, c) {
+	if (b instanceof Vector) {
+		c.x = a.x - b.x;
+		c.y = a.y - b.y;
+	} else {
+		c.x = a.x - b;
+		c.y = a.y - b;
+	}
+	return c;
+};
+Vector.multiply = function (a, b, c) {
+	if (b instanceof Vector) {
+		c.x = a.x * b.x;
+		c.y = a.y * b.y;
+	} else {
+		c.x = a.x * b;
+		c.y = a.y * b;
+	}
+	return c;
+};
+Vector.divide = function (a, b, c) {
+	if (b instanceof Vector) {
+		c.x = a.x / b.x;
+		c.y = a.y / b.y;
+	} else {
+		c.x = a.x / b;
+		c.y = a.y / b;
+	}
+	return c;
+};
+
+Vector.unit = function (a, b) {
+	var length = a.length();
+	b.x = a.x / length;
+	b.y = a.y / length;
+	return b;
+};
+
+Vector.min = function (a, b) {
+	return new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y));
+};
+Vector.max = function (a, b) {
+	return new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y));
+};
+Vector.lerp = function (a, b, fraction) {
+	return b.subtract(a).multiply(fraction).add(a);
+};
+Vector.fromArray = function (a) {
+	return new Vector(a[0], a[1]);
+};
+
+exports.default = Vector;
+
+/***/ }),
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1975,800 +3292,24 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(22);
+var _RegularNode = __webpack_require__(1);
 
-var _Link = __webpack_require__(10);
+var _RegularNode2 = _interopRequireDefault(_RegularNode);
 
-var _Link2 = _interopRequireDefault(_Link);
+var _Textures = __webpack_require__(2);
+
+var _Textures2 = _interopRequireDefault(_Textures);
+
+var _config = __webpack_require__(0);
+
+var _main = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LinksDrawer = function () {
-    function LinksDrawer(container, nodes) {
-        _classCallCheck(this, LinksDrawer);
-
-        this.links = new PIXI.Container();
-        this.nodes = nodes;
-        container.addChild(this.links);
-        this.draw();
-    }
-
-    _createClass(LinksDrawer, [{
-        key: 'draw',
-        value: function draw() {
-            for (var i = 0, l = this.nodes.length; i < l; i++) {
-                var node = this.nodes[i];
-                for (var j = 0; j < node.pinRows.length; j++) {
-                    if (node.pinRows[j].output) {
-                        var color = _config.VAR_COLORS[node.pinRows[j].output.type.name];
-                        for (var k = 0; k < node.pinRows[j].output.links.length; k++) {
-                            var linkObj = new _Link2.default(node, node.pinRows[j].output, node.pinRows[j].output.links[k], color);
-                            linkObj.draw();
-                            this.links.addChild(linkObj.line);
-                            if (!node.pinRows[j].output.lines) {
-                                node.pinRows[j].output.lines = [];
-                            }
-                            node.pinRows[j].output.lines.push(linkObj);
-                        }
-                    }
-                }
-            }
-        }
-    }, {
-        key: 'drawPath',
-        value: function drawPath(node, pin, link, color) {
-            var line = new PIXI.Graphics();
-            var minOffset = 16;
-            var startX = node.x + pin.sprite.x;
-            //console.log(node);
-            var startY = node.y + pin.sprite.y;
-
-            var endX = link.parentX + link.sprite.x;
-            ;
-            var endY = link.parentY + link.sprite.y;
-
-            //console.log(startX, startY, endX, endY);
-
-            this.links.addChild(line);
-
-            var deltaX = Math.abs(link.sprite.x + link.parentX - pin.sprite.x - node.x);
-
-            var cOffset = deltaX > this.controlOffset && this.controlOffset || Math.max(deltaX, minOffset);
-
-            var control1X = pin.sprite.x + cOffset + node.x;
-            var control1Y = pin.sprite.y + node.y;
-
-            var control2X = link.sprite.x - cOffset + link.parentX;
-            var control2Y = link.sprite.y + link.parentY;
-
-            line.lineStyle(this.linkThickness, color).moveTo(startX, startY).bezierCurveTo(control1X, control1Y, control2X, control2Y, endX, endY);
-            return line;
-        }
-    }]);
-
-    return LinksDrawer;
-}();
-
-exports.default = LinksDrawer;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Link = function () {
-    function Link(node, pin, link, color) {
-        _classCallCheck(this, Link);
-
-        this.line = new PIXI.Graphics();
-        this.linkThickness = 1;
-        this.pin = pin;
-        this.link = link;
-        this.color = color;
-        this.minOffset = 16;
-        this.node = node;
-    }
-
-    _createClass(Link, [{
-        key: "draw",
-        value: function draw() {
-            var startX = this.node.x + this.pin.sprite.x;
-            //console.log(node);
-            var startY = this.node.y + this.pin.sprite.y;
-
-            var endX = this.link.parent.x + this.link.sprite.x;
-            ;
-            var endY = this.link.parent.y + this.link.sprite.y;
-
-            //console.log(startX, startY, endX, endY);
-
-
-            var deltaX = Math.abs(this.link.sprite.x + this.link.parent.x - this.pin.sprite.x - this.node.x);
-
-            var cOffset = deltaX > this.controlOffset && this.controlOffset || Math.max(deltaX, this.minOffset);
-
-            var control1X = this.pin.sprite.x + cOffset + this.node.x;
-            var control1Y = this.pin.sprite.y + this.node.y;
-
-            var control2X = this.link.sprite.x - cOffset + this.link.parent.x;
-            var control2Y = this.link.sprite.y + this.link.parent.y;
-
-            this.line.lineStyle(this.linkThickness, this.color).moveTo(startX, startY).bezierCurveTo(control1X, control1Y, control2X, control2Y, endX, endY);
-        }
-    }, {
-        key: "redraw",
-        value: function redraw() {
-            this.line.clear();
-            this.draw();
-        }
-    }]);
-
-    return Link;
-}();
-
-exports.default = Link;
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _RegularNode2 = __webpack_require__(0);
-
-var _config = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FunctionNode = function (_RegularNode) {
-    _inherits(FunctionNode, _RegularNode);
-
-    function FunctionNode(node, x, y, texturesHanlder) {
-        _classCallCheck(this, FunctionNode);
-
-        var _this = _possibleConstructorReturn(this, (FunctionNode.__proto__ || Object.getPrototypeOf(FunctionNode)).call(this, node, x, y, texturesHanlder));
-
-        if (!node.isPure) {
-            _this.colorTint = _config.VAR_COLORS["execFunction"];
-        } else {
-            _this.colorTint = _config.VAR_COLORS["pureFunction"];
-        }
-
-        if (node.isParent) {
-            _this.colorTint = _config.VAR_COLORS["parent"];
-        }
-
-        if (node.color) {
-            _this.colorTint = _this.function.color;
-        }
-
-        _this.isPure = node.isPure;
-        _this.functionName = node.name;
-
-        if (!_this.isPure) {
-            _this.iconTint = _config.VAR_COLORS["execFunction"];
-        } else {
-            _this.iconTint = _config.VAR_COLORS["pureFunction"];
-        }
-
-        _this.icon = 'assets/icons/function.png';
-
-        if (_this.functionName.indexOf("Make") !== -1 && _this.functionName.indexOf("Array") === -1) {
-            _this.icon = "assets/nodes_icons/icon_Blueprint_MakeStruct_16x.png";
-            _this.iconTint = null;
-        } else if (_this.functionName.indexOf("Break") !== -1) {
-            _this.icon = "assets/nodes_icons/icon_Blueprint_BreakStruct_16x.png";
-            _this.iconTint = null;
-        } else if (_this.functionName.indexOf("Make Array") !== -1) {
-            _this.icon = "assets/nodes_icons/icon_Blueprint_MakeArray_16x.png";
-            _this.iconTint = null;
-        }
-
-        _this.headerTextOffset = _config.CONFIG.CELL_SIZE * 2;
-        return _this;
-    }
-
-    _createClass(FunctionNode, [{
-        key: 'draw',
-        value: function draw(app) {
-            _get(FunctionNode.prototype.__proto__ || Object.getPrototypeOf(FunctionNode.prototype), 'draw', this).call(this, app);
-
-            this.headerText.x = -this.body.width / 2;
-            this.headerText.y = -this.body.height / 2;
-
-            this.headerText.y += this.gloss.height / 2;
-            this.headerText.x += this.headerTextOffset;
-
-            this.headerText.anchor.set(0, 0.5);
-
-            this.fIcon.anchor.set(0.5, 0.5);
-            this.fIcon.x = -this.body.width / 2;
-            this.fIcon.y = -this.body.height / 2;
-
-            this.fIcon.y += this.gloss.height / 2;
-            this.fIcon.x += _config.CONFIG.CELL_SIZE;
-
-            if (this.iconTint) {
-                this.fIcon.tint = this.iconTint;
-            }
-
-            this.container.addChild(this.headerText);
-            this.container.addChild(this.fIcon);
-        }
-    }, {
-        key: 'init',
-        value: function init() {
-            this.headerText = new PIXI.Text(this.functionName /* + "(" + this.x + "," + this.y + ")"*/, _config.defaultTextStyle);
-            this.fIcon = PIXI.Sprite.fromImage(this.icon);
-            this.calculateWidth();
-            _get(FunctionNode.prototype.__proto__ || Object.getPrototypeOf(FunctionNode.prototype), 'init', this).call(this);
-        }
-    }, {
-        key: 'calculateWidth',
-        value: function calculateWidth() {
-            var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
-            if (headerFullWidth > this.width) {
-                this.width = _get(FunctionNode.prototype.__proto__ || Object.getPrototypeOf(FunctionNode.prototype), 'nearestCellWidth', this).call(this, headerFullWidth) * _config.CONFIG.CELL_SIZE;
-            }
-        }
-    }]);
-
-    return FunctionNode;
-}(_RegularNode2.RegularNode);
-
-exports.default = FunctionNode;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _RegularNode2 = __webpack_require__(0);
-
-var _config = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var EventNode = function (_RegularNode) {
-    _inherits(EventNode, _RegularNode);
-
-    function EventNode(node, x, y, texturesHanlder) {
-        _classCallCheck(this, EventNode);
-
-        var _this = _possibleConstructorReturn(this, (EventNode.__proto__ || Object.getPrototypeOf(EventNode)).call(this, node, x, y, texturesHanlder));
-
-        _this.colorTint = _config.VAR_COLORS["event"];
-        _this.functionName = node.name;
-
-        _this.icon = 'assets/icons/event.png';
-
-        if (_this.node.isCustom === true) {
-            _this.custom = true;
-            _this.icon = 'assets/icons/event_custom.png';
-            _this.titleHeight = _config.CONFIG.CELL_SIZE * 2.5;
-            _this.height += _config.CONFIG.CELL_SIZE;
-        }
-
-        if (_this.node.inputKey) {
-            if (_this.node.inputKey.indexOf("Mouse") !== -1) _this.icon = 'assets/nodes_icons/icon_Blueprint_MouseEvent_16x.png';else _this.icon = 'assets/nodes_icons/icon_Blueprint_KeyboardEvent_16x.png';
-            _this.functionName = _this.node.inputKey;
-        }
-
-        _this.headerTextOffset = _config.CONFIG.CELL_SIZE * 2;
-        return _this;
-    }
-
-    _createClass(EventNode, [{
-        key: 'init',
-        value: function init() {
-            this.headerText = new PIXI.Text(this.functionName /* + "(" + this.x + "," + this.y + ")"*/, _config.defaultTextStyle);
-            this.fIcon = PIXI.Sprite.fromImage(this.icon);
-            this.calculateWidth();
-            _get(EventNode.prototype.__proto__ || Object.getPrototypeOf(EventNode.prototype), 'init', this).call(this);
-        }
-    }, {
-        key: 'draw',
-        value: function draw(app) {
-
-            _get(EventNode.prototype.__proto__ || Object.getPrototypeOf(EventNode.prototype), 'draw', this).call(this, app);
-
-            this.headerText.x = -this.body.width / 2;
-            this.headerText.y = -this.body.height / 2;
-
-            this.headerText.y += this.gloss.height / 2;
-            this.headerText.x += this.headerTextOffset;
-            this.headerText.anchor.set(0, 0.5);
-            if (this.custom) {
-                this.headerText.anchor.set(0, 1);
-            }
-
-            this.container.addChild(this.headerText);
-
-            if (this.custom) {
-                this.customText = new PIXI.Text("Custom Event", _config.customEventTextStyle);
-                this.customText.x = -this.body.width / 2;
-                this.customText.y = -this.body.height / 2;
-
-                this.customText.y = this.headerText.y + this.headerText.height;
-                this.customText.x += this.headerTextOffset;
-
-                this.customText.anchor.set(0, 1);
-                this.container.addChild(this.customText);
-            }
-
-            this.fIcon.anchor.set(0.5, 0.5);
-            this.fIcon.x = -this.body.width / 2;
-            this.fIcon.y = -this.body.height / 2;
-
-            this.fIcon.y += this.gloss.height / 2;
-            this.fIcon.x += _config.CONFIG.CELL_SIZE;
-
-            this.container.addChild(this.fIcon);
-
-            if (this.node.outputs && this.node.outputs[0].name === "Output Delegate") {
-                var delegateIcon = this.node.outputs[0].linked ? 'assets/nodes/DelegatePin_Connected.png' : 'assets/nodes/DelegatePin_Disconnected.png';
-                var delegate = PIXI.Sprite.fromImage(delegateIcon);
-                delegate.tint = _config.VAR_COLORS["delegate"];
-                delegate.x = this.body.width / 2 - _config.CONFIG.CELL_SIZE * (5 / 8);
-                delegate.y = -this.body.height / 2 + _config.CONFIG.CELL_SIZE * (5 / 8);
-                delegate.anchor.set(0.5, 0.5);
-
-                this.container.addChild(delegate);
-            }
-        }
-    }, {
-        key: 'calculateWidth',
-        value: function calculateWidth() {
-            var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
-            if (this.node.outputs && this.node.outputs[0].name === "Output Delegate") {
-                headerFullWidth += _config.CONFIG.CELL_SIZE;
-            }
-            if (headerFullWidth > this.width) {
-                this.width = _get(EventNode.prototype.__proto__ || Object.getPrototypeOf(EventNode.prototype), 'nearestCellWidth', this).call(this, headerFullWidth) * _config.CONFIG.CELL_SIZE;
-            }
-        }
-    }]);
-
-    return EventNode;
-}(_RegularNode2.RegularNode);
-
-exports.default = EventNode;
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var TexturesHandler = function TexturesHandler() {
-    _classCallCheck(this, TexturesHandler);
-
-    this.bodyTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_body.png');
-    this.glossTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_title_gloss.png');
-    this.titleHighlightTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_title_highlight.png');
-    this.shadowTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow.png');
-    this.shadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_shadow_selected.png');
-    this.colorSpillTexture = PIXI.Texture.fromImage('assets/nodes/RegularNode_color_spill.png');
-
-    this.varNodeBodyTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_body.png');
-    this.varNodeGlossTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_gloss.png');
-    this.varNodeShadowTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_shadow.png');
-    this.varNodeShadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_shadow_selected.png');
-    this.varNodeColorSpillTexture = PIXI.Texture.fromImage('assets/nodes/VarNode_color_spill.png');
-
-    this.mathNodeBodyTexture = PIXI.Texture.fromImage('assets/nodes/MathNode_body.png');
-    this.mathNodeShadowSelectedTexture = PIXI.Texture.fromImage('assets/nodes/MathNode_shadow_selected.png');
-
-    this.commentNodeBody = PIXI.Texture.fromImage('assets/nodes/Comment_Background.png');
-
-    this.selector = PIXI.Texture.fromImage('assets/Selector.png');
-};
-
-exports.default = TexturesHandler;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _VarNode2 = __webpack_require__(1);
-
-var _config = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var SetterNode = function (_VarNode) {
-    _inherits(SetterNode, _VarNode);
-
-    function SetterNode(node, x, y, texturesHanlder) {
-        _classCallCheck(this, SetterNode);
-
-        var _this = _possibleConstructorReturn(this, (SetterNode.__proto__ || Object.getPrototypeOf(SetterNode)).call(this, node, x, y, texturesHanlder));
-
-        var setterType = node.inputs[1].type.name;
-        _this.colorTint = _config.VAR_COLORS[setterType];
-        return _this;
-    }
-
-    _createClass(SetterNode, [{
-        key: 'draw',
-        value: function draw(nodesContainer) {
-            _get(SetterNode.prototype.__proto__ || Object.getPrototypeOf(SetterNode.prototype), 'draw', this).call(this, nodesContainer);
-            this.pinStartY = -this.body.height / 2 + _config.CONFIG.CELL_SIZE;
-            _get(SetterNode.prototype.__proto__ || Object.getPrototypeOf(SetterNode.prototype), 'drawPinRows', this).call(this);
-            this.setText = new PIXI.Text("SET", _config.defaultTextStyle);
-            this.setText.anchor.set(0.5);
-            this.setText.y = -this.body.height / 2 + _config.CONFIG.CELL_SIZE;
-            this.container.addChild(this.setText);
-        }
-    }]);
-
-    return SetterNode;
-}(_VarNode2.VarNode);
-
-exports.default = SetterNode;
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _VarNode2 = __webpack_require__(1);
-
-var _config = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var GetterNode = function (_VarNode) {
-    _inherits(GetterNode, _VarNode);
-
-    function GetterNode(node, x, y, texturesHanlder) {
-        _classCallCheck(this, GetterNode);
-
-        var _this = _possibleConstructorReturn(this, (GetterNode.__proto__ || Object.getPrototypeOf(GetterNode)).call(this, node, x, y, texturesHanlder));
-
-        _this.height = _config.CONFIG.CELL_SIZE * 2;
-        var getterType = node.outputs[0].type.name;
-        _this.colorTint = _config.VAR_COLORS[getterType];
-        return _this;
-    }
-
-    _createClass(GetterNode, [{
-        key: 'draw',
-        value: function draw(nodesContainer) {
-            _get(GetterNode.prototype.__proto__ || Object.getPrototypeOf(GetterNode.prototype), 'draw', this).call(this, nodesContainer);
-            this.pinStartY = -this.body.height / 2 + _config.CONFIG.CELL_SIZE * 1.25;
-            _get(GetterNode.prototype.__proto__ || Object.getPrototypeOf(GetterNode.prototype), 'drawPinRows', this).call(this);
-        }
-    }]);
-
-    return GetterNode;
-}(_VarNode2.VarNode);
-
-exports.default = GetterNode;
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _RegularNode2 = __webpack_require__(0);
-
-var _config = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BinaryOperatorNode = function (_RegularNode) {
-    _inherits(BinaryOperatorNode, _RegularNode);
-
-    function BinaryOperatorNode(node, x, y, texturesHandler) {
-        _classCallCheck(this, BinaryOperatorNode);
-
-        var _this = _possibleConstructorReturn(this, (BinaryOperatorNode.__proto__ || Object.getPrototypeOf(BinaryOperatorNode)).call(this, node, x, y, texturesHandler));
-
-        _this.minCellWidth = 4;
-        _this.showPinText = true;
-        _this.inputOffset = _this.cellSize * 0.2;
-
-        _this.pinRows = [];
-
-        _this.titleHeight = 0;
-
-        _this.node = node;
-
-        _this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.mathNodeBodyTexture, 11, 11, 11, 11);
-        _this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.mathNodeShadowSelectedTexture, 21, 21, 21, 21);
-        _this.config = {
-            body: true,
-            gloss: false,
-            shadow: true,
-            titleHighlight: false,
-            colorSpill: false
-        };
-        return _this;
-    }
-
-    _createClass(BinaryOperatorNode, [{
-        key: 'init',
-        value: function init() {
-            this.width = this.minCellWidth * _config.CONFIG.CELL_SIZE;
-
-            var text = this.node.name;
-            if (text.indexOf("Boolean") !== -1) {
-                text = text.replace("Boolean", "").toUpperCase();
-            } else if (text.indexOf("Int") !== -1 || text.indexOf("Float") !== -1 || text.indexOf("Enum") !== -1) {
-                if (text.indexOf("And") !== -1) {
-                    text = "&";
-                } else if (text.indexOf("Or") !== -1) {
-                    text = "|";
-                } else if (text.indexOf("Multiply") !== -1) {
-                    text = "x";
-                } else if (text.indexOf("Equality") !== -1) {
-                    text = "==";
-                } else if (text.indexOf("Subtract") !== -1) {
-                    text = "-";
-                } else if (text.indexOf("Add") !== -1) {
-                    text = "+";
-                } else if (text.indexOf("Multiply") !== -1) {
-                    text = "x";
-                } else if (text.indexOf("Percent") !== -1) {
-                    text = "%";
-                } else if (text.indexOf("Divide") !== -1) {
-                    text = "/";
-                } else if (text.indexOf("Dot") !== -1) {
-                    text = ".";
-                } else if (text.indexOf("Greater") !== -1) {
-                    if (text.indexOf("Equal") === -1) text = ">";else text = ">=";
-                } else if (text.indexOf("Less") !== -1) {
-                    if (text.indexOf("Equal") === -1) text = "<";else text = "<=";
-                } else if (text.indexOf("Equal") !== -1 && text.indexOf("Not") !== -1) {
-                    text = "!=";
-                } else if (text.indexOf("Equal") !== -1) {
-                    text = "=";
-                } else if (text.indexOf("Not") !== -1) {
-                    text = "NOT";
-                }
-            }
-
-            this.operatorText = new PIXI.Text(text, _config.binaryOperatorTextStyle);
-            if (this.operatorText.width > this.width) {
-                this.width = _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'nearestCellWidth', this).call(this, this.operatorText.width) * _config.CONFIG.CELL_SIZE + _config.CONFIG.CELL_SIZE / 2;
-            }
-            ;
-
-            _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'init', this).call(this);
-        }
-    }, {
-        key: 'draw',
-        value: function draw(nodesContainer) {
-            _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'draw', this).call(this, nodesContainer);
-            this.pinStartY = -this.body.height / 2 + _config.CONFIG.CELL_SIZE;
-
-            this.operatorText.anchor.set(0.5, 0.5);
-            this.container.addChild(this.operatorText);
-            _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'drawPinRows', this).call(this);
-        }
-    }]);
-
-    return BinaryOperatorNode;
-}(_RegularNode2.RegularNode);
-
-exports.default = BinaryOperatorNode;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _RegularNode2 = __webpack_require__(0);
-
-var _config = __webpack_require__(22);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var MacroNode = function (_RegularNode) {
-    _inherits(MacroNode, _RegularNode);
-
-    function MacroNode(node, x, y, texturesHanlder) {
-        _classCallCheck(this, MacroNode);
-
-        var _this = _possibleConstructorReturn(this, (MacroNode.__proto__ || Object.getPrototypeOf(MacroNode)).call(this, node, x, y, texturesHanlder));
-
-        _this.colorTint = _config.VAR_COLORS["macro"];
-
-        _this.functionName = node.name;
-
-        _this.headerTextOffset = _config.CONFIG.CELL_SIZE * 2;
-
-        if (_this.functionName === "Branch") {
-            _this.icon = (0, _config.getIcon)("branch");
-        } else if (_this.functionName.indexOf("For Each") !== -1) {
-            _this.icon = (0, _config.getIcon)("for_each");
-        } else if (_this.functionName.indexOf("Flip") !== -1) {
-            _this.icon = (0, _config.getIcon)("flip_flop");
-        } else if (_this.functionName.indexOf("Valid") !== -1) {
-            _this.icon = (0, _config.getIcon)("valid");
-        } else if (_this.functionName.indexOf("Sequence") !== -1) {
-            _this.icon = (0, _config.getIcon)("sequence");
-        } else if (_this.functionName.indexOf("For Loop") !== -1) {
-            _this.icon = (0, _config.getIcon)("for_loop");
-        } else {
-            _this.icon = (0, _config.getIcon)("macro");
-        }
-        return _this;
-    }
-
-    _createClass(MacroNode, [{
-        key: 'draw',
-        value: function draw(app) {
-            _get(MacroNode.prototype.__proto__ || Object.getPrototypeOf(MacroNode.prototype), 'draw', this).call(this, app);
-
-            this.headerText.x = -this.body.width / 2;
-            this.headerText.y = -this.body.height / 2;
-
-            this.headerText.y += this.gloss.height / 2;
-            this.headerText.x += this.headerTextOffset;
-
-            this.headerText.anchor.set(0, 0.5);
-
-            this.fIcon.anchor.set(0.5, 0.5);
-            this.fIcon.x = -this.body.width / 2;
-            this.fIcon.y = -this.body.height / 2;
-
-            this.fIcon.y += this.gloss.height / 2;
-            this.fIcon.x += _config.CONFIG.CELL_SIZE;
-
-            this.container.addChild(this.headerText);
-            this.container.addChild(this.fIcon);
-        }
-    }, {
-        key: 'init',
-        value: function init() {
-            this.headerText = new PIXI.Text(this.functionName, _config.defaultTextStyle);
-            this.fIcon = PIXI.Sprite.fromImage(this.icon);
-            this.calculateWidth();
-            _get(MacroNode.prototype.__proto__ || Object.getPrototypeOf(MacroNode.prototype), 'init', this).call(this);
-        }
-    }, {
-        key: 'calculateWidth',
-        value: function calculateWidth() {
-            var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
-            if (headerFullWidth > this.width) {
-                this.width = _get(MacroNode.prototype.__proto__ || Object.getPrototypeOf(MacroNode.prototype), 'nearestCellWidth', this).call(this, headerFullWidth) * _config.CONFIG.CELL_SIZE;
-            }
-        }
-    }]);
-
-    return MacroNode;
-}(_RegularNode2.RegularNode);
-
-exports.default = MacroNode;
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _RegularNode = __webpack_require__(0);
-
-var _config = __webpack_require__(22);
-
-var _main = __webpack_require__(20);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var CommentNode = function () {
-    function CommentNode(node, x, y, texturesHandler) {
+    function CommentNode(node, x, y) {
         _classCallCheck(this, CommentNode);
 
         this.x = parseInt(x);
@@ -2776,10 +3317,8 @@ var CommentNode = function () {
 
         this.affectedNodes = [];
 
-        this.texturesHandler = texturesHandler;
-
-        this.body = new PIXI.Sprite.from(texturesHandler.commentNodeBody);
-        this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
+        this.body = new PIXI.Sprite.from(_Textures2.default.commentNodeBody);
+        this.shadowSelected = new PIXI.mesh.NineSlicePlane(_Textures2.default.shadowSelectedTexture, 21, 21, 21, 21);
 
         this.pinRows = [];
 
@@ -2928,7 +3467,7 @@ var CommentNode = function () {
 
             this.container.addChild(this.body);
 
-            this.gloss = new PIXI.mesh.NineSlicePlane(this.texturesHandler.glossTexture, 7, 7, 7, 7);
+            this.gloss = new PIXI.mesh.NineSlicePlane(_Textures2.default.glossTexture, 7, 7, 7, 7);
             this.gloss.blendMode = PIXI.BLEND_MODES.SCREEN;
 
             this.gloss.aplha = opacity;
@@ -2983,326 +3522,7 @@ var CommentNode = function () {
 exports.default = CommentNode;
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-function Vector(x, y) {
-	this.x = x || 0;
-	this.y = y || 0;
-}
-
-Vector.prototype = {
-	negative: function negative() {
-		return new Vector(-this.x, -this.y);
-	},
-	add: function add(v) {
-		if (v instanceof Vector) return new Vector(this.x + v.x, this.y + v.y);else return new Vector(this.x + v, this.y + v);
-	},
-	subtract: function subtract(v) {
-		if (v instanceof Vector) return new Vector(this.x - v.x, this.y - v.y);else return new Vector(this.x - v, this.y - v);
-	},
-	multiply: function multiply(v) {
-		if (v instanceof Vector) return new Vector(this.x * v.x, this.y * v.y);else return new Vector(this.x * v, this.y * v);
-	},
-	divide: function divide(v) {
-		if (v instanceof Vector) return new Vector(this.x / v.x, this.y / v.y);else return new Vector(this.x / v, this.y / v);
-	},
-	equals: function equals(v) {
-		return this.x == v.x && this.y == v.y;
-	},
-	dot: function dot(v) {
-		return this.x * v.x + this.y * v.y;
-	},
-	length: function length() {
-		return Math.sqrt(this.dot(this));
-	},
-	unit: function unit() {
-		return this.divide(this.length());
-	},
-	min: function min() {
-		return Math.min(this.x, this.y);
-	},
-	max: function max() {
-		return Math.max(this.x, this.y);
-	},
-	angleTo: function angleTo(a) {
-		return Math.acos(this.dot(a) / (this.length() * a.length()));
-	},
-	toArray: function toArray(n) {
-		return [this.x, this.y].slice(0, n || 2);
-	},
-	clone: function clone() {
-		return new Vector(this.x, this.y);
-	},
-	init: function init(x, y, z) {
-		this.x = x;
-		this.y = y;
-		return this;
-	}
-};
-
-Vector.negative = function (a, b) {
-	b.x = -a.x;
-	b.y = -a.y;
-	return b;
-};
-Vector.add = function (a, b, c) {
-	if (b instanceof Vector) {
-		c.x = a.x + b.x;
-		c.y = a.y + b.y;
-	} else {
-		c.x = a.x + b;
-		c.y = a.y + b;
-	}
-	return c;
-};
-Vector.subtract = function (a, b, c) {
-	if (b instanceof Vector) {
-		c.x = a.x - b.x;
-		c.y = a.y - b.y;
-	} else {
-		c.x = a.x - b;
-		c.y = a.y - b;
-	}
-	return c;
-};
-Vector.multiply = function (a, b, c) {
-	if (b instanceof Vector) {
-		c.x = a.x * b.x;
-		c.y = a.y * b.y;
-	} else {
-		c.x = a.x * b;
-		c.y = a.y * b;
-	}
-	return c;
-};
-Vector.divide = function (a, b, c) {
-	if (b instanceof Vector) {
-		c.x = a.x / b.x;
-		c.y = a.y / b.y;
-	} else {
-		c.x = a.x / b;
-		c.y = a.y / b;
-	}
-	return c;
-};
-
-Vector.unit = function (a, b) {
-	var length = a.length();
-	b.x = a.x / length;
-	b.y = a.y / length;
-	return b;
-};
-
-Vector.min = function (a, b) {
-	return new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y));
-};
-Vector.max = function (a, b) {
-	return new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y));
-};
-Vector.lerp = function (a, b, fraction) {
-	return b.subtract(a).multiply(fraction).add(a);
-};
-Vector.fromArray = function (a) {
-	return new Vector(a[0], a[1]);
-};
-
-exports.default = Vector;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.allNodes = exports.app = undefined;
-exports.default = prepare;
-
-var _Grid = __webpack_require__(21);
-
-var _Grid2 = _interopRequireDefault(_Grid);
-
-var _Textures = __webpack_require__(13);
-
-var _Textures2 = _interopRequireDefault(_Textures);
-
-var _BlueprintRenderer = __webpack_require__(6);
-
-var _BlueprintRenderer2 = _interopRequireDefault(_BlueprintRenderer);
-
-var _BPToNodes = __webpack_require__(8);
-
-var _BPToNodes2 = _interopRequireDefault(_BPToNodes);
-
-var _LinksDrawer = __webpack_require__(9);
-
-var _LinksDrawer2 = _interopRequireDefault(_LinksDrawer);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var app = exports.app = undefined;
-var allNodes = exports.allNodes = [];
-
-function prepare(document) {
-    exports.app = app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, { antialias: true });
-    app.stage.displayList = new PIXI.DisplayList();
-    document.body.appendChild(app.view);
-
-    var grid = new _Grid2.default(app, 0, 0);
-
-    var texturesHandler = new _Textures2.default();
-
-    var dragging = false;
-
-    var draggingLeft = false;
-    var dragLeftStartPoint = null;
-
-    var eventData = null;
-
-    var mainContainer = new PIXI.Container();
-
-    exports.allNodes = allNodes = [];
-
-    var selectedNodes = [];
-
-    var linksDrawer;
-
-    var nodesLayer = new PIXI.DisplayGroup(1, true);
-    var linksLayer = new PIXI.DisplayGroup(0, true);
-
-    var linksContainer = new PIXI.Container();
-    app.stage.addChild(linksContainer);
-
-    app.renderer.plugins.interaction.on('pointerdown', onDragStart).on('pointerup', onDragEnd).on('pointerupoutside', onDragEnd).on('pointermove', onDragMove);
-
-    app.stage.addChild(mainContainer);
-
-    var selector = new PIXI.mesh.NineSlicePlane(texturesHandler.selector, 2, 2, 2, 2);
-
-    selector.width = 100;
-    selector.height = 100;
-    selector.visible = false;
-
-    app.stage.addChild(selector);
-    app.bpConfig = { draggingNode: false };
-
-    var render = new _BlueprintRenderer2.default();
-    render.renderFromFile("/tests/file_big.txt", function (nodes) {
-        var nodesObjects = (0, _BPToNodes2.default)(nodes, texturesHandler);
-        for (var i = 0, l = nodesObjects.length; i < l; i++) {
-            nodesObjects[i].draw(mainContainer);
-            allNodes.push(nodesObjects[i]);
-        }
-        linksDrawer = new _LinksDrawer2.default(linksContainer, allNodes);
-        var canvas = document.body.querySelector("canvas");
-        disableContextMenu(canvas);
-    });
-
-    function isRightClick(e) {
-        return e.which === 3;
-    }
-
-    function isLeftClick(e) {
-        return e.which === 1;
-    }
-
-    function disableContextMenu(canvas) {
-        canvas.addEventListener('contextmenu', function (e) {
-            e.preventDefault();
-        });
-    }
-
-    function dropNodesSelection(e) {
-        for (var i = 0, l = allNodes.length; i < l; i++) {
-            if (allNodes[i].selected) {
-                if (!allNodes[i].inNode(e.data.global)) {
-                    allNodes[i].dropSelection();
-                }
-            }
-        }
-    }
-
-    function onDragStart(event) {
-        if (isRightClick(event.data.originalEvent)) {
-            dragging = true;
-            eventData = event.data;
-        } else if (isLeftClick(event.data.originalEvent)) {
-            dropNodesSelection(event);
-            draggingLeft = true;
-            dragLeftStartPoint = {
-                x: event.data.global.x,
-                y: event.data.global.y
-            };
-        }
-    }
-
-    function onDragEnd(event) {
-        if (isRightClick(event.data.originalEvent)) {
-            dragging = false;
-            eventData = null;
-        } else if (isLeftClick(event.data.originalEvent)) {
-            draggingLeft = false;
-            dragLeftStartPoint = null;
-            selector.visible = false;
-        }
-    }
-
-    function onDragMove(event) {
-        if (dragging) {
-            mainContainer.x += event.data.originalEvent.movementX;
-            mainContainer.y += event.data.originalEvent.movementY;
-
-            linksDrawer.links.x += event.data.originalEvent.movementX;
-            linksDrawer.links.y += event.data.originalEvent.movementY;
-
-            // grid.redraw(event.data.originalEvent.movementX, event.data.originalEvent.movementY)
-        } else if (draggingLeft) {
-            if (dragLeftStartPoint && !app.bpConfig.draggingNode) {
-                selector.visible = true;
-                selector.x = dragLeftStartPoint.x;
-                selector.y = dragLeftStartPoint.y;
-
-                selector.width = event.data.global.x - dragLeftStartPoint.x;
-                selector.height = event.data.global.y - dragLeftStartPoint.y;
-
-                var selectorBounds = selector.getBounds();
-
-                for (var i = 0; i < allNodes.length; i++) {
-                    if (!allNodes[i].constructor.name === 'CommentNode') {
-                        var bounds = allNodes[i].container.getBounds();
-                        if (intersectNodeSelectable(bounds, selectorBounds)) {
-                            allNodes[i].select();
-                        } else {
-                            allNodes[i].dropSelection();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /*setTimeout(function () {
-        let renderTexture = PIXI.RenderTexture.create(7552, 4272);
-        app.renderer.render(app.stage, renderTexture, false);
-        //grid.show();
-        var hiddenElement = document.createElement('a');
-        hiddenElement.href = app.renderer.extract.base64(renderTexture);
-        hiddenElement.click();
-    }, 3000);*/
-}
-
-/***/ }),
-/* 21 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3314,106 +3534,131 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(22);
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _RegularNode2 = __webpack_require__(1);
+
+var _RegularNode3 = _interopRequireDefault(_RegularNode2);
+
+var _config = __webpack_require__(0);
+
+var _resources = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Grid = function () {
-    function Grid(app, x, y) {
-        _classCallCheck(this, Grid);
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-        var tmpContainer = new PIXI.Container();
-        var background = new PIXI.Graphics();
-        background.beginFill(0x2a2a2a);
-        var fullCellSize = 8 * _config.CONFIG.CELL_SIZE;
-        background.drawRect(0, 0, fullCellSize, fullCellSize);
-        tmpContainer.addChild(background);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-        this.grid = new PIXI.Graphics();
-        this.gridThickness = 1;
-        tmpContainer.addChild(this.grid);
-        this.drawQuad();
+var EventNode = function (_RegularNode) {
+    _inherits(EventNode, _RegularNode);
 
-        var renderTexture = PIXI.RenderTexture.create(fullCellSize + 1, fullCellSize + 1);
-        app.renderer.render(tmpContainer, renderTexture, false);
+    function EventNode(node, x, y, texturesHanlder) {
+        _classCallCheck(this, EventNode);
 
-        var newSprite = new PIXI.extras.TilingSprite(renderTexture, 7552, 4272);
-        app.stage.addChild(newSprite);
+        var _this = _possibleConstructorReturn(this, (EventNode.__proto__ || Object.getPrototypeOf(EventNode)).call(this, node, x, y, texturesHanlder));
+
+        _this.colorTint = _config.VAR_COLORS["event"];
+        _this.functionName = node.name;
+
+        _this.icon = _resources.ICONS.EventNodeIcon;
+
+        if (_this.node.isCustom === true) {
+            _this.custom = true;
+            _this.icon = _resources.ICONS.EventNodeIconCustom;
+            _this.titleHeight = _config.CONFIG.CELL_SIZE * 2.5;
+            _this.height += _config.CONFIG.CELL_SIZE;
+        }
+
+        if (_this.node.inputKey) {
+            if (_this.node.inputKey.indexOf("Mouse") !== -1) _this.icon = _resources.ICONS.MouseEventIcon;else _this.icon = _resources.ICONS.KeyboardEventIcon;
+            _this.functionName = _this.node.inputKey;
+        }
+
+        _this.headerTextOffset = _config.CONFIG.CELL_SIZE * 2;
+        return _this;
     }
 
-    _createClass(Grid, [{
-        key: 'drawQuad',
-        value: function drawQuad() {
-            var gridThickness = this.gridThickness;
-            var fullCellSize = 8 * _config.CONFIG.CELL_SIZE;
-            for (var i = 0; i < fullCellSize; i += _config.CONFIG.CELL_SIZE) {
-                this.grid.lineStyle(gridThickness, 0x353535).moveTo(i, 0).lineTo(i, fullCellSize);
-            }
-
-            for (var i = 0; i < fullCellSize; i += _config.CONFIG.CELL_SIZE) {
-                this.grid.lineStyle(gridThickness, 0x353535).moveTo(0, i).lineTo(fullCellSize, i);
-            }
-
-            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, 0).lineTo(0, fullCellSize + 1);
-
-            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(fullCellSize + 1, 0).lineTo(fullCellSize + 1, fullCellSize + 1);
-
-            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, 0).lineTo(fullCellSize + 1, 0);
-
-            this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, fullCellSize + 1).lineTo(fullCellSize + 1, fullCellSize + 1);
+    _createClass(EventNode, [{
+        key: 'init',
+        value: function init() {
+            this.headerText = new PIXI.Text(this.functionName, _config.defaultTextStyle);
+            this.fIcon = PIXI.Sprite.fromImage(this.icon);
+            this.calculateWidth();
+            _get(EventNode.prototype.__proto__ || Object.getPrototypeOf(EventNode.prototype), 'init', this).call(this);
         }
     }, {
         key: 'draw',
-        value: function draw() {
-            var gridThickness = this.gridThickness;
-            this.grid.clear();
+        value: function draw(app) {
 
-            var fullCellSize = fullCellSize;
+            _get(EventNode.prototype.__proto__ || Object.getPrototypeOf(EventNode.prototype), 'draw', this).call(this, app);
 
-            for (var i = -fullCellSize; i < window.innerWidth + fullCellSize; i += _config.CONFIG.CELL_SIZE) {
-                this.grid.lineStyle(gridThickness, 0x353535).moveTo(i - this.origin.x, 0).lineTo(i - this.origin.x, window.innerHeight);
+            this.headerText.x = -this.body.width / 2;
+            this.headerText.y = -this.body.height / 2;
+
+            this.headerText.y += this.gloss.height / 2;
+            this.headerText.x += this.headerTextOffset;
+            this.headerText.anchor.set(0, 0.5);
+            if (this.custom) {
+                this.headerText.anchor.set(0, 1);
             }
 
-            for (var i = -fullCellSize; i < window.innerHeight + fullCellSize; i += _config.CONFIG.CELL_SIZE) {
-                this.grid.lineStyle(gridThickness, 0x353535).moveTo(0, i - this.origin.y).lineTo(window.innerWidth, i - this.origin.y);
+            this.container.addChild(this.headerText);
+
+            if (this.custom) {
+                this.customText = new PIXI.Text("Custom Event", _config.customEventTextStyle);
+                this.customText.x = -this.body.width / 2;
+                this.customText.y = -this.body.height / 2;
+
+                this.customText.y = this.headerText.y + this.headerText.height;
+                this.customText.x += this.headerTextOffset;
+
+                this.customText.anchor.set(0, 1);
+                this.container.addChild(this.customText);
             }
 
-            for (var i = -fullCellSize; i < window.innerWidth + fullCellSize; i += fullCellSize) {
-                this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(i - this.origin.x, 0).lineTo(i - this.origin.x, window.innerHeight);
-            }
+            this.fIcon.anchor.set(0.5, 0.5);
+            this.fIcon.x = -this.body.width / 2;
+            this.fIcon.y = -this.body.height / 2;
 
-            for (var i = -fullCellSize; i < window.innerHeight + fullCellSize; i += fullCellSize) {
-                this.grid.lineStyle(gridThickness, 0x1c1c1c).moveTo(0, i - this.origin.y).lineTo(window.innerWidth, i - this.origin.y);
+            this.fIcon.y += this.gloss.height / 2;
+            this.fIcon.x += _config.CONFIG.CELL_SIZE;
+
+            this.container.addChild(this.fIcon);
+
+            if (this.node.outputs && this.node.outputs[0].name === "Output Delegate") {
+                var delegateIcon = this.node.outputs[0].linked ? _resources.TEXTURES.DelegatePinConnected : _resources.TEXTURES.DelegatePinDisconnected;
+                var delegate = PIXI.Sprite.fromImage(delegateIcon);
+                delegate.tint = _config.VAR_COLORS["delegate"];
+                delegate.x = this.body.width / 2 - _config.CONFIG.CELL_SIZE * (5 / 8);
+                delegate.y = -this.body.height / 2 + _config.CONFIG.CELL_SIZE * (5 / 8);
+                delegate.anchor.set(0.5, 0.5);
+
+                this.container.addChild(delegate);
             }
         }
     }, {
-        key: 'redraw',
-        value: function redraw(x, y) {
-            this.origin.x -= x;
-            this.origin.y -= y;
-
-            if (this.origin.x > fullCellSize) {
-                this.origin.x = this.origin.x - fullCellSize;
-            } else if (this.origin.x < -fullCellSize) {
-                this.origin.x = this.origin.x + fullCellSize;
+        key: 'calculateWidth',
+        value: function calculateWidth() {
+            var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
+            if (this.node.outputs && this.node.outputs[0].name === "Output Delegate") {
+                headerFullWidth += _config.CONFIG.CELL_SIZE;
             }
-
-            if (this.origin.y > fullCellSize) {
-                this.origin.y = this.origin.y - fullCellSize;
-            } else if (this.origin.y < -fullCellSize) {
-                this.origin.y = this.origin.y + fullCellSize;
+            if (headerFullWidth > this.width) {
+                this.width = _get(EventNode.prototype.__proto__ || Object.getPrototypeOf(EventNode.prototype), 'nearestCellWidth', this).call(this, headerFullWidth) * _config.CONFIG.CELL_SIZE;
             }
-            this.draw();
         }
     }]);
 
-    return Grid;
-}();
+    return EventNode;
+}(_RegularNode3.default);
 
-exports.default = Grid;
+exports.default = EventNode;
 
 /***/ }),
-/* 22 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3422,329 +3667,638 @@ exports.default = Grid;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.isLetter = isLetter;
-exports.getIcon = getIcon;
-exports.componentToHex = componentToHex;
-exports.rgbToHex = rgbToHex;
-exports.intersectNodeSelectable = intersectNodeSelectable;
-var CONFIG = exports.CONFIG = {
-    CELL_SIZE: 16
-};
 
-var defaultTextStyle = exports.defaultTextStyle = new PIXI.TextStyle({
-    fontFamily: 'Roboto',
-    fontSize: 12,
-    fill: ['#ffffff'] // gradient
-});
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var binaryOperatorTextStyle = exports.binaryOperatorTextStyle = new PIXI.TextStyle({
-    fontFamily: 'Roboto',
-    fontSize: 36,
-    fill: ['#626262'] // gradient
-});
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var customEventTextStyle = exports.customEventTextStyle = new PIXI.TextStyle({
-    fontFamily: 'Roboto',
-    fontSize: 12,
-    fontStyle: 'italic',
-    fill: ['#a1825d'] // gradient
-});
+var _RegularNode2 = __webpack_require__(1);
 
-var commentTextStyle = exports.commentTextStyle = new PIXI.TextStyle({
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    fill: ['#eeeeee'], // gradient
-    dropShadow: true,
-    dropShadowColor: '#000000',
-    dropShadowBlur: 2,
-    dropShadowAngle: Math.PI / 6,
-    dropShadowDistance: 2,
-    fontWeight: 'bold'
-});
+var _RegularNode3 = _interopRequireDefault(_RegularNode2);
 
-var VAR_COLORS = exports.VAR_COLORS = {
-    bool: 0x8c0202,
-    byte: 0x026960,
-    int: 0x1ed6a4,
-    float: 0x97ef42,
-    name: 0xc07bef,
-    string: 0xef02c8,
-    text: 0xd975a0,
-    vector: 0xefbd22,
-    rotator: 0x97a9ef,
-    transform: 0xeb6b02,
-    actor: 0x02a2e9,
-    execFunction: 0x5b8fb1,
-    execFunctionF: 0x79c9ff,
-    pureFunction: 0x83b47c,
-    pureFunctionF: 0xaaeea0,
-    event: 0x8d1313,
-    delegate: 0xff3838,
-    object: 0x0481b7,
-    class: 0x5501b3,
-    struct: 0x024bab,
-    exec: 0xffffff,
-    interface: 0xc9d58f,
-    macro: 0xb7b4aa,
-    wildcard: 0x7f7979,
-    dynamicCast: 0x258489,
-    timeline: 0x9d7e24,
-    parent: 0x854613,
-    switch_on: 0x8f9013
-};
+var _config = __webpack_require__(0);
 
-var HIDDEN_PIN_NAMES = exports.HIDDEN_PIN_NAMES = ["Output_Get"];
+var _resources = __webpack_require__(3);
 
-var VAR_TYPES = exports.VAR_TYPES = {
-    bool: { code: 0, name: "bool" },
-    byte: { code: 1, name: "byte" },
-    int: { code: 2, name: "int" },
-    float: { code: 3, name: "float" },
-    name: { code: 4, name: "name" },
-    string: { code: 5, name: "string" },
-    text: { code: 6, name: "text" },
-    vector: { code: 7, name: "vector" },
-    rotator: { code: 8, name: "rotator" },
-    transform: { code: 9, name: "transform" },
-    actor: { code: 10, name: "actor" },
-    event: { code: 11, name: "delegateOut" },
-    object: { code: 12, name: "object" },
-    class: { code: 13, name: "class" },
-    struct: { code: 14, name: "struct" },
-    exec: { code: 15, name: "exec" },
-    interface: { code: 16, name: "interface" },
-    macro: { code: 17, name: "macro" },
-    delegate: { code: 18, name: "delegate" },
-    wildcard: { code: 19, name: "wildcard" }
-};
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ICONS = exports.ICONS = {
-    branch: "icon_Blueprint_Branch_16x.png",
-    make_struct: "icon_Blueprint_MakeStruct_16x.png",
-    break_struct: "icon_Blueprint_BreakStruct_16x.png",
-    event_custom: "icon_Blueprint_CustomEvent_16x.png",
-    event: "icon_Blueprint_Event_16x.png",
-    for_each: "icon_Blueprint_ForEach_16x.png",
-    for_loop: "icon_Blueprint_Loop_16x.png",
-    make_array: "icon_Blueprint_MakeArray_16x.png",
-    flip_flop: "icon_Blueprint_FlipFlop_16x.png",
-    dynamic_cast: "icon_Blueprint_Cast_16x.png",
-    timeline: "icon_Blueprint_Timeline_16x.png",
-    node: "icon_Blueprint_Node_16x.png",
-    message: "MessageIcon.png",
-    latent: "LatentIcon.png",
-    valid: "icon_Blueprint_IsValid_16x.png",
-    select: "icon_Blueprint_Select_16x.png",
-    sequence: "icon_Blueprint_Sequence_16x.png",
-    macro: "icon_Blueprint_Macro_16x.png",
-    keyboard: "icon_Blueprint_KeyboardEvent_16x.png",
-    switch_on: "icon_Blueprint_Switch_16x.png",
-    mouse: "icon_Blueprint_MouseEvent_16x.png",
-    fullscreen: "LV_FullScreen.png",
-    save: "LV_Save.png"
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var FUNCTIONS_MAPPING = exports.FUNCTIONS_MAPPING = {
-    K2Node_CallFunction: null,
-    K2Node_SpawnActorFromClass: {
-        text: "Spawn Actor"
-    },
-    K2Node_GetInputAxisValue: null,
-    K2Node_MakeArray: {
-        text: "Make Array"
-    },
-    K2Node_CreateWidget: {
-        text: "Construct"
-    },
-    K2Node_MakeStruct: {
-        text: "Make Struct"
-    },
-    K2Node_BreakStruct: {
-        text: "Break Struct"
-    },
-    K2Node_LatentOnlineCall: {
-        async: true
-    },
-    K2Node_AsyncAction: {
-        async: true
-    },
-    K2Node_LeaderboardQuery: {
-        text: "Read Leaderboard Integer",
-        async: true
-    },
-    K2Node_SwitchInteger: {
-        text: "Switch on Int",
-        icon: ICONS["switch_on"],
-        morpher: function morpher(obj) {
-            obj.color = VAR_COLORS["switch_on"];
-            return obj;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FunctionNode = function (_RegularNode) {
+    _inherits(FunctionNode, _RegularNode);
+
+    function FunctionNode(node, x, y, texturesHanlder) {
+        _classCallCheck(this, FunctionNode);
+
+        var _this = _possibleConstructorReturn(this, (FunctionNode.__proto__ || Object.getPrototypeOf(FunctionNode)).call(this, node, x, y, texturesHanlder));
+
+        if (!node.isPure) {
+            _this.colorTint = _config.VAR_COLORS["execFunction"];
+        } else {
+            _this.colorTint = _config.VAR_COLORS["pureFunction"];
         }
-    },
-    K2Node_SwitchEnum: {
-        text: "Switch on Enum",
-        icon: ICONS["switch_on"],
-        morpher: function morpher(obj) {
-            obj.color = VAR_COLORS["switch_on"];
-            return obj;
+
+        if (node.isParent) {
+            _this.colorTint = _config.VAR_COLORS["parent"];
         }
-    },
-    K2Node_SwitchString: {
-        text: "Switch on String",
-        icon: ICONS["switch_on"],
-        morpher: function morpher(obj) {
-            obj.color = VAR_COLORS["switch_on"];
-            return obj;
+
+        if (node.color) {
+            _this.colorTint = _this.function.color;
         }
-    },
-    K2Node_CallParentFunction: {
-        morpher: function morpher(obj) {
-            obj.name = "Parent: " + obj.name;
-            obj.isParent = true;
-            return obj;
+
+        _this.isPure = node.isPure;
+        _this.functionName = node.name;
+
+        if (!_this.isPure) {
+            _this.iconTint = _config.VAR_COLORS["execFunction"];
+        } else {
+            _this.iconTint = _config.VAR_COLORS["pureFunction"];
         }
-    },
-    K2Node_AddComponent: null,
-    K2Node_FormatText: {
-        text: "Format Text",
-        icon: ICONS["node"],
-        morpher: function morpher(obj) {
-            obj.isPure = true;
-            return obj;
+
+        _this.icon = 'assets/icons/function.png';
+
+        if (_this.functionName.indexOf("Make") !== -1 && _this.functionName.indexOf("Array") === -1) {
+            _this.icon = _resources.ICONS.MakeStructIcon;
+            _this.iconTint = null;
+        } else if (_this.functionName.indexOf("Break") !== -1) {
+            _this.icon = _resources.ICONS.BreakStructIcon;
+            _this.iconTint = null;
+        } else if (_this.functionName.indexOf("Make Array") !== -1) {
+            _this.icon = _resources.ICONS.MakeArrayIcon;
+            _this.iconTint = null;
         }
-    },
-    K2Node_GetInputVectorAxisValue: {
-        icon: ICONS["keyboard"],
-        morpher: function morpher(obj, node) {
-            obj.isPure = true;
-            obj.name = "Get " + node.inputAxisKey;
-            return obj;
-        }
-    },
-    K2Node_GetDataTableRow: {
-        text: "Get Data Table Row"
+
+        _this.headerTextOffset = _config.CONFIG.CELL_SIZE * 2;
+        return _this;
     }
-};
 
-var NAME_MAPPING = exports.NAME_MAPPING = {
-    "K2_Destroy Actor": "DestroyActor",
-    "VSize": "VectorLength",
-    "K2_Get Component Location": "GetWorldLocation",
-    "K2_Set Actor Relative Location": "SetActorRelativeLocation",
-    "K2_Set Relative Location": "SetRelativeLocation",
-    "K2_Set Actor Location": "SetActorLocation",
-    "K2_Set Actor Relative Rotation": "SetActorRelativeRotation",
-    "K2_Set Relative Rotation": "SetRelativeRotation",
-    "K2_Set Actor Rotation": "SetActorRotation",
-    "K2_Set Timer": "Set Timer by Function Name",
-    "K2_Get Actor Location": "GetActorLocation",
-    "K2_Get Actor Rotation": "GetActorRotation",
-    "RLerp": "Lerp (Rotator)",
-    "FTrunc": "Truncate",
-    "Conv_Int To Text": "ToText(int)",
-    "Conv_Float To Text": "ToText(float)",
-    "Conv_Text To String": "ToString(text)"
-};
+    _createClass(FunctionNode, [{
+        key: 'draw',
+        value: function draw(app) {
+            _get(FunctionNode.prototype.__proto__ || Object.getPrototypeOf(FunctionNode.prototype), 'draw', this).call(this, app);
 
-var FUNCTION_NAMES_MAPPING = exports.FUNCTION_NAMES_MAPPING = {
-    Array_Set: "Set Array Elem"
-};
+            this.headerText.x = -this.body.width / 2;
+            this.headerText.y = -this.body.height / 2;
 
-var ARRAY_FUNCTION_NAMES_MAPPING = exports.ARRAY_FUNCTION_NAMES_MAPPING = {
-    Array_Add: {
-        text: "Add"
-    },
-    "Array_Add Unique": {
-        text: "AddUnique"
-    },
-    Array_Append: {
-        text: "Append"
-    },
-    Array_Clear: {
-        text: "Clear"
-    },
-    Array_Contains: {
-        text: "Contains"
-    },
-    Array_Find: {
-        text: "Find"
-    },
-    Array_Get: {
-        text: "Get"
-    },
-    Array_Insert: {
-        text: "Insert"
-    },
-    "Array_Last Index": {
-        text: "Last Index"
-    },
-    Array_Length: {
-        text: "Length"
-    },
-    Array_Remove: {
-        text: "Remove Index"
-    },
-    "Array_Remove Item": {
-        text: "Remove"
-    },
-    Array_Resize: {
-        text: "Resize"
-    },
-    Array_Set: {
-        text: "Set Array Elem",
-        showHeader: true
-    },
-    Array_Shuffle: {
-        text: "Shuffle"
-    }
-};
+            this.headerText.y += this.gloss.height / 2;
+            this.headerText.x += this.headerTextOffset;
 
-String.prototype.format = function () {
-    var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
-        formatted = formatted.replace(regexp, arguments[i]);
-    }
-    return formatted;
-};
+            this.headerText.anchor.set(0, 0.5);
 
-String.prototype.fromCamelCase = function () {
-    var newString = '';
-    for (var i = 0; i < this.length; i++) {
-        newString += this[i];
-        if (isLetter(this[i]) && this[i + 1] && isLetter(this[i + 1])) {
-            if (this[i].toLowerCase() === this[i] && this[i + 1].toUpperCase() === this[i + 1]) {
-                newString += " ";
+            this.fIcon.anchor.set(0.5, 0.5);
+            this.fIcon.x = -this.body.width / 2;
+            this.fIcon.y = -this.body.height / 2;
+
+            this.fIcon.y += this.gloss.height / 2;
+            this.fIcon.x += _config.CONFIG.CELL_SIZE;
+
+            if (this.iconTint) {
+                this.fIcon.tint = this.iconTint;
+            }
+
+            this.container.addChild(this.headerText);
+            this.container.addChild(this.fIcon);
+        }
+    }, {
+        key: 'init',
+        value: function init() {
+            this.headerText = new PIXI.Text(this.functionName /* + "(" + this.x + "," + this.y + ")"*/, _config.defaultTextStyle);
+            this.fIcon = PIXI.Sprite.fromImage(this.icon);
+            this.calculateWidth();
+            _get(FunctionNode.prototype.__proto__ || Object.getPrototypeOf(FunctionNode.prototype), 'init', this).call(this);
+        }
+    }, {
+        key: 'calculateWidth',
+        value: function calculateWidth() {
+            var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
+            if (headerFullWidth > this.width) {
+                this.width = _get(FunctionNode.prototype.__proto__ || Object.getPrototypeOf(FunctionNode.prototype), 'nearestCellWidth', this).call(this, headerFullWidth) * _config.CONFIG.CELL_SIZE;
             }
         }
+    }]);
+
+    return FunctionNode;
+}(_RegularNode3.default);
+
+exports.default = FunctionNode;
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _RegularNode2 = __webpack_require__(1);
+
+var _RegularNode3 = _interopRequireDefault(_RegularNode2);
+
+var _config = __webpack_require__(0);
+
+var _resources = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MacroNode = function (_RegularNode) {
+    _inherits(MacroNode, _RegularNode);
+
+    function MacroNode(node, x, y, texturesHanlder) {
+        _classCallCheck(this, MacroNode);
+
+        var _this = _possibleConstructorReturn(this, (MacroNode.__proto__ || Object.getPrototypeOf(MacroNode)).call(this, node, x, y, texturesHanlder));
+
+        _this.colorTint = _config.VAR_COLORS["macro"];
+
+        _this.functionName = node.name;
+
+        _this.headerTextOffset = _config.CONFIG.CELL_SIZE * 2;
+
+        if (_this.functionName === "Branch") {
+            _this.icon = _resources.ICONS.BranchIcon;
+        } else if (_this.functionName.indexOf("For Each") !== -1) {
+            _this.icon = _resources.ICONS.ForEachIcon;
+        } else if (_this.functionName.indexOf("Flip") !== -1) {
+            _this.icon = _resources.ICONS.FlipFlopIcon;
+        } else if (_this.functionName.indexOf("Valid") !== -1) {
+            _this.icon = _resources.ICONS.ValidIcon;
+        } else if (_this.functionName.indexOf("Sequence") !== -1) {
+            _this.icon = _resources.ICONS.SequenceIcon;
+        } else if (_this.functionName.indexOf("For Loop") !== -1) {
+            _this.icon = _resources.ICONS.ForLoopIcon;
+        } else {
+            _this.icon = _resources.ICONS.MacroIcon;
+        }
+        return _this;
     }
-    return newString.trim();
-};
 
-function isLetter(c) {
-    return c.toLowerCase() !== c.toUpperCase();
-}
+    _createClass(MacroNode, [{
+        key: 'draw',
+        value: function draw(app) {
+            _get(MacroNode.prototype.__proto__ || Object.getPrototypeOf(MacroNode.prototype), 'draw', this).call(this, app);
 
-function getIcon(iconName) {
-    return 'assets/nodes_icons/' + ICONS[iconName];
-}
+            this.headerText.x = -this.body.width / 2;
+            this.headerText.y = -this.body.height / 2;
 
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
+            this.headerText.y += this.gloss.height / 2;
+            this.headerText.x += this.headerTextOffset;
 
-function rgbToHex(r, g, b) {
-    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
-}
+            this.headerText.anchor.set(0, 0.5);
 
-function intersectNodeSelectable(node1, node2, scale, drawer, origin) {
-    var s = scale || 1;
-    if (node1.x + node1.width < node2.x * s || node2.x * s + node2.width * s < node1.x || node1.y + node1.height < node2.y * s || node2.y * s + node2.selectableHeight * s < node1.y) {
-        return false;
-    } else {
-        return true;
+            this.fIcon.anchor.set(0.5, 0.5);
+            this.fIcon.x = -this.body.width / 2;
+            this.fIcon.y = -this.body.height / 2;
+
+            this.fIcon.y += this.gloss.height / 2;
+            this.fIcon.x += _config.CONFIG.CELL_SIZE;
+
+            this.container.addChild(this.headerText);
+            this.container.addChild(this.fIcon);
+        }
+    }, {
+        key: 'init',
+        value: function init() {
+            this.headerText = new PIXI.Text(this.functionName, _config.defaultTextStyle);
+            this.fIcon = PIXI.Sprite.fromImage(this.icon);
+            this.calculateWidth();
+            _get(MacroNode.prototype.__proto__ || Object.getPrototypeOf(MacroNode.prototype), 'init', this).call(this);
+        }
+    }, {
+        key: 'calculateWidth',
+        value: function calculateWidth() {
+            var headerFullWidth = this.headerText.width + 2 * this.headerTextOffset;
+            if (headerFullWidth > this.width) {
+                this.width = _get(MacroNode.prototype.__proto__ || Object.getPrototypeOf(MacroNode.prototype), 'nearestCellWidth', this).call(this, headerFullWidth) * _config.CONFIG.CELL_SIZE;
+            }
+        }
+    }]);
+
+    return MacroNode;
+}(_RegularNode3.default);
+
+exports.default = MacroNode;
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _VarNode2 = __webpack_require__(5);
+
+var _VarNode3 = _interopRequireDefault(_VarNode2);
+
+var _config = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var GetterNode = function (_VarNode) {
+    _inherits(GetterNode, _VarNode);
+
+    function GetterNode(node, x, y, texturesHanlder) {
+        _classCallCheck(this, GetterNode);
+
+        var _this = _possibleConstructorReturn(this, (GetterNode.__proto__ || Object.getPrototypeOf(GetterNode)).call(this, node, x, y, texturesHanlder));
+
+        _this.height = _config.CONFIG.CELL_SIZE * 2;
+        var getterType = node.outputs[0].type.name;
+        _this.colorTint = _config.VAR_COLORS[getterType];
+        return _this;
     }
-}
+
+    _createClass(GetterNode, [{
+        key: 'draw',
+        value: function draw(nodesContainer) {
+            _get(GetterNode.prototype.__proto__ || Object.getPrototypeOf(GetterNode.prototype), 'draw', this).call(this, nodesContainer);
+            this.pinStartY = -this.body.height / 2 + _config.CONFIG.CELL_SIZE * 1.25;
+            _get(GetterNode.prototype.__proto__ || Object.getPrototypeOf(GetterNode.prototype), 'drawPinRows', this).call(this);
+        }
+    }]);
+
+    return GetterNode;
+}(_VarNode3.default);
+
+exports.default = GetterNode;
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _VarNode2 = __webpack_require__(5);
+
+var _VarNode3 = _interopRequireDefault(_VarNode2);
+
+var _config = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SetterNode = function (_VarNode) {
+    _inherits(SetterNode, _VarNode);
+
+    function SetterNode(node, x, y, texturesHanlder) {
+        _classCallCheck(this, SetterNode);
+
+        var _this = _possibleConstructorReturn(this, (SetterNode.__proto__ || Object.getPrototypeOf(SetterNode)).call(this, node, x, y, texturesHanlder));
+
+        var setterType = node.inputs[1].type.name;
+        _this.colorTint = _config.VAR_COLORS[setterType];
+        return _this;
+    }
+
+    _createClass(SetterNode, [{
+        key: 'draw',
+        value: function draw(nodesContainer) {
+            _get(SetterNode.prototype.__proto__ || Object.getPrototypeOf(SetterNode.prototype), 'draw', this).call(this, nodesContainer);
+            this.pinStartY = -this.body.height / 2 + _config.CONFIG.CELL_SIZE;
+            _get(SetterNode.prototype.__proto__ || Object.getPrototypeOf(SetterNode.prototype), 'drawPinRows', this).call(this);
+            this.setText = new PIXI.Text("SET", _config.defaultTextStyle);
+            this.setText.anchor.set(0.5);
+            this.setText.y = -this.body.height / 2 + _config.CONFIG.CELL_SIZE;
+            this.container.addChild(this.setText);
+        }
+    }]);
+
+    return SetterNode;
+}(_VarNode3.default);
+
+exports.default = SetterNode;
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _RegularNode2 = __webpack_require__(1);
+
+var _RegularNode3 = _interopRequireDefault(_RegularNode2);
+
+var _config = __webpack_require__(0);
+
+var _Textures = __webpack_require__(2);
+
+var _Textures2 = _interopRequireDefault(_Textures);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BinaryOperatorNode = function (_RegularNode) {
+    _inherits(BinaryOperatorNode, _RegularNode);
+
+    function BinaryOperatorNode(node, x, y) {
+        _classCallCheck(this, BinaryOperatorNode);
+
+        var _this = _possibleConstructorReturn(this, (BinaryOperatorNode.__proto__ || Object.getPrototypeOf(BinaryOperatorNode)).call(this, node, x, y));
+
+        _this.minCellWidth = 4;
+        _this.showPinText = true;
+        _this.inputOffset = _this.cellSize * 0.2;
+
+        _this.pinRows = [];
+
+        _this.titleHeight = 0;
+
+        _this.node = node;
+
+        _this.body = new PIXI.mesh.NineSlicePlane(_Textures2.default.mathNodeBodyTexture, 11, 11, 11, 11);
+        _this.shadowSelected = new PIXI.mesh.NineSlicePlane(_Textures2.default.mathNodeShadowSelectedTexture, 21, 21, 21, 21);
+        _this.config = {
+            body: true,
+            gloss: false,
+            shadow: true,
+            titleHighlight: false,
+            colorSpill: false
+        };
+        return _this;
+    }
+
+    _createClass(BinaryOperatorNode, [{
+        key: 'init',
+        value: function init() {
+            this.width = this.minCellWidth * _config.CONFIG.CELL_SIZE;
+
+            var text = this.node.name;
+            if (text.indexOf("Boolean") !== -1) {
+                text = text.replace("Boolean", "").toUpperCase();
+            } else if (text.indexOf("Int") !== -1 || text.indexOf("Float") !== -1 || text.indexOf("Enum") !== -1) {
+                if (text.indexOf("And") !== -1) {
+                    text = "&";
+                } else if (text.indexOf("Or") !== -1) {
+                    text = "|";
+                } else if (text.indexOf("Multiply") !== -1) {
+                    text = "x";
+                } else if (text.indexOf("Equality") !== -1) {
+                    text = "==";
+                } else if (text.indexOf("Subtract") !== -1) {
+                    text = "-";
+                } else if (text.indexOf("Add") !== -1) {
+                    text = "+";
+                } else if (text.indexOf("Multiply") !== -1) {
+                    text = "x";
+                } else if (text.indexOf("Percent") !== -1) {
+                    text = "%";
+                } else if (text.indexOf("Divide") !== -1) {
+                    text = "/";
+                } else if (text.indexOf("Dot") !== -1) {
+                    text = ".";
+                } else if (text.indexOf("Greater") !== -1) {
+                    if (text.indexOf("Equal") === -1) text = ">";else text = ">=";
+                } else if (text.indexOf("Less") !== -1) {
+                    if (text.indexOf("Equal") === -1) text = "<";else text = "<=";
+                } else if (text.indexOf("Equal") !== -1 && text.indexOf("Not") !== -1) {
+                    text = "!=";
+                } else if (text.indexOf("Equal") !== -1) {
+                    text = "=";
+                } else if (text.indexOf("Not") !== -1) {
+                    text = "NOT";
+                }
+            }
+
+            this.operatorText = new PIXI.Text(text, _config.binaryOperatorTextStyle);
+            if (this.operatorText.width > this.width) {
+                this.width = _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'nearestCellWidth', this).call(this, this.operatorText.width) * _config.CONFIG.CELL_SIZE + _config.CONFIG.CELL_SIZE / 2;
+            }
+            ;
+
+            _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'init', this).call(this);
+        }
+    }, {
+        key: 'draw',
+        value: function draw(nodesContainer) {
+            _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'draw', this).call(this, nodesContainer);
+            this.pinStartY = -this.body.height / 2 + _config.CONFIG.CELL_SIZE;
+
+            this.operatorText.anchor.set(0.5, 0.5);
+            this.container.addChild(this.operatorText);
+            _get(BinaryOperatorNode.prototype.__proto__ || Object.getPrototypeOf(BinaryOperatorNode.prototype), 'drawPinRows', this).call(this);
+        }
+    }]);
+
+    return BinaryOperatorNode;
+}(_RegularNode3.default);
+
+exports.default = BinaryOperatorNode;
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(0);
+
+var _Link = __webpack_require__(68);
+
+var _Link2 = _interopRequireDefault(_Link);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LinksDrawer = function () {
+    function LinksDrawer(container, nodes) {
+        _classCallCheck(this, LinksDrawer);
+
+        this.links = new PIXI.Container();
+        this.nodes = nodes;
+        container.addChild(this.links);
+        this.draw();
+    }
+
+    _createClass(LinksDrawer, [{
+        key: 'draw',
+        value: function draw() {
+            for (var i = 0, l = this.nodes.length; i < l; i++) {
+                var node = this.nodes[i];
+                for (var j = 0; j < node.pinRows.length; j++) {
+                    if (node.pinRows[j].output) {
+                        var color = _config.VAR_COLORS[node.pinRows[j].output.type.name];
+                        for (var k = 0; k < node.pinRows[j].output.links.length; k++) {
+                            var linkObj = new _Link2.default(node, node.pinRows[j].output, node.pinRows[j].output.links[k], color);
+                            linkObj.draw();
+                            this.links.addChild(linkObj.line);
+                            if (!node.pinRows[j].output.lines) {
+                                node.pinRows[j].output.lines = [];
+                            }
+                            node.pinRows[j].output.lines.push(linkObj);
+                        }
+                    }
+                }
+            }
+        }
+    }, {
+        key: 'drawPath',
+        value: function drawPath(node, pin, link, color) {
+            var line = new PIXI.Graphics();
+            var minOffset = 16;
+            var startX = node.x + pin.sprite.x;
+            //console.log(node);
+            var startY = node.y + pin.sprite.y;
+
+            var endX = link.parentX + link.sprite.x;
+            ;
+            var endY = link.parentY + link.sprite.y;
+
+            //console.log(startX, startY, endX, endY);
+
+            this.links.addChild(line);
+
+            var deltaX = Math.abs(link.sprite.x + link.parentX - pin.sprite.x - node.x);
+
+            var cOffset = deltaX > this.controlOffset && this.controlOffset || Math.max(deltaX, minOffset);
+
+            var control1X = pin.sprite.x + cOffset + node.x;
+            var control1Y = pin.sprite.y + node.y;
+
+            var control2X = link.sprite.x - cOffset + link.parentX;
+            var control2Y = link.sprite.y + link.parentY;
+
+            line.lineStyle(this.linkThickness, color).moveTo(startX, startY).bezierCurveTo(control1X, control1Y, control2X, control2Y, endX, endY);
+            return line;
+        }
+    }]);
+
+    return LinksDrawer;
+}();
+
+exports.default = LinksDrawer;
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Link = function () {
+    function Link(node, pin, link, color) {
+        _classCallCheck(this, Link);
+
+        this.line = new PIXI.Graphics();
+        this.linkThickness = 1;
+        this.pin = pin;
+        this.link = link;
+        this.color = color;
+        this.minOffset = 16;
+        this.node = node;
+    }
+
+    _createClass(Link, [{
+        key: "draw",
+        value: function draw() {
+            var startX = this.node.x + this.pin.sprite.x;
+            //console.log(node);
+            var startY = this.node.y + this.pin.sprite.y;
+
+            var endX = this.link.parent.x + this.link.sprite.x;
+            ;
+            var endY = this.link.parent.y + this.link.sprite.y;
+
+            //console.log(startX, startY, endX, endY);
+
+
+            var deltaX = Math.abs(this.link.sprite.x + this.link.parent.x - this.pin.sprite.x - this.node.x);
+
+            var cOffset = deltaX > this.controlOffset && this.controlOffset || Math.max(deltaX, this.minOffset);
+
+            var control1X = this.pin.sprite.x + cOffset + this.node.x;
+            var control1Y = this.pin.sprite.y + this.node.y;
+
+            var control2X = this.link.sprite.x - cOffset + this.link.parent.x;
+            var control2Y = this.link.sprite.y + this.link.parent.y;
+
+            this.line.lineStyle(this.linkThickness, this.color).moveTo(startX, startY).bezierCurveTo(control1X, control1Y, control2X, control2Y, endX, endY);
+        }
+    }, {
+        key: "redraw",
+        value: function redraw() {
+            this.line.clear();
+            this.draw();
+        }
+    }]);
+
+    return Link;
+}();
+
+exports.default = Link;
 
 /***/ })
 /******/ ]);

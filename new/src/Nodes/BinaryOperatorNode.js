@@ -1,9 +1,10 @@
-import {RegularNode} from './RegularNode.js';
+import RegularNode from './RegularNode.js';
 import {CONFIG, VAR_COLORS, binaryOperatorTextStyle} from '../config.js';
+import TexturesHandler from '../Textures/Textures.js'
 
 export default class BinaryOperatorNode extends RegularNode {
-    constructor(node, x, y, texturesHandler) {
-        super(node, x, y, texturesHandler);
+    constructor(node, x, y) {
+        super(node, x, y);
         this.minCellWidth = 4;
         this.showPinText = true;
         this.inputOffset = this.cellSize * 0.2;
@@ -15,8 +16,8 @@ export default class BinaryOperatorNode extends RegularNode {
 
         this.node = node;
 
-        this.body = new PIXI.mesh.NineSlicePlane(texturesHandler.mathNodeBodyTexture, 11, 11, 11, 11);
-        this.shadowSelected = new PIXI.mesh.NineSlicePlane(texturesHandler.mathNodeShadowSelectedTexture, 21, 21, 21, 21);
+        this.body = new PIXI.mesh.NineSlicePlane(TexturesHandler.mathNodeBodyTexture, 11, 11, 11, 11);
+        this.shadowSelected = new PIXI.mesh.NineSlicePlane(TexturesHandler.mathNodeShadowSelectedTexture, 21, 21, 21, 21);
         this.config = {
             body: true,
             gloss: false,

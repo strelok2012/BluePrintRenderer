@@ -1,8 +1,10 @@
 import {CONFIG, VAR_COLORS, defaultTextStyle} from '../config.js';
+import {TEXTURES} from '../resources.js';
 import {app} from '../main.js';
+import TexturesHandler from '../Textures/Textures.js';
 
-export class RegularNode {
-    constructor(node, x, y, texturesHandler) {
+export default class RegularNode {
+    constructor(node, x, y) {
         this.x = parseInt(x);
         this.y = parseInt(y);
         this.height = 0;
@@ -15,7 +17,6 @@ export class RegularNode {
         this.minCellHeight = 3;
         this.inputOffset = this.cellSize * 0.2;
         this.pointOnNode = null;
-        this.texturesHandler = texturesHandler;
 
 
         if (!this.config) {
@@ -175,7 +176,7 @@ export class RegularNode {
     initBody() {
         if (this.config.body) {
             if (!this.body) {
-                this.body = new PIXI.mesh.NineSlicePlane(this.texturesHandler.bodyTexture, 14, 14, 14, 14);
+                this.body = new PIXI.mesh.NineSlicePlane(TexturesHandler.bodyTexture, 14, 14, 14, 14);
             }
             this.body.width = this.width;
             this.body.height = this.height;
@@ -186,11 +187,11 @@ export class RegularNode {
     initShadow() {
         if (this.config.shadow) {
             if (!this.shadow) {
-                this.shadow = new PIXI.mesh.NineSlicePlane(this.texturesHandler.shadowTexture, 21, 21, 21, 21);
+                this.shadow = new PIXI.mesh.NineSlicePlane(TexturesHandler.shadowTexture, 21, 21, 21, 21);
             }
 
             if (!this.shadowSelected) {
-                this.shadowSelected = new PIXI.mesh.NineSlicePlane(this.texturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
+                this.shadowSelected = new PIXI.mesh.NineSlicePlane(TexturesHandler.shadowSelectedTexture, 21, 21, 21, 21);
             }
 
 
@@ -214,7 +215,7 @@ export class RegularNode {
     initGloss() {
         if (this.config.gloss) {
             if (!this.gloss) {
-                this.gloss = new PIXI.mesh.NineSlicePlane(this.texturesHandler.glossTexture, 7, 7, 7, 7);
+                this.gloss = new PIXI.mesh.NineSlicePlane(TexturesHandler.glossTexture, 7, 7, 7, 7);
             }
             this.gloss.width = this.width;
             this.gloss.height = this.titleHeight;
@@ -226,7 +227,7 @@ export class RegularNode {
     initTitleHighlight() {
         if (this.config.titleHighlight) {
             if (!this.titleHighlight) {
-                this.titleHighlight = new PIXI.mesh.NineSlicePlane(this.texturesHandler.titleHighlightTexture, 7, 7, 7, 7);
+                this.titleHighlight = new PIXI.mesh.NineSlicePlane(TexturesHandler.titleHighlightTexture, 7, 7, 7, 7);
             }
             this.titleHighlight.width = this.width;
             this.titleHighlight.height = this.titleHeight;
@@ -238,7 +239,7 @@ export class RegularNode {
     initColorSpill() {
         if (this.config.colorSpill) {
             if (!this.colorSpill) {
-                this.colorSpill = new PIXI.mesh.NineSlicePlane(this.texturesHandler.colorSpillTexture, 6, 6, 1, 1);
+                this.colorSpill = new PIXI.mesh.NineSlicePlane(TexturesHandler.colorSpillTexture, 6, 6, 1, 1);
             }
             this.colorSpill.tint = this.colorTint;
             this.colorSpill.width = this.width;
@@ -467,9 +468,9 @@ export class RegularNode {
     }
     getPinSprite(pin) {
         if (pin.type.name === "exec") {
-            return pin.linked ? 'assets/nodes/ExecPin_Connected.png' : 'assets/nodes/ExecPin_Disconnected.png';
+            return pin.linked ? TEXTURES.ExecPinDisconnected : TEXTURES.ExecPinDisconnected;
         }
-        return pin.linked ? 'assets/nodes/Pin_connected_VarA.png' : 'assets/nodes/Pin_disconnected_VarA.png';
+        return pin.linked ? TEXTURES.PinConnected : TEXTURES.PinDisconnected;
     }
     nearestCellWidth(width) {
         return Math.ceil(width / CONFIG.CELL_SIZE);
