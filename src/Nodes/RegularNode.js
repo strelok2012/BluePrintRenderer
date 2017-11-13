@@ -126,10 +126,13 @@ export default class RegularNode {
                     this.pinRows[i].output.lines[j].redraw();
                 }
             }
-            if (this.pinRows[i].input && this.pinRows[i].input.backward && this.pinRows[i].input.backward.lines) {
-                for (var j = 0; j < this.pinRows[i].input.backward.lines.length; j++) {
-                    this.pinRows[i].input.backward.lines[j].redraw();
+            if (this.pinRows[i].input && this.pinRows[i].input.backward) {
+                for (var k = 0; k < this.pinRows[i].input.backward.length; k++) {
+                    for (var j = 0; j < this.pinRows[i].input.backward[k].lines.length; j++) {
+                        this.pinRows[i].input.backward[k].lines[j].redraw();
+                    }
                 }
+
             }
         }
     }
@@ -481,7 +484,12 @@ export default class RegularNode {
             if (!from.links)
                 from.links = [];
             from.links.push(to);
-            to.backward = from;
+
+            if (!to.backward) {
+                to.backward = [];
+            }
+
+            to.backward.push(from);
             to.linked = true;
         }
     }
