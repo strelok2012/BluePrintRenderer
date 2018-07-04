@@ -4,10 +4,13 @@ import BlueprintRenderer from './App/BlueprintRenderer.js';
 import BPToNodes from './Parser/BPToNodes.js';
 import LinksDrawer from './Drawers/LinksDrawer.js';
 
+import WebFont from 'webfontloader';
+
 export var app;
 export var allNodes = [];
 
-export default function prepare(document,file) {
+function preparePIXI(document, file) {
+    
     app = new PIXI.Application(document.body.parentNode.clientWidth, window.innerHeight, {antialias: true});
     document.body.appendChild(app.view);
 
@@ -164,4 +167,16 @@ export default function prepare(document,file) {
         hiddenElement.href = app.renderer.extract.base64(renderTexture);
         hiddenElement.click();
     }, 3000);*/
+}
+
+
+export default function prepare(document, file) {
+    WebFont.load({
+        google: {
+            families: ['Roboto']
+        },
+        active: e =>{
+            preparePIXI(document, file)
+        }
+    });
 }
