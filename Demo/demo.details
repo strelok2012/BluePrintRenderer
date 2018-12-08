@@ -5,7 +5,7 @@ description: Online demo
 authors:
   - Vitaliy Rybnikov (strelok2012)
 resources:
-  - https://cdn.rawgit.com/strelok2012/BluePrintRenderer/b43836d54bb91606d9ebf8a5845784f54a3e566a/dist/blueprint-renderer.js
+  - https://cdn.jsdelivr.net/gh/strelok2012/BluePrintRenderer@b43836d54bb91606d9ebf8a5845784f54a3e566a/dist/blueprint-renderer.js
   - https://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic
 ...
 */
